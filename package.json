@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "axios": "^0.18.0",
+    "lodash": "^4.17.11",
+    "nodemon": "^1.18.9",
+    "prompts": "^2.0.1",
+    "rss-parser": "^3.6.2"
+  }
+}

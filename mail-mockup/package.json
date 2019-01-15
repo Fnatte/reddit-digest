@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "parcel-bundler": "^1.11.0"
+  },
+  "devDependencies": {
+    "stylus": "^0.54.5"
+  }
+}
