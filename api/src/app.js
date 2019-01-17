@@ -27,6 +27,12 @@ const formatDate = post => {
   return `${moment().diff(moment(post.created * 1000), 'hour')} hours ago`
 }
 
+app.get('/', (req, res) => {
+  return res.send({
+    hello: 'world'
+  })
+})
+
 app.post('/', (req, res) => {
   const updateId = req.body.update_id
   const update = req.body.message
@@ -88,6 +94,6 @@ app.get('/digest/:id', (req, res) => {
     })
 })
 
-app.listen(8888, () => {
+app.listen(process.env.PORT, () => {
   console.log('Reddit Digest fetcher listening http://localhost:8888')
 })
