@@ -1,4 +1,5 @@
 import React from 'react'
+import axios from 'axios'
 
 const dayLabels = [
   'monday', 'tuesday', 'wednesday', 'thursday','friday', 'saturday', 'sunday'
@@ -11,7 +12,7 @@ export default class Editor extends React.Component {
     this.state = {
       title: '',
       subreddits: '',
-      days: parseInt('0010000', 2),
+      days: parseInt('0000000', 2),
       time: 8
     }
   }
@@ -36,6 +37,10 @@ export default class Editor extends React.Component {
 
   onSubmit = event => {
     event.preventDefault()
+
+    const { title, subreddits, days, time } = this.state
+
+    axios.post('http://localhost:8888/digest', { title, subreddits, days, time })
   }
 
   render () {

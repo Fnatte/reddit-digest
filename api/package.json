@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "dev": "nodemon ./app.js"
+    "dev": "nodemon src/app.js"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -10,6 +10,7 @@
     "express": "^4.16.4",
     "lodash": "^4.17.11",
     "moment": "^2.23.0",
+    "node-uuid": "^1.4.8",
     "nodemon": "^1.18.9",
     "prompts": "^2.0.1",
     "rss-parser": "^3.6.2"

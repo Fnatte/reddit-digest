@@ -6,6 +6,8 @@ const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const moment = require('moment')
+const uuid = require('node-uuid')
+const database = require('./database')
 const reddit = require('./reddit')
 const telegram = require('./telegram')
 const time = require('./time')
@@ -52,6 +54,39 @@ app.post('/', (req, res) => {
 
   return res.send('hello')
 });
+
+app.post('/digest', (req, res) => {
+  const id = uuid.v4()
+  const { title, subreddits, days, time } = req.body
+
+  const newDigest = {
+    id: uuid.v4(),
+    title,
+    subreddits,
+    days,
+    time
+  }
+
+  database.read('digests')
+    .then(storedDigests => {
+      database.write('digests', [...storedDigests, newDigest]) 
+
+      return res.send(newDigest)
+    })
+})
+
+app.get('/digest/:id', (req, res) => {
+  database.read('digests')
+    .then(digests => {
+      const matching = digests.filter(digest => digest.id === req.params.id)
+
+      if (matching.length === 0) {
+        return res.sendStatus(404)
+      }
+
+      return res.send(matching[0])
+    })
+})
 
 app.listen(8888, () => {
   console.log('Reddit Digest fetcher listening http://localhost:8888')
