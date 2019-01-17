@@ -1,14 +1,17 @@
 {
-  "dependencies": {
-    "moment": "^2.23.0",
-    "parcel-bundler": "^1.11.0",
-    "react": "^16.8.0-alpha.0",
-    "react-dom": "^16.8.0-alpha.0"
-  },
-  "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "stylus": "^0.54.5"
-  }
+    "scripts": {
+        "dev": "parcel index.html"
+    },
+    "dependencies": {
+        "axios": "^0.18.0",
+        "moment": "^2.23.0",
+        "parcel-bundler": "^1.11.0",
+        "react": "^16.7.0",
+        "react-dom": "^16.7.0",
+        "babel-core": "^6.26.3",
+        "babel-preset-env": "^1.7.0",
+        "babel-preset-react": "^6.24.1",
+        "babel-preset-stage-0": "^6.24.1",
+        "stylus": "^0.54.5"
+    }
 }

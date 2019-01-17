@@ -298,7 +298,7 @@ function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
 
 module.exports = checkPropTypes;
 },{"./lib/ReactPropTypesSecret":"node_modules/prop-types/lib/ReactPropTypesSecret.js"}],"node_modules/react/cjs/react.development.js":[function(require,module,exports) {
-/** @license React v16.8.0-alpha.0
+/** @license React v16.7.0
  * react.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -317,7 +317,7 @@ if ("development" !== "production") {
     var checkPropTypes = require('prop-types/checkPropTypes'); // TODO: this is special because it gets imported during build.
 
 
-    var ReactVersion = '16.8.0-alpha.0'; // The Symbol used to tag the ReactElement-like types. If there is no native Symbol
+    var ReactVersion = '16.7.0'; // The Symbol used to tag the ReactElement-like types. If there is no native Symbol
     // nor polyfill, then a plain number is used for performance.
 
     var hasSymbol = typeof Symbol === 'function' && Symbol.for;
@@ -350,7 +350,7 @@ if ("development" !== "production") {
       return null;
     }
 
-    var enableHooks = true; // Helps identify side effects in begin-phase lifecycle hooks and setState reducers:
+    var enableHooks = false; // Helps identify side effects in begin-phase lifecycle hooks and setState reducers:
     // In some cases, StrictMode should also double-render lifecycles.
     // This can be confusing for tests though,
     // And it can be bad for performance in production.
@@ -369,7 +369,7 @@ if ("development" !== "production") {
     // These APIs will no longer be "unstable" in the upcoming 16.7 release,
     // Control this behavior with a flag to support 16.6 minor releases in the meanwhile.
 
-    var enableStableConcurrentModeAPIs = true;
+    var enableStableConcurrentModeAPIs = false;
     /**
      * Use invariant() to assert state which your program assumes to be true.
      *
@@ -735,30 +735,20 @@ if ("development" !== "production") {
       return refObject;
     }
     /**
-     * Keeps track of the current dispatcher.
-     */
-
-
-    var ReactCurrentDispatcher = {
-      /**
-       * @internal
-       * @type {ReactComponent}
-       */
-      current: null
-    };
-    /**
      * Keeps track of the current owner.
      *
      * The current owner is the component who should own any components that are
      * currently being constructed.
      */
 
+
     var ReactCurrentOwner = {
       /**
        * @internal
        * @type {ReactComponent}
        */
-      current: null
+      current: null,
+      currentDispatcher: null
     };
     var BEFORE_SLASH_RE = /^(.*)[\\\/]/;
 
@@ -905,7 +895,6 @@ if ("development" !== "production") {
       };
     }
     var ReactSharedInternals = {
-      ReactCurrentDispatcher: ReactCurrentDispatcher,
       ReactCurrentOwner: ReactCurrentOwner,
       // Used by renderers to avoid bundling object-assign twice in UMD bundles:
       assign: _assign
@@ -1786,7 +1775,7 @@ if ("development" !== "production") {
     }
 
     function resolveDispatcher() {
-      var dispatcher = ReactCurrentDispatcher.current;
+      var dispatcher = ReactCurrentOwner.currentDispatcher;
       !(dispatcher !== null) ? invariant(false, 'Hooks can only be called inside the body of a function component.') : void 0;
       return dispatcher;
     }
@@ -1943,7 +1932,7 @@ if ("development" !== "production") {
 
       setCurrentlyValidatingElement(element);
       {
-        warning$1(false, 'Each child in a list should have a unique "key" prop.' + '%s%s See https://fb.me/react-warning-keys for more information.', currentComponentErrorInfo, childOwner);
+        warning$1(false, 'Each child in an array or iterator should have a unique "key" prop.' + '%s%s See https://fb.me/react-warning-keys for more information.', currentComponentErrorInfo, childOwner);
       }
       setCurrentlyValidatingElement(null);
     }
@@ -2224,7 +2213,7 @@ if ("development" === 'production') {
 }
 },{"./cjs/react.development.js":"node_modules/react/cjs/react.development.js"}],"node_modules/scheduler/cjs/scheduler.development.js":[function(require,module,exports) {
 var global = arguments[3];
-/** @license React v0.13.0-alpha.0
+/** @license React v0.12.0
  * scheduler.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -2240,8 +2229,26 @@ if ("development" !== "production") {
 
     Object.defineProperty(exports, '__esModule', {
       value: true
-    });
-    var enableSchedulerDebugging = false;
+    }); // Helps identify side effects in begin-phase lifecycle hooks and setState reducers:
+    // In some cases, StrictMode should also double-render lifecycles.
+    // This can be confusing for tests though,
+    // And it can be bad for performance in production.
+    // This feature flag can be used to control the behavior:
+    // To preserve the "Pause on caught exceptions" behavior of the debugger, we
+    // replay the begin phase of a failed component inside invokeGuardedCallback.
+    // Warn about deprecated, async-unsafe lifecycles; relates to RFC #6:
+    // Gather advanced timing metrics for Profiler subtrees.
+    // Trace which interactions trigger each commit.
+    // Only used in www builds.
+    // TODO: true? Here it might just be false.
+    // Only used in www builds.
+
+    var enableSchedulerDebugging = true; // Only used in www builds.
+    // React Fire: prevent the value and checked attributes from syncing
+    // with their related DOM properties
+    // These APIs will no longer be "unstable" in the upcoming 16.7 release,
+    // Control this behavior with a flag to support 16.6 minor releases in the meanwhile.
+
     /* eslint-disable no-var */
     // TODO: Use symbols?
 
@@ -2911,7 +2918,7 @@ if ("development" === 'production') {
   module.exports = require('./cjs/scheduler.development.js');
 }
 },{"./cjs/scheduler.development.js":"node_modules/scheduler/cjs/scheduler.development.js"}],"node_modules/scheduler/cjs/scheduler-tracing.development.js":[function(require,module,exports) {
-/** @license React v0.13.0-alpha.0
+/** @license React v0.12.0
  * scheduler-tracing.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -3307,7 +3314,7 @@ if ("development" === 'production') {
   module.exports = require('./cjs/scheduler-tracing.development.js');
 }
 },{"./cjs/scheduler-tracing.development.js":"node_modules/scheduler/cjs/scheduler-tracing.development.js"}],"node_modules/react-dom/cjs/react-dom.development.js":[function(require,module,exports) {
-/** @license React v16.8.0-alpha.0
+/** @license React v16.7.0
  * react-dom.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -6552,7 +6559,7 @@ if ("development" !== "production") {
       };
     }
     var enableUserTimingAPI = true;
-    var enableHooks = true; // Helps identify side effects in begin-phase lifecycle hooks and setState reducers:
+    var enableHooks = false; // Helps identify side effects in begin-phase lifecycle hooks and setState reducers:
 
     var debugRenderPhaseSideEffects = false; // In some cases, StrictMode should also double-render lifecycles.
     // This can be confusing for tests though,
@@ -6578,7 +6585,7 @@ if ("development" !== "production") {
     var disableInputAttributeSyncing = false; // These APIs will no longer be "unstable" in the upcoming 16.7 release,
     // Control this behavior with a flag to support 16.6 minor releases in the meanwhile.
 
-    var enableStableConcurrentModeAPIs = true;
+    var enableStableConcurrentModeAPIs = false;
     var warnAboutShorthandPropertyCollision = false; // TODO: direct imports like some-package/src/* are bad. Fix me.
 
     var didWarnValueDefaultValue = false;
@@ -7375,22 +7382,32 @@ if ("development" !== "production") {
         return [leave, enter];
       }
     };
+    /*eslint-disable no-self-compare */
+
+    var hasOwnProperty$1 = Object.prototype.hasOwnProperty;
     /**
      * inlined Object.is polyfill to avoid requiring consumers ship their own
      * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
      */
 
     function is(x, y) {
-      return x === y && (x !== 0 || 1 / x === 1 / y) || x !== x && y !== y // eslint-disable-line no-self-compare
-      ;
+      // SameValue algorithm
+      if (x === y) {
+        // Steps 1-5, 7-10
+        // Steps 6.b-6.e: +0 != -0
+        // Added the nonzero y check to make Flow happy, but it is redundant
+        return x !== 0 || y !== 0 || 1 / x === 1 / y;
+      } else {
+        // Step 6.a: NaN == NaN
+        return x !== x && y !== y;
+      }
     }
-
-    var hasOwnProperty$1 = Object.prototype.hasOwnProperty;
     /**
      * Performs equality by iterating through keys on an object and returning false
      * when any key has values which are not strictly equal between the arguments.
      * Returns true when the values of all keys are strictly equal.
      */
+
 
     function shallowEqual(objA, objB) {
       if (is(objA, objB)) {
@@ -14583,10 +14600,10 @@ if ("development" !== "production") {
     } // UpdateQueue is a linked list of prioritized updates.
     //
     // Like fibers, update queues come in pairs: a current queue, which represents
-    // the visible state of the screen, and a work-in-progress queue, which can be
-    // mutated and processed asynchronously before it is committed — a form of
-    // double buffering. If a work-in-progress render is discarded before finishing,
-    // we create a new work-in-progress by cloning the current queue.
+    // the visible state of the screen, and a work-in-progress queue, which is
+    // can be mutated and processed asynchronously before it is committed — a form
+    // of double buffering. If a work-in-progress render is discarded before
+    // finishing, we create a new work-in-progress by cloning the current queue.
     //
     // Both queues share a persistent, singly-linked list structure. To schedule an
     // update, we append it to the end of both queues. Each queue maintains a
@@ -15146,10 +15163,14 @@ if ("development" !== "production") {
     }
 
     function calculateChangedBits(context, newValue, oldValue) {
-      if (is(oldValue, newValue)) {
-        // No change
-        return 0;
-      } else {
+      // Use Object.is to compare the new context value to the old value. Inlined
+      // Object.is polyfill.
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
+      if (oldValue === newValue && (oldValue !== 0 || 1 / oldValue === 1 / newValue) || oldValue !== oldValue && newValue !== newValue // eslint-disable-line no-self-compare
+      ) {
+          // No change
+          return 0;
+        } else {
         var changedBits = typeof context._calculateChangedBits === 'function' ? context._calculateChangedBits(oldValue, newValue) : maxSigned31BitInt;
         {
           !((changedBits & maxSigned31BitInt) === changedBits) ? warning$1(false, 'calculateChangedBits: Expected the return value to be a ' + '31-bit integer. Instead received: %s', changedBits) : void 0;
@@ -15339,9 +15360,15 @@ if ("development" !== "production") {
       }
 
       for (var i = 0; i < arr1.length; i++) {
-        if (is(arr1[i], arr2[i])) {
-          continue;
-        }
+        // Inlined Object.is polyfill.
+        // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is
+        var val1 = arr1[i];
+        var val2 = arr2[i];
+
+        if (val1 === val2 && (val1 !== 0 || 1 / val1 === 1 / val2) || val1 !== val1 && val2 !== val2 // eslint-disable-line no-self-compare
+        ) {
+            continue;
+          }
 
         return false;
       }
@@ -16108,10 +16135,10 @@ if ("development" !== "production") {
       }
     }
 
-    var ReactCurrentDispatcher$1 = ReactSharedInternals.ReactCurrentDispatcher;
+    var ReactCurrentOwner$4 = ReactSharedInternals.ReactCurrentOwner;
 
     function readContext$1(contextType) {
-      var dispatcher = ReactCurrentDispatcher$1.current;
+      var dispatcher = ReactCurrentOwner$4.currentDispatcher;
       return dispatcher.readContext(contextType);
     }
 
@@ -16816,14 +16843,14 @@ if ("development" !== "production") {
 
         !(typeof child._store === 'object') ? invariant(false, 'React Component in warnForMissingKey should have a _store. This error is likely caused by a bug in React. Please file an issue.') : void 0;
         child._store.validated = true;
-        var currentComponentErrorInfo = 'Each child in a list should have a unique ' + '"key" prop. See https://fb.me/react-warning-keys for ' + 'more information.' + getCurrentFiberStackInDev();
+        var currentComponentErrorInfo = 'Each child in an array or iterator should have a unique ' + '"key" prop. See https://fb.me/react-warning-keys for ' + 'more information.' + getCurrentFiberStackInDev();
 
         if (ownerHasKeyUseWarning[currentComponentErrorInfo]) {
           return;
         }
 
         ownerHasKeyUseWarning[currentComponentErrorInfo] = true;
-        warning$1(false, 'Each child in a list should have a unique ' + '"key" prop. See https://fb.me/react-warning-keys for ' + 'more information.');
+        warning$1(false, 'Each child in an array or iterator should have a unique ' + '"key" prop. See https://fb.me/react-warning-keys for ' + 'more information.');
       };
     }
     var isArray = Array.isArray;
@@ -21494,7 +21521,6 @@ if ("development" !== "production") {
     var DispatcherWithoutHooks = {
       readContext: readContext
     };
-    var ReactCurrentDispatcher = ReactSharedInternals.ReactCurrentDispatcher;
     var ReactCurrentOwner$2 = ReactSharedInternals.ReactCurrentOwner;
     var didWarnAboutStateTransition = void 0;
     var didWarnSetStateChildContext = void 0;
@@ -22442,9 +22468,9 @@ if ("development" !== "production") {
       isWorking = true;
 
       if (enableHooks) {
-        ReactCurrentDispatcher.current = Dispatcher;
+        ReactCurrentOwner$2.currentDispatcher = Dispatcher;
       } else {
-        ReactCurrentDispatcher.current = DispatcherWithoutHooks;
+        ReactCurrentOwner$2.currentDispatcher = DispatcherWithoutHooks;
       }
 
       var expirationTime = root.nextExpirationTimeToWorkOn; // Check if we're starting from a fresh stack, or if we're resuming from
@@ -22485,7 +22511,7 @@ if ("development" !== "production") {
                 subscriber.onWorkStarted(interactions, threadID);
               } catch (error) {
                 // Work thrown by an interaction tracing subscriber should be rethrown,
-                // But only once it's safe (to avoid leaving the scheduler in an invalid state).
+                // But only once it's safe (to avoid leaveing the scheduler in an invalid state).
                 // Store the error for now and we'll re-throw in finishRendering().
                 if (!hasUnhandledError) {
                   hasUnhandledError = true;
@@ -22582,7 +22608,7 @@ if ("development" !== "production") {
 
 
       isWorking = false;
-      ReactCurrentDispatcher.current = null;
+      ReactCurrentOwner$2.currentDispatcher = null;
       resetContextDependences();
       resetHooks(); // Yield back to main thread.
 
@@ -23854,10 +23880,8 @@ if ("development" !== "production") {
 
     function injectIntoDevTools(devToolsConfig) {
       var findFiberByHostInstance = devToolsConfig.findFiberByHostInstance;
-      var ReactCurrentDispatcher = ReactSharedInternals.ReactCurrentDispatcher;
       return injectInternals(_assign({}, devToolsConfig, {
         overrideProps: overrideProps,
-        currentDispatcherRef: ReactCurrentDispatcher,
         findHostInstanceByFiber: function (fiber) {
           var hostFiber = findCurrentHostFiber(fiber);
 
@@ -23894,7 +23918,7 @@ if ("development" !== "production") {
     } // TODO: this is special because it gets imported during build.
 
 
-    var ReactVersion = '16.8.0-alpha.0'; // TODO: This type is shared between the reconciler and ReactDOM, but will
+    var ReactVersion = '16.7.0'; // TODO: This type is shared between the reconciler and ReactDOM, but will
     // eventually be lifted out to the renderer.
 
     var ReactCurrentOwner = ReactSharedInternals.ReactCurrentOwner;
@@ -28994,7 +29018,7 @@ var andify = function andify(list, render) {
 };
 
 exports.andify = andify;
-},{"react":"node_modules/react/index.js"}],"../node_modules/axios/lib/helpers/bind.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js"}],"node_modules/axios/lib/helpers/bind.js":[function(require,module,exports) {
 'use strict';
 
 module.exports = function bind(fn, thisArg) {
@@ -29007,7 +29031,7 @@ module.exports = function bind(fn, thisArg) {
   };
 };
 
-},{}],"../node_modules/is-buffer/index.js":[function(require,module,exports) {
+},{}],"node_modules/is-buffer/index.js":[function(require,module,exports) {
 /*!
  * Determine if an object is a Buffer
  *
@@ -29030,7 +29054,7 @@ function isSlowBuffer (obj) {
   return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))
 }
 
-},{}],"../node_modules/axios/lib/utils.js":[function(require,module,exports) {
+},{}],"node_modules/axios/lib/utils.js":[function(require,module,exports) {
 'use strict';
 
 var bind = require('./helpers/bind');
@@ -29335,7 +29359,7 @@ module.exports = {
   trim: trim
 };
 
-},{"./helpers/bind":"../node_modules/axios/lib/helpers/bind.js","is-buffer":"../node_modules/is-buffer/index.js"}],"../node_modules/axios/lib/helpers/normalizeHeaderName.js":[function(require,module,exports) {
+},{"./helpers/bind":"node_modules/axios/lib/helpers/bind.js","is-buffer":"node_modules/is-buffer/index.js"}],"node_modules/axios/lib/helpers/normalizeHeaderName.js":[function(require,module,exports) {
 'use strict';
 
 var utils = require('../utils');
@@ -29349,7 +29373,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
   });
 };
 
-},{"../utils":"../node_modules/axios/lib/utils.js"}],"../node_modules/axios/lib/core/enhanceError.js":[function(require,module,exports) {
+},{"../utils":"node_modules/axios/lib/utils.js"}],"node_modules/axios/lib/core/enhanceError.js":[function(require,module,exports) {
 'use strict';
 
 /**
@@ -29372,7 +29396,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
   return error;
 };
 
-},{}],"../node_modules/axios/lib/core/createError.js":[function(require,module,exports) {
+},{}],"node_modules/axios/lib/core/createError.js":[function(require,module,exports) {
 'use strict';
 
 var enhanceError = require('./enhanceError');
@@ -29392,7 +29416,7 @@ module.exports = function createError(message, config, code, request, response) 
   return enhanceError(error, config, code, request, response);
 };
 
-},{"./enhanceError":"../node_modules/axios/lib/core/enhanceError.js"}],"../node_modules/axios/lib/core/settle.js":[function(require,module,exports) {
+},{"./enhanceError":"node_modules/axios/lib/core/enhanceError.js"}],"node_modules/axios/lib/core/settle.js":[function(require,module,exports) {
 'use strict';
 
 var createError = require('./createError');
@@ -29420,7 +29444,7 @@ module.exports = function settle(resolve, reject, response) {
   }
 };
 
-},{"./createError":"../node_modules/axios/lib/core/createError.js"}],"../node_modules/axios/lib/helpers/buildURL.js":[function(require,module,exports) {
+},{"./createError":"node_modules/axios/lib/core/createError.js"}],"node_modules/axios/lib/helpers/buildURL.js":[function(require,module,exports) {
 'use strict';
 
 var utils = require('./../utils');
@@ -29488,7 +29512,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
   return url;
 };
 
-},{"./../utils":"../node_modules/axios/lib/utils.js"}],"../node_modules/axios/lib/helpers/parseHeaders.js":[function(require,module,exports) {
+},{"./../utils":"node_modules/axios/lib/utils.js"}],"node_modules/axios/lib/helpers/parseHeaders.js":[function(require,module,exports) {
 'use strict';
 
 var utils = require('./../utils');
@@ -29543,7 +29567,7 @@ module.exports = function parseHeaders(headers) {
   return parsed;
 };
 
-},{"./../utils":"../node_modules/axios/lib/utils.js"}],"../node_modules/axios/lib/helpers/isURLSameOrigin.js":[function(require,module,exports) {
+},{"./../utils":"node_modules/axios/lib/utils.js"}],"node_modules/axios/lib/helpers/isURLSameOrigin.js":[function(require,module,exports) {
 'use strict';
 
 var utils = require('./../utils');
@@ -29613,7 +29637,7 @@ module.exports = (
   })()
 );
 
-},{"./../utils":"../node_modules/axios/lib/utils.js"}],"../node_modules/axios/lib/helpers/btoa.js":[function(require,module,exports) {
+},{"./../utils":"node_modules/axios/lib/utils.js"}],"node_modules/axios/lib/helpers/btoa.js":[function(require,module,exports) {
 'use strict';
 
 // btoa polyfill for IE<10 courtesy https://github.com/davidchambers/Base64.js
@@ -29651,7 +29675,7 @@ function btoa(input) {
 
 module.exports = btoa;
 
-},{}],"../node_modules/axios/lib/helpers/cookies.js":[function(require,module,exports) {
+},{}],"node_modules/axios/lib/helpers/cookies.js":[function(require,module,exports) {
 'use strict';
 
 var utils = require('./../utils');
@@ -29706,7 +29730,7 @@ module.exports = (
   })()
 );
 
-},{"./../utils":"../node_modules/axios/lib/utils.js"}],"../node_modules/axios/lib/adapters/xhr.js":[function(require,module,exports) {
+},{"./../utils":"node_modules/axios/lib/utils.js"}],"node_modules/axios/lib/adapters/xhr.js":[function(require,module,exports) {
 'use strict';
 
 var utils = require('./../utils');
@@ -29882,7 +29906,7 @@ module.exports = function xhrAdapter(config) {
     request.send(requestData);
   });
 };
-},{"./../utils":"../node_modules/axios/lib/utils.js","./../core/settle":"../node_modules/axios/lib/core/settle.js","./../helpers/buildURL":"../node_modules/axios/lib/helpers/buildURL.js","./../helpers/parseHeaders":"../node_modules/axios/lib/helpers/parseHeaders.js","./../helpers/isURLSameOrigin":"../node_modules/axios/lib/helpers/isURLSameOrigin.js","../core/createError":"../node_modules/axios/lib/core/createError.js","./../helpers/btoa":"../node_modules/axios/lib/helpers/btoa.js","./../helpers/cookies":"../node_modules/axios/lib/helpers/cookies.js"}],"node_modules/process/browser.js":[function(require,module,exports) {
+},{"./../utils":"node_modules/axios/lib/utils.js","./../core/settle":"node_modules/axios/lib/core/settle.js","./../helpers/buildURL":"node_modules/axios/lib/helpers/buildURL.js","./../helpers/parseHeaders":"node_modules/axios/lib/helpers/parseHeaders.js","./../helpers/isURLSameOrigin":"node_modules/axios/lib/helpers/isURLSameOrigin.js","../core/createError":"node_modules/axios/lib/core/createError.js","./../helpers/btoa":"node_modules/axios/lib/helpers/btoa.js","./../helpers/cookies":"node_modules/axios/lib/helpers/cookies.js"}],"node_modules/process/browser.js":[function(require,module,exports) {
 
 // shim for using process in browser
 var process = module.exports = {}; // cached from whatever global is present so that test runners that stub it
@@ -30092,7 +30116,7 @@ process.chdir = function (dir) {
 process.umask = function () {
   return 0;
 };
-},{}],"../node_modules/axios/lib/defaults.js":[function(require,module,exports) {
+},{}],"node_modules/axios/lib/defaults.js":[function(require,module,exports) {
 var process = require("process");
 'use strict';
 
@@ -30191,7 +30215,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-},{"./utils":"../node_modules/axios/lib/utils.js","./helpers/normalizeHeaderName":"../node_modules/axios/lib/helpers/normalizeHeaderName.js","./adapters/xhr":"../node_modules/axios/lib/adapters/xhr.js","./adapters/http":"../node_modules/axios/lib/adapters/xhr.js","process":"node_modules/process/browser.js"}],"../node_modules/axios/lib/core/InterceptorManager.js":[function(require,module,exports) {
+},{"./utils":"node_modules/axios/lib/utils.js","./helpers/normalizeHeaderName":"node_modules/axios/lib/helpers/normalizeHeaderName.js","./adapters/xhr":"node_modules/axios/lib/adapters/xhr.js","./adapters/http":"node_modules/axios/lib/adapters/xhr.js","process":"node_modules/process/browser.js"}],"node_modules/axios/lib/core/InterceptorManager.js":[function(require,module,exports) {
 'use strict';
 
 var utils = require('./../utils');
@@ -30245,7 +30269,7 @@ InterceptorManager.prototype.forEach = function forEach(fn) {
 
 module.exports = InterceptorManager;
 
-},{"./../utils":"../node_modules/axios/lib/utils.js"}],"../node_modules/axios/lib/core/transformData.js":[function(require,module,exports) {
+},{"./../utils":"node_modules/axios/lib/utils.js"}],"node_modules/axios/lib/core/transformData.js":[function(require,module,exports) {
 'use strict';
 
 var utils = require('./../utils');
@@ -30267,14 +30291,14 @@ module.exports = function transformData(data, headers, fns) {
   return data;
 };
 
-},{"./../utils":"../node_modules/axios/lib/utils.js"}],"../node_modules/axios/lib/cancel/isCancel.js":[function(require,module,exports) {
+},{"./../utils":"node_modules/axios/lib/utils.js"}],"node_modules/axios/lib/cancel/isCancel.js":[function(require,module,exports) {
 'use strict';
 
 module.exports = function isCancel(value) {
   return !!(value && value.__CANCEL__);
 };
 
-},{}],"../node_modules/axios/lib/helpers/isAbsoluteURL.js":[function(require,module,exports) {
+},{}],"node_modules/axios/lib/helpers/isAbsoluteURL.js":[function(require,module,exports) {
 'use strict';
 
 /**
@@ -30290,7 +30314,7 @@ module.exports = function isAbsoluteURL(url) {
   return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url);
 };
 
-},{}],"../node_modules/axios/lib/helpers/combineURLs.js":[function(require,module,exports) {
+},{}],"node_modules/axios/lib/helpers/combineURLs.js":[function(require,module,exports) {
 'use strict';
 
 /**
@@ -30306,7 +30330,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
     : baseURL;
 };
 
-},{}],"../node_modules/axios/lib/core/dispatchRequest.js":[function(require,module,exports) {
+},{}],"node_modules/axios/lib/core/dispatchRequest.js":[function(require,module,exports) {
 'use strict';
 
 var utils = require('./../utils');
@@ -30394,7 +30418,7 @@ module.exports = function dispatchRequest(config) {
   });
 };
 
-},{"./../utils":"../node_modules/axios/lib/utils.js","./transformData":"../node_modules/axios/lib/core/transformData.js","../cancel/isCancel":"../node_modules/axios/lib/cancel/isCancel.js","../defaults":"../node_modules/axios/lib/defaults.js","./../helpers/isAbsoluteURL":"../node_modules/axios/lib/helpers/isAbsoluteURL.js","./../helpers/combineURLs":"../node_modules/axios/lib/helpers/combineURLs.js"}],"../node_modules/axios/lib/core/Axios.js":[function(require,module,exports) {
+},{"./../utils":"node_modules/axios/lib/utils.js","./transformData":"node_modules/axios/lib/core/transformData.js","../cancel/isCancel":"node_modules/axios/lib/cancel/isCancel.js","../defaults":"node_modules/axios/lib/defaults.js","./../helpers/isAbsoluteURL":"node_modules/axios/lib/helpers/isAbsoluteURL.js","./../helpers/combineURLs":"node_modules/axios/lib/helpers/combineURLs.js"}],"node_modules/axios/lib/core/Axios.js":[function(require,module,exports) {
 'use strict';
 
 var defaults = require('./../defaults');
@@ -30475,7 +30499,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = Axios;
 
-},{"./../defaults":"../node_modules/axios/lib/defaults.js","./../utils":"../node_modules/axios/lib/utils.js","./InterceptorManager":"../node_modules/axios/lib/core/InterceptorManager.js","./dispatchRequest":"../node_modules/axios/lib/core/dispatchRequest.js"}],"../node_modules/axios/lib/cancel/Cancel.js":[function(require,module,exports) {
+},{"./../defaults":"node_modules/axios/lib/defaults.js","./../utils":"node_modules/axios/lib/utils.js","./InterceptorManager":"node_modules/axios/lib/core/InterceptorManager.js","./dispatchRequest":"node_modules/axios/lib/core/dispatchRequest.js"}],"node_modules/axios/lib/cancel/Cancel.js":[function(require,module,exports) {
 'use strict';
 
 /**
@@ -30496,7 +30520,7 @@ Cancel.prototype.__CANCEL__ = true;
 
 module.exports = Cancel;
 
-},{}],"../node_modules/axios/lib/cancel/CancelToken.js":[function(require,module,exports) {
+},{}],"node_modules/axios/lib/cancel/CancelToken.js":[function(require,module,exports) {
 'use strict';
 
 var Cancel = require('./Cancel');
@@ -30555,7 +30579,7 @@ CancelToken.source = function source() {
 
 module.exports = CancelToken;
 
-},{"./Cancel":"../node_modules/axios/lib/cancel/Cancel.js"}],"../node_modules/axios/lib/helpers/spread.js":[function(require,module,exports) {
+},{"./Cancel":"node_modules/axios/lib/cancel/Cancel.js"}],"node_modules/axios/lib/helpers/spread.js":[function(require,module,exports) {
 'use strict';
 
 /**
@@ -30584,7 +30608,7 @@ module.exports = function spread(callback) {
   };
 };
 
-},{}],"../node_modules/axios/lib/axios.js":[function(require,module,exports) {
+},{}],"node_modules/axios/lib/axios.js":[function(require,module,exports) {
 'use strict';
 
 var utils = require('./utils');
@@ -30638,70 +30662,28 @@ module.exports = axios;
 // Allow use of default import syntax in TypeScript
 module.exports.default = axios;
 
-},{"./utils":"../node_modules/axios/lib/utils.js","./helpers/bind":"../node_modules/axios/lib/helpers/bind.js","./core/Axios":"../node_modules/axios/lib/core/Axios.js","./defaults":"../node_modules/axios/lib/defaults.js","./cancel/Cancel":"../node_modules/axios/lib/cancel/Cancel.js","./cancel/CancelToken":"../node_modules/axios/lib/cancel/CancelToken.js","./cancel/isCancel":"../node_modules/axios/lib/cancel/isCancel.js","./helpers/spread":"../node_modules/axios/lib/helpers/spread.js"}],"../node_modules/axios/index.js":[function(require,module,exports) {
+},{"./utils":"node_modules/axios/lib/utils.js","./helpers/bind":"node_modules/axios/lib/helpers/bind.js","./core/Axios":"node_modules/axios/lib/core/Axios.js","./defaults":"node_modules/axios/lib/defaults.js","./cancel/Cancel":"node_modules/axios/lib/cancel/Cancel.js","./cancel/CancelToken":"node_modules/axios/lib/cancel/CancelToken.js","./cancel/isCancel":"node_modules/axios/lib/cancel/isCancel.js","./helpers/spread":"node_modules/axios/lib/helpers/spread.js"}],"node_modules/axios/index.js":[function(require,module,exports) {
 module.exports = require('./lib/axios');
-},{"./lib/axios":"../node_modules/axios/lib/axios.js"}],"reddit.js":[function(require,module,exports) {
+},{"./lib/axios":"node_modules/axios/lib/axios.js"}],"reddit.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.samplePosts = exports.getTopPostsFromSubreddits = void 0;
+exports.getTopPostsFromSubreddits = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
-var _moment = _interopRequireDefault(require("moment"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var getTopPostsFromSubreddits = function getTopPostsFromSubreddits(subreddits) {
-  return Promise.resolve(samplePosts);
+var getTopPostsFromSubreddits = function getTopPostsFromSubreddits() {
+  return (0, _axios.default)("http://localhost:8888/digest").then(function (res) {
+    return res.data;
+  });
 };
 
 exports.getTopPostsFromSubreddits = getTopPostsFromSubreddits;
-var samplePosts = [{
-  id: 1,
-  title: "Feds Can't Force You to Unlock your iPhone with finger or face, judge rules",
-  url: "#",
-  votes: 42365,
-  created_at: (0, _moment.default)().subtract(5, "days"),
-  author: "loremipsum_dolor",
-  subreddit: "technology"
-}, {
-  id: 2,
-  title: "Lorem ipsum dolor sit amet",
-  url: "#",
-  votes: 42365,
-  created_at: (0, _moment.default)().subtract(5, "days"),
-  author: "loremipsum_dolor",
-  subreddit: "javascript"
-}, {
-  id: 3,
-  title: "Lorem ipsum dolor sit amet",
-  url: "#",
-  votes: 42365,
-  created_at: (0, _moment.default)().subtract(5, "days"),
-  author: "loremipsum_dolor",
-  subreddit: "programming"
-}, {
-  id: 4,
-  title: "Lorem ipsum dolor sit amet",
-  url: "#",
-  votes: 42365,
-  created_at: (0, _moment.default)().subtract(5, "days"),
-  author: "loremipsum_dolor",
-  subreddit: "technology"
-}, {
-  id: 5,
-  title: "Lorem ipsum dolor sit amet",
-  url: "#",
-  votes: 42365,
-  created_at: (0, _moment.default)().subtract(5, "days"),
-  author: "loremipsum_dolor",
-  subreddit: "reactjs"
-}];
-exports.samplePosts = samplePosts;
-},{"axios":"../node_modules/axios/index.js","moment":"node_modules/moment/moment.js"}],"app.js":[function(require,module,exports) {
+},{"axios":"node_modules/axios/index.js"}],"app.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireWildcard(require("react"));
@@ -30718,57 +30700,107 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 var subreddits = ["technology", "javascript", "programming", "reactjs"];
 
-var App = function App() {
-  var _useState = (0, _react.useState)([]),
-      _useState2 = _slicedToArray(_useState, 2),
-      posts = _useState2[0],
-      setPosts = _useState2[1];
+var App =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(App, _React$Component);
 
-  (0, _react.useEffect)(function () {
-    (0, _reddit.getTopPostsFromSubreddits)(subreddits).then(function (posts) {
-      setPosts(posts);
-    });
-  }, []);
-  return _react.default.createElement("div", {
-    className: "wrapper"
-  }, _react.default.createElement("header", null, _react.default.createElement("h1", null, "Reddit Digest"), _react.default.createElement("h2", null, "Last week in", " ", (0, _utils.andify)(subreddits, function (sr) {
-    return _react.default.createElement("code", null, "/r/", sr);
-  }))), _react.default.createElement("ul", null, posts.map(function (post) {
-    return _react.default.createElement("li", {
-      key: post.id,
-      className: "item"
-    }, _react.default.createElement("div", {
-      className: "item__subredditmeta"
-    }, _react.default.createElement("span", {
-      className: "item__votes"
-    }, post.votes, " upvotes"), _react.default.createElement("span", {
-      className: "item__badge"
-    }, "/r/", post.subreddit)), _react.default.createElement("h3", {
-      className: "item__title"
-    }, _react.default.createElement("a", {
-      href: post.url
-    }, post.title)), _react.default.createElement("div", {
-      className: "item__meta"
-    }, _react.default.createElement("span", {
-      className: "item__date"
-    }, (0, _moment.default)().diff(post.created_at, "days"), " days ago"), _react.default.createElement("a", {
-      className: "item__author",
-      href: "#"
-    }, "/u/", post.author)));
-  })), _react.default.createElement("footer", null, _react.default.createElement("a", {
-    href: "#"
-  }, "Edit this digest")));
-};
+  function App() {
+    var _getPrototypeOf2;
+
+    var _this;
+
+    var _temp;
+
+    _classCallCheck(this, App);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(App)).call.apply(_getPrototypeOf2, [this].concat(args))), _this.state = {
+      posts: [],
+      loading: true
+    }, _temp));
+  }
+
+  _createClass(App, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      this.setState({
+        loading: true
+      });
+      (0, _reddit.getTopPostsFromSubreddits)().then(function (posts) {
+        console.log("received posts", posts);
+
+        _this2.setState({
+          loading: false,
+          posts: posts
+        });
+      }).catch(console.error);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this$state = this.state,
+          posts = _this$state.posts,
+          loading = _this$state.loading;
+      return _react.default.createElement("div", {
+        className: "wrapper"
+      }, _react.default.createElement("header", null, _react.default.createElement("h1", null, "Reddit Digest"), _react.default.createElement("h2", null, "Last week in", " ", (0, _utils.andify)(subreddits, function (sr) {
+        return _react.default.createElement("code", null, "/r/", sr);
+      }))), _react.default.createElement("ul", null, posts.map(function (post) {
+        return _react.default.createElement("li", {
+          key: post.id,
+          className: "item"
+        }, _react.default.createElement("div", {
+          className: "item__subredditmeta"
+        }, _react.default.createElement("span", {
+          className: "item__votes"
+        }, post.votes, " upvotes"), _react.default.createElement("span", {
+          className: "item__badge"
+        }, "/r/", post.subreddit)), _react.default.createElement("h3", {
+          className: "item__title"
+        }, _react.default.createElement("a", {
+          href: post.url
+        }, post.title)), _react.default.createElement("div", {
+          className: "item__meta"
+        }, _react.default.createElement("span", {
+          className: "item__date"
+        }, (0, _moment.default)().diff(post.created_at, "days"), " ", "days ago"), _react.default.createElement("a", {
+          className: "item__author",
+          href: "#"
+        }, "/u/", post.author)));
+      })), _react.default.createElement("footer", null, _react.default.createElement("a", {
+        href: "#"
+      }, "Edit this digest")));
+    }
+  }]);
+
+  return App;
+}(_react.default.Component);
 
 _reactDom.default.render(_react.default.createElement(App, null), document.querySelector("#__react-root"));
 },{"react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","moment":"node_modules/moment/moment.js","./utils":"utils.js","./reddit":"reddit.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
@@ -30798,7 +30830,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65369" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50228" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
