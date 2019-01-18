@@ -33,7 +33,7 @@ const formatDate = post => {
 
 app.use(express.static(__dirname + '/editor/dist'))
 
-app.post('/', (req, res) => {
+app.post('/api/telegram/input', (req, res) => {
   const updateId = req.body.update_id
   const update = req.body.message
 
@@ -59,7 +59,11 @@ app.post('/', (req, res) => {
   return res.send('hello')
 });
 
-app.post('/digest', (req, res) => {
+app.get('/api/digest', (req, res) => {
+  database.read('digests').then(digests => res.send(digests))
+})
+
+app.post('/api/digest', (req, res) => {
   const id = uuid.v4()
   const { title, subreddits, days, time } = req.body
 
@@ -79,7 +83,7 @@ app.post('/digest', (req, res) => {
     })
 })
 
-app.get('/digest/:id', (req, res) => {
+app.get('/api/digest/:id', (req, res) => {
   database.read('digests')
     .then(digests => {
       const matching = digests.filter(digest => digest.id === req.params.id)
