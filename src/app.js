@@ -34,29 +34,10 @@ const formatDate = post => {
 app.use(express.static(__dirname + '/editor/dist'))
 
 app.post('/api/telegram/input', (req, res) => {
-  const updateId = req.body.update_id
-  const update = req.body.message
-
-  switch(update.text) {
-    case '/digest': {
-      reddit.fetchPosts().then(posts => posts.slice(1, 10)).then(posts => {
-        telegram.sendMessage({
-          chat_id: update.chat.id,
-          parse_mode: 'markdown',
-          disable_web_page_preview: true,
-          text: `*Reddit Digest ${moment().format('YYYY-MM-DD')}*\n\n${formatTelegramDigest(posts)}`
-        })
-      })
-      .catch(error => {
-        telegram.sendMessage({
-          chat_id: update.chat.id,
-          text: `I couldn't fetch posts from Reddit right now. Try again in a short while.`
-        })
-      })
-    }
-  }
-
-  return res.send('hello')
+  telegram.onUpdate(req.body)
+    .then(() => {
+      return res.send('hello')
+    })
 });
 
 app.get('/api/digest', (req, res) => {
