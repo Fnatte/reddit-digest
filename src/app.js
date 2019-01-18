@@ -13,6 +13,8 @@ const reddit = require('./reddit')
 const telegram = require('./telegram')
 const time = require('./time')
 
+const env = process.env
+
 const app = express()
 app.use(cors())
 app.use(bodyParser.json())
@@ -95,6 +97,6 @@ app.get('/digest/:id', (req, res) => {
     })
 })
 
-app.listen(process.env.PORT, () => {
-  console.log(`Reddit Digest fetcher listening http://localhost:${process.env.PORT}`)
+const listener = app.listen(env.PORT, () => {
+  console.log(`Reddit Digest fetcher listening http://localhost:${listener.address().port}`)
 })
