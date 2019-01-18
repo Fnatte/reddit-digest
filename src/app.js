@@ -97,6 +97,6 @@ app.get('/digest/:id', (req, res) => {
     })
 })
 
-const listener = app.listen(env.PORT, () => {
+const listener = app.listen(parseInt(env.PORT), () => {
   console.log(`Reddit Digest fetcher listening http://localhost:${listener.address().port}`)
 })
