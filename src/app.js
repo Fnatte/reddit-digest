@@ -3,6 +3,7 @@
 require('dotenv').config()
 
 const process = require('process')
+const path = require('path')
 const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser')
@@ -30,11 +31,7 @@ const formatDate = post => {
   return `${moment().diff(moment(post.created * 1000), 'hour')} hours ago`
 }
 
-app.get('/', (req, res) => {
-  return res.send({
-    hello: 'world'
-  })
-})
+app.use(express.static(__dirname + '/editor/dist'))
 
 app.post('/', (req, res) => {
   const updateId = req.body.update_id
@@ -51,8 +48,6 @@ app.post('/', (req, res) => {
         })
       })
       .catch(error => {
-        console.error(error)
-
         telegram.sendMessage({
           chat_id: update.chat.id,
           text: `I couldn't fetch posts from Reddit right now. Try again in a short while.`
