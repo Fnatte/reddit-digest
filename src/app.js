@@ -5,6 +5,7 @@ require("dotenv").config()
 const process = require("process")
 const express = require("express")
 const cors = require("cors")
+const moment = require('moment')
 const bodyParser = require("body-parser")
 const telegram = require("./telegram")
 const reddit = require("./reddit")
@@ -39,9 +40,16 @@ app.get("/api/marshall_digests", async (req, res) => {
 
   await Promise.all(
     storedDigests.map(async digest => {
-      const posts = await reddit.fetchPosts(
-        digest.subreddits.split(",").map(sr => sr.trim())
-      )
+      const shiftedDayNumber = digest.days >>> (7 - moment().isoWeekday())
+      const shouldRunToday = Boolean(shiftedDayNumber % 2)
+      const shouldRunThisHour = digest.time === moment().hour()
+
+      if (!shouldRunToday || !shouldRunThisHour) {
+        console.log('Digest should not run right now', digest)
+        return Promise.resolve()
+      }
+
+      const posts = await reddit.fetchPosts(digest.subreddits.split(",").map(sr => sr.trim()))
       return Promise.all(
         digest.subscribers.map(subscriber => {
           return telegram.sendDigest(posts.slice(1, 10), subscriber)

@@ -1,0 +1,131 @@
+{
+  "settings": {
+    "size": {
+      "width": 315,
+      "height": 300
+    }
+  },
+  "layers": [
+    [
+      {
+        "type": "line",
+        "vertices": [
+          {
+            "x": 75,
+            "y": 75
+          },
+          {
+            "x": 255,
+            "y": 75
+          }
+        ]
+      },
+      {
+        "type": "line",
+        "vertices": [
+          {
+            "x": 45,
+            "y": 120
+          },
+          {
+            "x": 285,
+            "y": 120
+          }
+        ]
+      },
+      {
+        "type": "line",
+        "vertices": [
+          {
+            "x": 30,
+            "y": 165
+          },
+          {
+            "x": 300,
+            "y": 165
+          }
+        ]
+      },
+      {
+        "type": "line",
+        "vertices": [
+          {
+            "x": 45,
+            "y": 210
+          },
+          {
+            "x": 285,
+            "y": 210
+          }
+        ]
+      },
+      {
+        "type": "line",
+        "vertices": [
+          {
+            "x": 75,
+            "y": 255
+          },
+          {
+            "x": 255,
+            "y": 255
+          }
+        ]
+      }
+    ],
+    [
+      {
+        "type": "arc_c",
+        "vertices": [
+          {
+            "x": 165,
+            "y": 30
+          },
+          {
+            "x": 300,
+            "y": 165
+          },
+          {
+            "x": 165,
+            "y": 300
+          },
+          {
+            "x": 30,
+            "y": 165
+          },
+          {
+            "x": 165,
+            "y": 30
+          }
+        ]
+      }
+    ],
+    []
+  ],
+  "styles": [
+    {
+      "thickness": 30,
+      "strokeLinecap": "round",
+      "strokeLinejoin": "round",
+      "color": "#000",
+      "fill": "none",
+      "mirror_style": 0
+    },
+    {
+      "thickness": 30,
+      "strokeLinecap": "round",
+      "strokeLinejoin": "round",
+      "color": "#000",
+      "fill": "none",
+      "mirror_style": 0
+    },
+    {
+      "thickness": 10,
+      "strokeLinecap": "round",
+      "strokeLinejoin": "round",
+      "color": "#fff",
+      "fill": "none",
+      "mirror_style": 0
+    }
+  ]
+}
