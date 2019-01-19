@@ -20,7 +20,7 @@ const createDigest = async payload => {
 }
 
 const getDigest = async id => {
-  const data = await db.read("digests")
+  const data = await db.read("digests", [])
   let matchingDigest = null
 
   for (const digest of data) {
