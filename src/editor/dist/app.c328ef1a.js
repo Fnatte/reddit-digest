@@ -30790,7 +30790,7 @@ function (_React$Component) {
           subreddits = _this$state2.subreddits;
       return _react.default.createElement("div", {
         className: "editor"
-      }, _react.default.createElement("form", {
+      }, _react.default.createElement("h3", null, "Create a new digest"), _react.default.createElement("form", {
         onSubmit: this.onSubmit
       }, _react.default.createElement("div", {
         className: "form-field"
@@ -30821,7 +30821,9 @@ function (_React$Component) {
 }(_react.default.Component);
 
 exports.default = Editor;
-},{"react":"node_modules/react/index.js","axios":"node_modules/axios/index.js"}],"app.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","axios":"node_modules/axios/index.js"}],"telegram.svg":[function(require,module,exports) {
+module.exports = "/telegram.4723bff1.svg";
+},{}],"app.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -30832,18 +30834,26 @@ var _reactRouterDom = require("react-router-dom");
 
 var _editor = _interopRequireDefault(require("./editor"));
 
+var _telegram = _interopRequireDefault(require("./telegram.svg"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var App = function App() {
   return _react.default.createElement("div", {
     className: "app-container"
-  }, _react.default.createElement("h1", null, "Reddit Digest Editor"), _react.default.createElement(_reactRouterDom.BrowserRouter, null, _react.default.createElement(_reactRouterDom.Route, {
+  }, _react.default.createElement("h1", null, "Reddit Digests"), _react.default.createElement("a", {
+    className: "buttonlink",
+    href: "https://t.me/redditdigest_bot",
+    target: "_blank"
+  }, _react.default.createElement("img", {
+    src: _telegram.default
+  }), "Add the Bot"), _react.default.createElement(_reactRouterDom.BrowserRouter, null, _react.default.createElement(_reactRouterDom.Route, {
     path: "/:id"
   }, _react.default.createElement(_editor.default, null))));
 };
 
 _reactDom.default.render(_react.default.createElement(App, null), document.querySelector('#app'));
-},{"react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","react-router-dom":"node_modules/react-router-dom/es/index.js","./editor":"editor.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","react-router-dom":"node_modules/react-router-dom/es/index.js","./editor":"editor.js","./telegram.svg":"telegram.svg"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -30870,7 +30880,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55260" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55693" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

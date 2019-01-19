@@ -77,6 +77,7 @@ export default class Editor extends React.Component {
 
     return (
       <div className="editor">
+        <h3>Create a new digest</h3>
         <form onSubmit={this.onSubmit}>
           <div className="form-field">
             <label>Title:</label>

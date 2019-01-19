@@ -22,6 +22,9 @@ h1 {
   background: #fff;
   padding: 2em;
 }
+.editor {
+  margin: 2em 0;
+}
 form > button {
   font-size: 18px;
   padding: 0.3em 1em;
@@ -63,4 +66,26 @@ form > button {
   padding: 0.3em;
   background: #eee;
   color: #555;
+}
+.buttonlink {
+  display: inline-flex;
+  align-items: center;
+  background: transparent;
+  border: 1px solid #aaa;
+  border-radius: 0.5em;
+  text-decoration: none;
+  color: #555;
+  padding: 0.5em;
+  margin: 1em 0;
+  font-weight: bold;
+  transition: all 250ms;
+}
+.buttonlink:hover {
+  background: #eaeaea;
+  color: #222;
+}
+.buttonlink img {
+  width: 1.5em;
+  height: 1.5em;
+  margin: 0 0.5em 0 0;
 }
