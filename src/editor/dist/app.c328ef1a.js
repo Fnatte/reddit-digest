@@ -30692,7 +30692,7 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var dayLabels = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+var dayLabels = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 
 var Editor =
 /*#__PURE__*/
@@ -30747,7 +30747,7 @@ function (_React$Component) {
           days = _this$state.days,
           time = _this$state.time;
 
-      _axios.default.post('http://localhost:8888/api/digest', {
+      _axios.default.post("/api/digest", {
         title: title,
         subreddits: subreddits,
         days: days,
@@ -30757,14 +30757,22 @@ function (_React$Component) {
           loading: false,
           createdDigest: response.data.id
         });
+      }).catch(function (error) {
+        console.error(error);
+
+        _this.setState({
+          loading: false,
+          error: "Something broke :/"
+        });
       });
     });
 
     _this.state = {
       loading: false,
-      title: '',
-      subreddits: '',
-      days: parseInt('0000000', 2),
+      error: null,
+      title: "",
+      subreddits: "",
+      days: parseInt("0000000", 2),
       time: 8,
       createdDigest: null
     };
@@ -30774,15 +30782,12 @@ function (_React$Component) {
   _createClass(Editor, [{
     key: "render",
     value: function render() {
-      var _this2 = this;
-
       var _this$state2 = this.state,
+          error = _this$state2.error,
           loading = _this$state2.loading,
           createdDigest = _this$state2.createdDigest,
           title = _this$state2.title,
-          subreddits = _this$state2.subreddits,
-          days = _this$state2.days,
-          time = _this$state2.time;
+          subreddits = _this$state2.subreddits;
       return _react.default.createElement("div", {
         className: "editor"
       }, _react.default.createElement("form", {
@@ -30801,32 +30806,13 @@ function (_React$Component) {
         value: subreddits,
         onChange: this.onSubredditsChange,
         disabled: loading
-      })), _react.default.createElement("div", {
-        className: "form-field"
-      }, _react.default.createElement("div", {
-        className: "multiselect"
-      }, 127 .toString(2).split('').map(function (_, index) {
-        return _react.default.createElement("div", {
-          key: index,
-          className: "multiselect__choice"
-        }, _react.default.createElement("input", {
-          type: "checkbox",
-          checked: Boolean((days >>> 6 - index) % 2),
-          onChange: _this2.onDayChange(64 >>> index),
-          disabled: loading
-        }), dayLabels[index]);
-      }))), _react.default.createElement("div", {
-        className: "form-field"
-      }, _react.default.createElement("label", null, "Hour:"), _react.default.createElement("input", {
-        type: "number",
-        min: 0,
-        max: 23,
-        value: time,
-        onChange: this.onTimeChange,
+      })), _react.default.createElement("button", {
         disabled: loading
-      })), _react.default.createElement("button", null, "Save")), createdDigest && _react.default.createElement("div", {
+      }, loading ? "..." : "Save")), error && _react.default.createElement("div", {
+        className: "notification--error"
+      }, _react.default.createElement("p", null, error)), createdDigest && _react.default.createElement("div", {
         className: "notification"
-      }, _react.default.createElement("p", null, "Awesome. Give the following id to the bot with the ", _react.default.createElement("code", null, "/subscribe"), " command."), _react.default.createElement("p", null, _react.default.createElement("code", null, createdDigest))));
+      }, _react.default.createElement("p", null, "Awesome. Give the following id to the bot with the", " ", _react.default.createElement("code", null, "/subscribe"), " command."), _react.default.createElement("p", null, _react.default.createElement("code", null, createdDigest))));
     }
   }]);
 
@@ -30883,7 +30869,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62942" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55260" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

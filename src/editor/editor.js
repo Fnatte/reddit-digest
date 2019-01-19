@@ -1,8 +1,14 @@
-import React from 'react'
-import axios from 'axios'
+import React from "react"
+import axios from "axios"
 
 const dayLabels = [
-  'monday', 'tuesday', 'wednesday', 'thursday','friday', 'saturday', 'sunday'
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
+  "sunday"
 ]
 
 export default class Editor extends React.Component {
@@ -11,10 +17,11 @@ export default class Editor extends React.Component {
 
     this.state = {
       loading: false,
+      error: null,
 
-      title: '',
-      subreddits: '',
-      days: parseInt('0000000', 2),
+      title: "",
+      subreddits: "",
+      days: parseInt("0000000", 2),
       time: 8,
       createdDigest: null
     }
@@ -45,29 +52,51 @@ export default class Editor extends React.Component {
 
     const { title, subreddits, days, time } = this.state
 
-    axios.post('/api/digest', { title, subreddits, days, time })
+    axios
+      .post("/api/digest", { title, subreddits, days, time })
       .then(response => {
-        this.setState({ 
+        this.setState({
           loading: false,
           createdDigest: response.data.id
         })
       })
+      .catch(error => {
+        console.error(error)
+        this.setState({ loading: false, error: "Something broke :/" })
+      })
   }
 
-  render () {
-    const { loading, createdDigest, title, subreddits, days, time } = this.state
+  render() {
+    const {
+      error,
+      loading,
+      createdDigest,
+      title,
+      subreddits /*, days, time*/
+    } = this.state
 
     return (
       <div className="editor">
         <form onSubmit={this.onSubmit}>
           <div className="form-field">
             <label>Title:</label>
-            <input type="text" value={title} onChange={this.onTitleChange} disabled={loading} />
+            <input
+              type="text"
+              value={title}
+              onChange={this.onTitleChange}
+              disabled={loading}
+            />
           </div>
           <div className="form-field">
             <label>Subreddits:</label>
-            <input type="text" value={subreddits} onChange={this.onSubredditsChange} disabled={loading} />
+            <input
+              type="text"
+              value={subreddits}
+              onChange={this.onSubredditsChange}
+              disabled={loading}
+            />
           </div>
+          {/*
           <div className="form-field">
             <div className="multiselect">
             {(127).toString(2).split('').map((_, index) => (
@@ -82,13 +111,20 @@ export default class Editor extends React.Component {
             <label>Hour:</label>
             <input type="number" min={0} max={23} value={time} onChange={this.onTimeChange} disabled={loading} />
           </div>
-          <button>Save</button>
+          */}
+          <button disabled={loading}>{loading ? "..." : "Save"}</button>
         </form>
 
-        { createdDigest && (
+        {error && <div className="notification--error"><p>{error}</p></div>}
+        {createdDigest && (
           <div className="notification">
-            <p>Awesome. Give the following id to the bot with the <code>/subscribe</code> command.</p>
-          <p><code>{createdDigest}</code></p>
+            <p>
+              Awesome. Give the following id to the bot with the{" "}
+              <code>/subscribe</code> command.
+            </p>
+            <p>
+              <code>{createdDigest}</code>
+            </p>
           </div>
         )}
       </div>
