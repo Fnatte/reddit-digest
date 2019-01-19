@@ -7,8 +7,8 @@ const express = require("express")
 const cors = require("cors")
 const bodyParser = require("body-parser")
 const telegram = require("./telegram")
-const reddit = require('./reddit')
-const digests = require('./digests')
+const reddit = require("./reddit")
+const digests = require("./digests")
 const { requestLogger } = require("./log")
 
 const env = process.env
@@ -39,13 +39,15 @@ app.get("/api/marshall_digests", async (req, res) => {
 
   await Promise.all(
     storedDigests.map(async digest => {
-      const posts = await reddit.fetchPosts()
+      const posts = await reddit.fetchPosts(
+        digest.subreddits.split(",").map(sr => sr.trim())
+      )
       return telegram.sendDigest(posts.slice(1, 10), digest.subscribers[0])
     })
   )
 
-  return res.send('done')
-});
+  return res.send("done")
+})
 
 app.get("/api/digest/:id", async (req, res) => {
   const digest = await digests.getDigest(req.params.id)

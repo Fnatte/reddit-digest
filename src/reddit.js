@@ -2,17 +2,16 @@
 
 const axios = require("axios")
 const _ = require("lodash/fp")
+const { logger } = require('./log')
 
-const subreddits = [
-    "technology",
-    "programming",
-    "psychology"
-]
+const log = (...args) => {
+  logger.log('[Reddit]', ...args)
+}
 
-const fetchPosts = async () => {
-  console.log('reddit.fetchPosts')
+const fetchPosts = async (subreddits) => {
+  log('Fetching posts', 'Subs:', subreddits)
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     Promise.all(
       subreddits.map(sr =>
         axios(  
