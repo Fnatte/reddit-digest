@@ -12,7 +12,7 @@ const createDigest = async payload => {
     time
   }
 
-  const storedDigests = await db.read("digests")
+  const storedDigests = await db.read("digests", [])
 
   await db.write("digests", [...storedDigests, newDigest])
 
@@ -44,7 +44,7 @@ const extractIdFromString = input => {
 }
 
 const subscribeToDigest = async (digestId, subscriber) => {
-  const storedDigests = await db.read("digests")
+  const storedDigests = await db.read("digests", [])
 
   const updatedDigests = storedDigests.map(digest => {
     if (digest.id !== digestId) {
