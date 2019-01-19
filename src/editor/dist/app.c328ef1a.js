@@ -30801,11 +30801,12 @@ function (_React$Component) {
         disabled: loading
       })), _react.default.createElement("div", {
         className: "form-field"
-      }, _react.default.createElement("label", null, "Subreddits:"), _react.default.createElement("input", {
+      }, _react.default.createElement("label", null, "Comma-separated subreddits:"), _react.default.createElement("input", {
         type: "text",
         value: subreddits,
         onChange: this.onSubredditsChange,
-        disabled: loading
+        disabled: loading,
+        placeholder: "technology, programming, javascript"
       })), _react.default.createElement("button", {
         disabled: loading
       }, loading ? "..." : "Save")), error && _react.default.createElement("div", {

@@ -88,12 +88,13 @@ export default class Editor extends React.Component {
             />
           </div>
           <div className="form-field">
-            <label>Subreddits:</label>
+            <label>Comma-separated subreddits:</label>
             <input
               type="text"
               value={subreddits}
               onChange={this.onSubredditsChange}
               disabled={loading}
+              placeholder="technology, programming, javascript"
             />
           </div>
           {/*
