@@ -45,7 +45,7 @@ export default class Editor extends React.Component {
 
     const { title, subreddits, days, time } = this.state
 
-    axios.post('http://localhost:8888/api/digest', { title, subreddits, days, time })
+    axios.post('/api/digest', { title, subreddits, days, time })
       .then(response => {
         this.setState({ 
           loading: false,
