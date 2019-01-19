@@ -10,37 +10,41 @@ const subreddits = [
 ]
 
 const fetchPosts = async () => {
-  let responses;
+  console.log('reddit.fetchPosts')
 
-  responses = await Promise.all(
-      subreddits.map(sr => {
-        const url = `https://www.reddit.com/r/${sr}/top.json`
-        const params = { t: 'day' }
-
-        return axios(url, { params })
-      })
-  )
-
-  return _.pipe(
-    _.flatten,
-    _.map(_.get('data.data.children')),
-    _.flatten,
-    _.map(_.pipe(
-      _.get('data'),
-      _.pick([
-        'title',
-        'url',
-        'ups',
-        'downs',
-        'author',
-        'created',
-        'subreddit',
-        'subreddit_id'
-      ])
-    )),
-    _.sortBy(_.get('ups')),
-    _.reverse,
-  )(responses)
+  return new Promise((resolve, reject) => {
+    Promise.all(
+      subreddits.map(sr =>
+        axios(  
+          `https://www.reddit.com/r/${sr}/top.json`,
+          { params: { t: 'day' } }
+        )
+      )
+    ).then(responses => {
+      resolve(
+        _.pipe(
+          _.flatten,
+          _.map(_.get('data.data.children')),
+          _.flatten,
+          _.map(_.pipe(
+            _.get('data'),
+            _.pick([
+              'title',
+              'url',
+              'ups',
+              'downs',
+              'author',
+              'created',
+              'subreddit',
+              'subreddit_id'
+            ])
+          )),
+          _.sortBy(_.get('ups')),
+          _.reverse,
+        )(responses)
+      )
+    })
+  })
 }
 
 module.exports = { fetchPosts }

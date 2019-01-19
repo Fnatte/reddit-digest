@@ -10,11 +10,9 @@ const token = process.env.TELEGRAM_TOKEN
 const webhook = args._[0]
 const url = `https://api.telegram.org/bot${token}/setWebhook`
 
-console.log(token, webhook, url)
-
 axios(url, {
   params: {
-    url: webhook
+    url: `${webhook}/api/telegram`
   }
 })
 .then(res => console.log(res.data))
