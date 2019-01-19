@@ -42,7 +42,11 @@ app.get("/api/marshall_digests", async (req, res) => {
       const posts = await reddit.fetchPosts(
         digest.subreddits.split(",").map(sr => sr.trim())
       )
-      return telegram.sendDigest(posts.slice(1, 10), digest.subscribers[0])
+      return Promise.all(
+        digest.subscribers.map(subscriber => {
+          return telegram.sendDigest(posts.slice(1, 10), subscriber)
+        })
+      )
     })
   )
 
