@@ -30692,6 +30692,7 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+/* eslint-disable no-console */
 var dayLabels = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 
 var Editor =
@@ -30725,9 +30726,7 @@ function (_React$Component) {
     });
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "onDayChange", function (day) {
-      return function (event) {
-        console.log(day);
-
+      return function () {
         _this.setState({
           days: _this.state.days ^ day
         });
@@ -30782,12 +30781,16 @@ function (_React$Component) {
   _createClass(Editor, [{
     key: "render",
     value: function render() {
+      var _this2 = this;
+
       var _this$state2 = this.state,
           error = _this$state2.error,
           loading = _this$state2.loading,
           createdDigest = _this$state2.createdDigest,
           title = _this$state2.title,
-          subreddits = _this$state2.subreddits;
+          subreddits = _this$state2.subreddits,
+          days = _this$state2.days,
+          time = _this$state2.time;
       return _react.default.createElement("div", {
         className: "editor"
       }, _react.default.createElement("h3", null, "Create a new digest"), _react.default.createElement("form", {
@@ -30807,6 +30810,29 @@ function (_React$Component) {
         onChange: this.onSubredditsChange,
         disabled: loading,
         placeholder: "technology, programming, javascript"
+      })), _react.default.createElement("div", {
+        className: "form-field"
+      }, _react.default.createElement("div", {
+        className: "multiselect"
+      }, 127 .toString(2).split("").map(function (_, index) {
+        return _react.default.createElement("div", {
+          key: index,
+          className: "multiselect__choice"
+        }, _react.default.createElement("input", {
+          type: "checkbox",
+          checked: Boolean((days >>> 6 - index) % 2),
+          onChange: _this2.onDayChange(64 >>> index),
+          disabled: loading
+        }), dayLabels[index]);
+      }))), _react.default.createElement("div", {
+        className: "form-field"
+      }, _react.default.createElement("label", null, "Hour:"), _react.default.createElement("input", {
+        type: "number",
+        min: 0,
+        max: 23,
+        value: time,
+        onChange: this.onTimeChange,
+        disabled: loading
       })), _react.default.createElement("button", {
         disabled: loading
       }, loading ? "..." : "Save")), error && _react.default.createElement("div", {
@@ -30880,7 +30906,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55693" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61734" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

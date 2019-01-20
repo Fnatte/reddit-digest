@@ -1,6 +1,8 @@
 import React from "react"
 import axios from "axios"
 
+/* eslint-disable no-console */
+
 const dayLabels = [
   "monday",
   "tuesday",
@@ -39,9 +41,7 @@ export default class Editor extends React.Component {
     this.setState({ time: event.target.value })
   }
 
-  onDayChange = day => event => {
-    console.log(day)
-
+  onDayChange = day => () => {
     this.setState({ days: this.state.days ^ day })
   }
 
@@ -72,7 +72,9 @@ export default class Editor extends React.Component {
       loading,
       createdDigest,
       title,
-      subreddits /*, days, time*/
+      subreddits,
+      days,
+      time
     } = this.state
 
     return (
@@ -98,26 +100,43 @@ export default class Editor extends React.Component {
               placeholder="technology, programming, javascript"
             />
           </div>
-          {/*
           <div className="form-field">
             <div className="multiselect">
-            {(127).toString(2).split('').map((_, index) => (
-              <div key={index} className="multiselect__choice">
-                <input type="checkbox" checked={Boolean((days >>> (6 - index)) % 2)} onChange={this.onDayChange(64 >>> index)} disabled={loading} />
-                {dayLabels[index]}
-              </div>
-            ))}
+              {(127)
+                .toString(2)
+                .split("")
+                .map((_, index) => (
+                  <div key={index} className="multiselect__choice">
+                    <input
+                      type="checkbox"
+                      checked={Boolean((days >>> (6 - index)) % 2)}
+                      onChange={this.onDayChange(64 >>> index)}
+                      disabled={loading}
+                    />
+                    {dayLabels[index]}
+                  </div>
+                ))}
             </div>
           </div>
           <div className="form-field">
             <label>Hour:</label>
-            <input type="number" min={0} max={23} value={time} onChange={this.onTimeChange} disabled={loading} />
+            <input
+              type="number"
+              min={0}
+              max={23}
+              value={time}
+              onChange={this.onTimeChange}
+              disabled={loading}
+            />
           </div>
-          */}
           <button disabled={loading}>{loading ? "..." : "Save"}</button>
         </form>
 
-        {error && <div className="notification--error"><p>{error}</p></div>}
+        {error && (
+          <div className="notification--error">
+            <p>{error}</p>
+          </div>
+        )}
         {createdDigest && (
           <div className="notification">
             <p>

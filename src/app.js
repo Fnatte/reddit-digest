@@ -10,7 +10,7 @@ const bodyParser = require("body-parser")
 const telegram = require("./telegram")
 const reddit = require("./reddit")
 const digests = require("./digests")
-const { requestLogger } = require("./log")
+const { requestLogger, logger } = require("./log")
 
 const env = process.env
 
@@ -45,7 +45,7 @@ app.get("/api/marshall_digests", async (req, res) => {
       const shouldRunThisHour = digest.time === moment().hour()
 
       if (!shouldRunToday || !shouldRunThisHour) {
-        console.log('Digest should not run right now', digest)
+        logger.log(`Digest ${digest.id} should not run at this moment`)
         return Promise.resolve()
       }
 
