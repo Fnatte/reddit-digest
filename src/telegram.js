@@ -4,7 +4,7 @@ const emoji = require("node-emoji")
 const db = require("./database")
 const { logger } = require("./log")
 const digests = require("./digests")
-const reddit = require("./reddit")
+const firebase = require("./firebase")
 
 const TOKEN = process.env.TELEGRAM_TOKEN
 
@@ -16,19 +16,24 @@ const prefixUrl = method => `https://api.telegram.org/bot${TOKEN}/${method}`
 
 const executeCommand = (command, payload = {}) => {
   log("executeCommand", command)
-  return axios(prefixUrl(command), { params: payload }).then(res => res.data)
+  return axios(prefixUrl(command), { params: payload })
+    .then(res => res.data)
+    .catch(error => {
+      // eslint-disable-next-line no-console
+      console.error(error)
+    })
 }
 
-const formatPostRow = post =>
-  `*${formatUpvotes(post.ups)} in /r/${post.subreddit}* _${formatDate(
-    post
-  )}_\n[${post.title}](${post.url})`
 const formatTelegramDigest = posts => {
   return posts.reduce(
     (result, post) => `${result}${formatPostRow(post)}\n\n`,
     ""
   )
 }
+const formatPostRow = post =>
+  `<b>${formatUpvotes(post.ups)} in /r/${post.subreddit}</b> <i>${formatDate(
+    post
+  )}</i>\n<a href="https://www.reddit.com${post.permalink}">${post.title}</a>`
 const formatUpvotes = votes => {
   return votes >= 1000
     ? `${(votes / 1000).toFixed(1)}k upvotes`
@@ -47,25 +52,31 @@ const onUpdate = async payload => {
     return
   }
 
-  log("Received update", update_id, message.text)
+  log(`Received update #${update_id} from chat #${message.chat.id}`)
 
-  const data = await db.read("telegram", {})
+  const updateExists = await firebase.telegramUpdateExists(update_id)
 
   // Don't act on updates already stored.
-  if (data.updates && data.updates.includes(update_id)) {
-    log(`Update ${update_id} has already been handled. Noop.`)
+  if (updateExists) {
+    log(`Update #${update_id} has already been handled`)
     return
   }
 
   // Store the update.
-  await db.write("telegram", {
-    updates: [...(data.updates || []), update_id]
-  })
+  await firebase.storeTelegramUpdate(update_id, message)
 
   switch (true) {
     case message.text.startsWith("/subscribe"): {
-      const digestId = digests.extractIdFromString(message.text)
-      const digest = await digests.getDigest(digestId)
+      const digestId = message.text.split("/subscribe")[1].trim()
+
+      if (!digestId.length) {
+        return executeCommand("sendMessage", {
+          chat_id: message.chat.id,
+          text: 'Subscribe with "/subscribe abc-123"'
+        })
+      }
+
+      const digest = await firebase.getDigest(digestId)
 
       if (!digest) {
         executeCommand("sendMessage", {
@@ -79,29 +90,29 @@ const onUpdate = async payload => {
 
       executeCommand("sendMessage", {
         chat_id: message.chat.id,
-        text: `You are now subscribed to "Sports" ${emoji.get(
+        text: `You are now subscribed to "${digest.title}" ${emoji.get(
           "ok_hand"
-        )}\n\nid: ${digestId}`
+        )}`
       })
       break
     }
-    case message.text.startsWith('/unsubscribe'): {
-      executeCommand('sendMessage', {
+    case message.text.startsWith("/unsubscribe"): {
+      executeCommand("sendMessage", {
         chat_id: message.chat.id,
-        text: `Unsubscribing is not yet implemented ${emoji.get('shrug')}`
+        text: `Unsubscribing is not yet implemented ${emoji.get("shrug")}`
       })
     }
   }
 }
 
 const sendDigest = async (posts, chatId) => {
-  const text = `*Reddit Digest ${moment().format(
+  const text = `<b>Reddit Digest ${moment().format(
     "YYYY-MM-DD"
-  )}*\n\n${formatTelegramDigest(posts)}`
+  )}</b>\n\n${formatTelegramDigest(posts)}`
 
-  await executeCommand('sendMessage', {
+  await executeCommand("sendMessage", {
     chat_id: chatId,
-    parse_mode: 'markdown',
+    parse_mode: "html",
     disable_web_page_preview: true,
     text
   })

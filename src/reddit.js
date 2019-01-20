@@ -30,6 +30,7 @@ const fetchPosts = async (subreddits) => {
             _.pick([
               'title',
               'url',
+              'permalink',
               'ups',
               'downs',
               'author',

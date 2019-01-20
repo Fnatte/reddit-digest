@@ -1,0 +1,9 @@
+{
+  "update_id": 123,
+  "message": {
+    "text": "this is a not a real update payload",
+    "chat": {
+      "id": 789
+    }
+  }
+}
