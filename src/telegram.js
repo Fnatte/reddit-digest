@@ -73,7 +73,7 @@ const onUpdate = async payload => {
       if (!digestId.length) {
         return executeCommand("sendMessage", {
           chat_id: message.chat.id,
-          text: 'Subscribe with "/subscribe abc-123"'
+          text: 'Subscribe with "/subscribe abc-123"\n\nGo here to create a digest: https://digest.antonniklasson.se'
         })
       }
 
