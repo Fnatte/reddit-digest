@@ -19,8 +19,6 @@ app.use(cors())
 app.use(bodyParser.json())
 app.use(requestLogger)
 
-app.use(express.static(__dirname + "/editor/dist"))
-
 app.post("/api/telegram", (req, res) => {
   telegram.onUpdate(req.body).then(() => {
     return res.sendStatus(200)
@@ -78,6 +76,11 @@ app.get("/api/marshall_digests", async (req, res) => {
   return res.send("done")
 })
 
+app.get('/', express.static(__dirname + '/editor/dist'))
+app.get('/*', (req, res) => {
+  return res.sendFile(__dirname + '/editor/dist/index.html')
+})
+
 const listener = app.listen(parseInt(env.PORT), () => {
   // eslint-disable-next-line
   console.log(
@@ -85,4 +88,4 @@ const listener = app.listen(parseInt(env.PORT), () => {
       listener.address().port
     }`
   )
-})
+  })
