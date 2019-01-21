@@ -9,7 +9,6 @@ const moment = require("moment")
 const bodyParser = require("body-parser")
 const telegram = require("./telegram")
 const reddit = require("./reddit")
-const digests = require("./digests")
 const { requestLogger, logger } = require("./log")
 const firebase = require("./firebase")
 

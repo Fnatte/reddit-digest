@@ -61,8 +61,9 @@ const onUpdate = async payload => {
     log(`Update #${update_id} has already been handled`)
     return
   }
-
-  // Store the update.
+  
+  // Grab the previous update, and store the current one.
+  const previousUpdate = await firebase.getPreviousUpdateFromTelegramChat(message.chat.id)
   await firebase.storeTelegramUpdate(update_id, message)
 
   switch (true) {
@@ -97,10 +98,36 @@ const onUpdate = async payload => {
       break
     }
     case message.text.startsWith("/unsubscribe"): {
-      executeCommand("sendMessage", {
-        chat_id: message.chat.id,
-        text: `Unsubscribing is not yet implemented ${emoji.get("shrug")}`
-      })
+      const subscriptions = await firebase.getSubscriptionsByChat(message.chat.id)
+
+        if (subscriptions.length === 0) {
+          await executeCommand('sendMessage', {
+            chat_id: message.chat.id,
+            text: `You are not subscribed to any digests ${emoji.get('unamused')} Go here to create one: https://digest.antonniklasson.se ${emoji.get('v')}`
+          })
+        } else {
+          await executeCommand("sendMessage", {
+            chat_id: message.chat.id,
+            text: 'Which digest would you like to unsubscribe from?',
+            reply_markup: {
+              one_time_keyboard: true,
+              keyboard: [
+                subscriptions.map(s => s.title) 
+              ]
+            }
+          })
+        }
+      break;
+    }
+    default: {
+      if (previousUpdate && previousUpdate.message.text.startsWith('/unsubscribe')) {
+        await firebase.unsubscribeChatFromDigest(message.chat.id, message.text)
+        await executeCommand('sendMessage', {
+          chat_id: message.chat.id,
+          text: `Done ${emoji.get('white_check_mark')}`
+        })
+      }
+      break;
     }
   }
 }
