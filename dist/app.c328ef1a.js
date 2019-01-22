@@ -31045,7 +31045,7 @@ var Landing = function Landing() {
     className: "landing-page"
   }, _react.default.createElement("header", null, _react.default.createElement("h1", null, "Create a custom Reddit\xA0Digest")), _react.default.createElement("main", null, _react.default.createElement(_telegramLogin.default, {
     dataOnauth: onLogin,
-    botName: "devredditdigest_bot"
+    botName: "redditdigest_bot"
   })));
 };
 

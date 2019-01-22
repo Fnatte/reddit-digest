@@ -14,7 +14,7 @@ const Landing = () => {
         <h1>Create a custom Reddit&nbsp;Digest</h1>
       </header>
       <main>
-      <TelegramLogin dataOnauth={onLogin} botName="devredditdigest_bot" />
+      <TelegramLogin dataOnauth={onLogin} botName="redditdigest_bot" />
       </main>
     </div>
   )
