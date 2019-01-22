@@ -1,5 +1,6 @@
 {
   "extends": ["eslint:recommended", "prettier"],
+  "plugins": ["react"],
   "env": {
     "browser": true,
     "es6": true,

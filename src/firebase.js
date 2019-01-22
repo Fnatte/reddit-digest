@@ -26,7 +26,16 @@ const getDigest = async id => {
     .doc(id)
     .get()
 
-  return query.exists ? query.data() : null
+  return query.exists ? { ...query.data(), id } : null
+}
+
+const updateDigest = async (digestId, payload) => {
+  return await db.collection('digests').doc(digestId).set({
+    title: payload.title,
+    subreddits: payload.subreddits,
+    days: payload.days,
+    time: payload.time
+  })
 }
 
 const createDigest = async payload => {
@@ -93,6 +102,7 @@ const unsubscribeChatFromDigest = async (chatId, digestTitle) => {
 
 module.exports = {
   getDigest,
+  updateDigest,
   getAllDigests,
   createDigest,
   getAllTelegramUpdates,

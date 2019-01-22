@@ -2,6 +2,7 @@
 
 require("dotenv").config()
 
+const path = require('path')
 const process = require("process")
 const express = require("express")
 const cors = require("cors")
@@ -47,6 +48,12 @@ app.get("/api/digest/:id", async (req, res) => {
   return res.send(digest)
 })
 
+app.post("/api/digest/:id", async (req, res) => {
+  await firebase.updateDigest(req.params.id, req.body)
+
+  return res.send(req.body)
+})
+
 app.get("/api/marshall_digests", async (req, res) => {
   const storedDigests = await firebase.getAllDigests()
 
@@ -76,10 +83,8 @@ app.get("/api/marshall_digests", async (req, res) => {
   return res.send("done")
 })
 
-app.get('/', express.static(__dirname + '/editor/dist'))
-app.get('/*', (req, res) => {
-  return res.sendFile(__dirname + '/editor/dist/index.html')
-})
+app.get("/*", express.static(path.join(__dirname, '../dist/')))
+app.get("/*", (req, res) => res.sendFile(path.join(__dirname, '../dist/')))
 
 const listener = app.listen(parseInt(env.PORT), () => {
   // eslint-disable-next-line
@@ -88,4 +93,4 @@ const listener = app.listen(parseInt(env.PORT), () => {
       listener.address().port
     }`
   )
-  })
+})

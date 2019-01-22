@@ -1,7 +1,8 @@
 {
   "scripts": {
-    "dev": "nodemon -w src src/app.js"
+    "dev": "parallelshell \"nodemon -w src src/app.js\" \"parcel watch src/editor/src/index.html\""
   },
+  "license": "UNLICENSED",
   "dependencies": {
     "@fvilers/simple-logger": "^1.0.1",
     "axios": "^0.18.0",
@@ -19,6 +20,8 @@
     "node-emoji": "^1.8.1",
     "node-uuid": "^1.4.8",
     "nodemon": "^1.18.9",
+    "parallelshell": "^3.0.2",
+    "parcel-bundler": "^1.11.0",
     "prettier": "^1.15.3",
     "prompts": "^2.0.1",
     "rss-parser": "^3.6.2",
