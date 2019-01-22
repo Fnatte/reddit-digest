@@ -4,6 +4,7 @@
 - [x] Update a digest, how without auth?
 
 # Next Action
+- Add "TELEGRAM_BOT_NAME" to .env
 - Mixpanel (https://mixpanel.com/pricing)
 
 # Backlog
