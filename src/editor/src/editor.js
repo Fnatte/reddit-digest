@@ -47,7 +47,7 @@ export default class Editor extends React.Component {
     if (digestId) {
       this.setState({ __loading: true })
 
-      axios(`http://localhost:8888/api/digest/${digestId}`)
+      axios(`/api/digest/${digestId}`)
         .then(res => {
           const digest = res.data
 
@@ -94,7 +94,7 @@ export default class Editor extends React.Component {
 
     axios
       .post(
-        `http://localhost:8888/api/digest${digestId ? `/${digestId}` : ''}`,
+        `/api/digest${digestId ? `/${digestId}` : ''}`,
         { title, subreddits, days, time }
       )
       .then(response => {

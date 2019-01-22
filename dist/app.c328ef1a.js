@@ -30759,7 +30759,7 @@ function (_React$Component) {
           days = _this$state.days,
           time = _this$state.time;
 
-      _axios.default.post("http://localhost:8888/api/digest".concat(digestId ? "/".concat(digestId) : ''), {
+      _axios.default.post("/api/digest".concat(digestId ? "/".concat(digestId) : ''), {
         title: title,
         subreddits: subreddits,
         days: days,
@@ -30804,7 +30804,7 @@ function (_React$Component) {
         this.setState({
           __loading: true
         });
-        (0, _axios.default)("http://localhost:8888/api/digest/".concat(digestId)).then(function (res) {
+        (0, _axios.default)("/api/digest/".concat(digestId)).then(function (res) {
           var digest = res.data;
 
           _this2.setState({
@@ -31104,7 +31104,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58059" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58471" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
