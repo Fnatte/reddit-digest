@@ -7,6 +7,7 @@ const https = require('https')
 const cors = require("cors")
 const moment = require("moment")
 const bodyParser = require("body-parser")
+const emoji = require('node-emoji')
 const telegram = require("./telegram")
 const reddit = require("./reddit")
 const { requestLogger, logger } = require("./log")
@@ -17,6 +18,17 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 app.use(requestLogger)
+
+app.post('/api/auth/telegram', async (req, res) => {
+  await firebase.storeUser(req.body)
+
+  await telegram.sendMessage({
+    chat_id: req.body.id,
+    text: `Hey, lets get this party started! ${emoji.get('dancer')}`
+  })
+
+  return res.send(200)
+})
 
 app.post("/api/telegram", (req, res) => {
   telegram.onUpdate(req.body).then(() => {

@@ -1,9 +1,14 @@
 import React from "react"
+import axios from 'axios'
 import TelegramLogin from "./telegramLogin"
 import "./landing.styl"
 
 const onLogin = response => {
-  console.log(response)
+  axios.post('/api/auth/telegram', response)
+    .then(() => {
+      mixpanel.track('Login')
+      window.location = '/editor'
+    })
 }
 
 const Landing = () => {

@@ -12,6 +12,10 @@ firebase.firestore().settings({
 
 const db = firebase.firestore()
 
+const storeUser = async payload => {
+  const query = await db.collection('users').add(payload)
+}
+
 const getAllDigests = async () => {
   const snapshot = await db.collection("digests").get()
 
@@ -115,6 +119,7 @@ const unsubscribeChatFromDigest = async (chatId, digestTitle) => {
 }
 
 module.exports = {
+  storeUser,
   getDigest,
   updateDigest,
   getAllDigests,

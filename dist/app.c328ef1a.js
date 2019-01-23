@@ -31106,6 +31106,8 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
+var _axios = _interopRequireDefault(require("axios"));
+
 var _telegramLogin = _interopRequireDefault(require("./telegramLogin"));
 
 require("./landing.styl");
@@ -31113,7 +31115,10 @@ require("./landing.styl");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var onLogin = function onLogin(response) {
-  console.log(response);
+  _axios.default.post('/api/auth/telegram', response).then(function () {
+    mixpanel.track('Login');
+    window.location = '/editor';
+  });
 };
 
 var Landing = function Landing() {
@@ -31129,7 +31134,7 @@ var Landing = function Landing() {
 
 var _default = Landing;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","./telegramLogin":"telegramLogin.js","./landing.styl":"landing.styl"}],"app.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","./telegramLogin":"telegramLogin.js","./landing.styl":"landing.styl"}],"app.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -31187,7 +31192,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49894" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51593" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
