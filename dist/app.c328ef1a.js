@@ -30660,7 +30660,79 @@ module.exports.default = axios;
 module.exports = require('./lib/axios');
 },{"./lib/axios":"../node_modules/axios/lib/axios.js"}],"telegram.svg":[function(require,module,exports) {
 module.exports = "/telegram.4723bff1.svg";
-},{}],"editor.js":[function(require,module,exports) {
+},{}],"../../../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
+
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
+  }
+
+  return bundleURL;
+}
+
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp):\/\/[^)\n]+/g);
+
+    if (matches) {
+      return getBaseURL(matches[0]);
+    }
+  }
+
+  return '/';
+}
+
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp):\/\/.+)\/[^/]+$/, '$1') + '/';
+}
+
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"../../../node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
+
+function updateLink(link) {
+  var newLink = link.cloneNode();
+
+  newLink.onload = function () {
+    link.remove();
+  };
+
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+
+var cssTimeout = null;
+
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
+  }
+
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
+
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
+      }
+    }
+
+    cssTimeout = null;
+  }, 50);
+}
+
+module.exports = reloadCSS;
+},{"./bundle-url":"../../../node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"editor.styl":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../../../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"editor.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -30673,6 +30745,8 @@ var _react = _interopRequireDefault(require("react"));
 var _axios = _interopRequireDefault(require("axios"));
 
 var _telegram = _interopRequireDefault(require("./telegram.svg"));
+
+require("./editor.styl");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -30759,7 +30833,7 @@ function (_React$Component) {
           days = _this$state.days,
           time = _this$state.time;
 
-      _axios.default.post("/api/digest".concat(digestId ? "/".concat(digestId) : ''), {
+      _axios.default.post("/api/digest".concat(digestId ? "/".concat(digestId) : ""), {
         title: title,
         subreddits: subreddits,
         days: days,
@@ -30841,22 +30915,15 @@ function (_React$Component) {
           subreddits = _this$state2.subreddits,
           days = _this$state2.days,
           time = _this$state2.time;
-      var strings = digestId ? uiStringVariants.update : uiStringVariants.create;
 
       if (__loading) {
         return _react.default.createElement("div", null, "Loading digest...");
       }
 
+      var strings = digestId ? uiStringVariants.update : uiStringVariants.create;
+      var canSubmitForm = title.length && subreddits.length && days > 0 && time;
       return _react.default.createElement("div", {
-        className: "app-container"
-      }, _react.default.createElement("header", null, _react.default.createElement("h1", null, "Reddit Digests"), _react.default.createElement("a", {
-        className: "buttonlink",
-        href: "https://t.me/redditdigest_bot",
-        target: "_blank"
-      }, _react.default.createElement("img", {
-        src: _telegram.default
-      }), "Add the Bot")), _react.default.createElement("div", {
-        className: "editor"
+        className: "editor-page"
       }, _react.default.createElement("h3", null, strings.title), _react.default.createElement("form", {
         onSubmit: this.onSubmit
       }, _react.default.createElement("div", {
@@ -30876,7 +30943,7 @@ function (_React$Component) {
         placeholder: "technology, programming, javascript"
       })), _react.default.createElement("div", {
         className: "form-field"
-      }, _react.default.createElement("div", {
+      }, _react.default.createElement("label", null, "What days?"), _react.default.createElement("div", {
         className: "multiselect"
       }, 127 .toString(2).split("").map(function (_, index) {
         return _react.default.createElement("div", {
@@ -30886,11 +30953,14 @@ function (_React$Component) {
           type: "checkbox",
           checked: Boolean((days >>> 6 - index) % 2),
           onChange: _this3.onDayChange(64 >>> index),
-          disabled: __creating
-        }), dayLabels[index]);
+          disabled: __creating,
+          id: "choice-".concat(dayLabels[index])
+        }), _react.default.createElement("label", {
+          htmlFor: "choice-".concat(dayLabels[index])
+        }, dayLabels[index]));
       }))), _react.default.createElement("div", {
         className: "form-field"
-      }, _react.default.createElement("label", null, "Hour:"), _react.default.createElement("input", {
+      }, _react.default.createElement("label", null, "At what time?"), _react.default.createElement("input", {
         type: "number",
         min: 0,
         max: 23,
@@ -30898,12 +30968,12 @@ function (_React$Component) {
         onChange: this.onTimeChange,
         disabled: __creating
       })), _react.default.createElement("button", {
-        disabled: __creating
+        disabled: __creating || !canSubmitForm
       }, __creating ? "..." : "Save")), error && _react.default.createElement("div", {
         className: "notification--error"
       }, _react.default.createElement("p", null, error)), createdDigest && _react.default.createElement("div", {
         className: "notification"
-      }, _react.default.createElement("p", null, "Awesome. Give the following id to the bot with the", " ", _react.default.createElement("code", null, "/subscribe"), " command."), _react.default.createElement("p", null, _react.default.createElement("code", null, createdDigest)))));
+      }, _react.default.createElement("p", null, "Awesome. Give the following id to the bot with the", " ", _react.default.createElement("code", null, "/subscribe"), " command."), _react.default.createElement("p", null, _react.default.createElement("code", null, createdDigest))));
     }
   }]);
 
@@ -30911,7 +30981,7 @@ function (_React$Component) {
 }(_react.default.Component);
 
 exports.default = Editor;
-},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","./telegram.svg":"telegram.svg"}],"telegramLogin.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","./telegram.svg":"telegram.svg","./editor.styl":"editor.styl"}],"telegramLogin.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31021,7 +31091,12 @@ TelegramLogin.defaultProps = {
 };
 var _default = TelegramLogin;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js"}],"landing.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","prop-types":"../node_modules/prop-types/index.js"}],"landing.styl":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"./background.jpg":[["background.9e15dd99.jpg","background.jpg"],"background.jpg"],"_css_loader":"../../../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"landing.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31033,6 +31108,8 @@ var _react = _interopRequireDefault(require("react"));
 
 var _telegramLogin = _interopRequireDefault(require("./telegramLogin"));
 
+require("./landing.styl");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var onLogin = function onLogin(response) {
@@ -31042,7 +31119,9 @@ var onLogin = function onLogin(response) {
 var Landing = function Landing() {
   return _react.default.createElement("div", {
     className: "landing-page"
-  }, _react.default.createElement("header", null, _react.default.createElement("h1", null, "Create a custom Reddit\xA0Digest")), _react.default.createElement("main", null, _react.default.createElement(_telegramLogin.default, {
+  }, _react.default.createElement("header", null), _react.default.createElement("main", null, _react.default.createElement("div", {
+    className: "content"
+  }, _react.default.createElement("p", null, 'Minimize distractions while staying on top of the things you care about.')), _react.default.createElement(_telegramLogin.default, {
     dataOnauth: onLogin,
     botName: "devredditdigest_bot"
   })));
@@ -31050,7 +31129,7 @@ var Landing = function Landing() {
 
 var _default = Landing;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","./telegramLogin":"telegramLogin.js"}],"app.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./telegramLogin":"telegramLogin.js","./landing.styl":"landing.styl"}],"app.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -31066,16 +31145,21 @@ var _landing = _interopRequireDefault(require("./landing"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var App = function App() {
-  return _react.default.createElement(_reactRouterDom.BrowserRouter, null, _react.default.createElement(_reactRouterDom.Switch, null, _react.default.createElement(_reactRouterDom.Route, {
+  return _react.default.createElement("div", {
+    className: "wrapper"
+  }, _react.default.createElement("header", null, _react.default.createElement("h1", null, "Reddit Digests")), _react.default.createElement(_reactRouterDom.BrowserRouter, null, _react.default.createElement(_reactRouterDom.Switch, null, _react.default.createElement(_reactRouterDom.Route, {
     path: "/",
+    exact: true,
     component: _landing.default
   }), _react.default.createElement(_reactRouterDom.Route, {
     path: "/editor/:id?",
     component: _editor.default
-  })));
+  }))), _react.default.createElement("footer", null, _react.default.createElement("div", null, _react.default.createElement("span", null, "Built by ", _react.default.createElement("a", {
+    href: "https://antonniklasson.se"
+  }, "Anton Niklasson")))));
 };
 
-_reactDom.default.render(_react.default.createElement(App, null), document.querySelector('#app'));
+_reactDom.default.render(_react.default.createElement(App, null), document.querySelector("#app"));
 },{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","react-router-dom":"../node_modules/react-router-dom/es/index.js","./editor":"editor.js","./landing":"landing.js"}],"../../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -31103,7 +31187,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52196" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49894" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
