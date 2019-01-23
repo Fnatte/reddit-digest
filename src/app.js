@@ -13,7 +13,6 @@ const reddit = require("./reddit")
 const { requestLogger, logger } = require("./log")
 const firebase = require("./firebase")
 
-
 const app = express()
 app.use(cors())
 app.use(bodyParser.json())
@@ -98,10 +97,10 @@ app.get("/*", (req, res) => res.sendFile(path.join(__dirname, '../dist/')))
 
 /** --- === --- **/
 
-const httpsOptions = {
+const httpsOptions = process.env.NODE_ENV !== 'production' ? {
   key: fs.readFileSync(path.resolve('ssl/server.key')),
   cert: fs.readFileSync(path.resolve('ssl/server.crt'))
-}
+} : {}
 const server = https.createServer(httpsOptions, app).listen(process.env.PORT, function(){
   // eslint-disable-next-line
   console.log(
