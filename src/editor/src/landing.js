@@ -5,8 +5,6 @@ const onLogin = response => {
   console.log(response)
 }
 
-console.log(process.env.NODE_ENV)
-
 const Landing = () => {
   return (
     <div className="landing-page">
@@ -14,7 +12,7 @@ const Landing = () => {
         <h1>Create a custom Reddit&nbsp;Digest</h1>
       </header>
       <main>
-      <TelegramLogin dataOnauth={onLogin} botName="redditdigest_bot" />
+      <TelegramLogin dataOnauth={onLogin} botName={process.env.TELEGRAM_BOT_NAME}/>
       </main>
     </div>
   )

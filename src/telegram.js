@@ -87,7 +87,7 @@ const onUpdate = async payload => {
         return
       }
 
-      await digests.subscribeToDigest(digestId, message.chat.id)
+      await firebase.subscribeChatToDigest(message.chat.id, digestId)
 
       executeCommand("sendMessage", {
         chat_id: message.chat.id,

@@ -7,8 +7,8 @@ import LandingPage from './landing'
 const App = () => (
     <Router>
       <Switch>
-        <Route path="/landing" component={LandingPage} />
-        <Route path="/:id?" component={Editor} />
+        <Route path="/" component={LandingPage} />
+        <Route path="/editor/:id?" component={Editor} />
       </Switch>
     </Router>
 )

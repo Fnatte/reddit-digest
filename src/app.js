@@ -1,10 +1,9 @@
 #! /usr/bin/env node
 
-require("dotenv").config()
-
 const path = require('path')
-const process = require("process")
+const fs = require('fs')
 const express = require("express")
+const https = require('https')
 const cors = require("cors")
 const moment = require("moment")
 const bodyParser = require("body-parser")
@@ -13,7 +12,6 @@ const reddit = require("./reddit")
 const { requestLogger, logger } = require("./log")
 const firebase = require("./firebase")
 
-const env = process.env
 
 const app = express()
 app.use(cors())
@@ -86,11 +84,17 @@ app.get("/api/marshall_digests", async (req, res) => {
 app.get("/*", express.static(path.join(__dirname, '../dist/')))
 app.get("/*", (req, res) => res.sendFile(path.join(__dirname, '../dist/')))
 
-const listener = app.listen(parseInt(env.PORT), () => {
+/** --- === --- **/
+
+const httpsOptions = {
+  key: fs.readFileSync(path.resolve('ssl/server.key')),
+  cert: fs.readFileSync(path.resolve('ssl/server.crt'))
+}
+const server = https.createServer(httpsOptions, app).listen(process.env.PORT, function(){
   // eslint-disable-next-line
   console.log(
-    `Reddit Digest fetcher listening http://localhost:${
-      listener.address().port
+    `Reddit Digest fetcher listening https://${process.env.DOMAIN}:${
+      server.address().port
     }`
   )
 })

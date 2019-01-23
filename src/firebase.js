@@ -86,6 +86,20 @@ const getSubscriptionsByChat = async chatId => {
   }, [])
 }
 
+const subscribeChatToDigest = async (chatId, digestTitle) => {
+  const query = await db
+    .collection("digests")
+    .where("title", "==", digestTitle)
+    .get()
+
+    return query.docs.map(
+      async doc =>
+        await doc.ref.update({
+          subscribers: firebase.firestore.FieldValue.arrayUnion(chatId)
+        })
+    )
+}
+
 const unsubscribeChatFromDigest = async (chatId, digestTitle) => {
   const query = await db
     .collection("digests")
@@ -110,5 +124,6 @@ module.exports = {
   storeTelegramUpdate,
   getPreviousUpdateFromTelegramChat,
   getSubscriptionsByChat,
+  subscribeChatToDigest,
   unsubscribeChatFromDigest
 }

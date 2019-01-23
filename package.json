@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "dev": "parallelshell \"nodemon -w src src/app.js\" \"parcel watch src/editor/src/index.html\""
+    "dev": "parallelshell \"nodemon -w src -- -r dotenv/config src/app.js\" \"parcel watch src/editor/src/index.html\""
   },
   "license": "UNLICENSED",
   "dependencies": {

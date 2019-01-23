@@ -30987,6 +30987,7 @@ function (_React$Component) {
       script.setAttribute("data-onauth", "TelegramLoginWidget.dataOnauth(user)");
       script.async = true;
       this.containerRef.current.appendChild(script);
+      console.log(script);
     }
   }, {
     key: "render",
@@ -31038,14 +31039,12 @@ var onLogin = function onLogin(response) {
   console.log(response);
 };
 
-console.log("development");
-
 var Landing = function Landing() {
   return _react.default.createElement("div", {
     className: "landing-page"
   }, _react.default.createElement("header", null, _react.default.createElement("h1", null, "Create a custom Reddit\xA0Digest")), _react.default.createElement("main", null, _react.default.createElement(_telegramLogin.default, {
     dataOnauth: onLogin,
-    botName: "redditdigest_bot"
+    botName: "devredditdigest_bot"
   })));
 };
 
@@ -31068,10 +31067,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var App = function App() {
   return _react.default.createElement(_reactRouterDom.BrowserRouter, null, _react.default.createElement(_reactRouterDom.Switch, null, _react.default.createElement(_reactRouterDom.Route, {
-    path: "/landing",
+    path: "/",
     component: _landing.default
   }), _react.default.createElement(_reactRouterDom.Route, {
-    path: "/:id?",
+    path: "/editor/:id?",
     component: _editor.default
   })));
 };
@@ -31104,7 +31103,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58555" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49472" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
