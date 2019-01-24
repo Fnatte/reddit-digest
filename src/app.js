@@ -106,7 +106,7 @@ const server =
           },
           app
         )
-        .listen(process.env.PORT, function() {
+        .listen(process.env.PORT, () => {
           console.log(
             `Reddit Digest fetcher listening https://${process.env.DOMAIN}:${
               server.address().port
