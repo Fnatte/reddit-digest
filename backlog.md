@@ -9,6 +9,7 @@
 - _nothing prioritized_
 
 # Backlog
+- Perhaps add a note about https://www.reddit.com/reddits/ in the welcome message
 - There shouldn't be a need for manually adding digests with the login in place
 - Login with telegram in the editor, no need to subscribe to things?
   - Add auth to creating and updating digests
