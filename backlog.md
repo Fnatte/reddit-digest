@@ -9,6 +9,7 @@
 - _nothing prioritized_
 
 # Backlog
+- There shouldn't be a need for manually adding digests with the login in place
 - Login with telegram in the editor, no need to subscribe to things?
   - Add auth to creating and updating digests
 - Include an edit link in the actual digest
