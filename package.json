@@ -1,6 +1,7 @@
 {
   "scripts": {
     "dev": "parallelshell \"nodemon -w src -- -r dotenv/config src/app.js\" \"parcel watch src/editor/src/index.html\"",
+    "build": "parcel build src/editor/src/index.html",
     "deploy": "./scripts/deploy.sh"
   },
   "license": "UNLICENSED",
