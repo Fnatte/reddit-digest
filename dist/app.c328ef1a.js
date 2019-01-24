@@ -30843,6 +30843,8 @@ function (_React$Component) {
           __creating: false,
           createdDigest: response.data.id
         });
+
+        window.location = '/editor/' + response.data.id;
       }).catch(function (error) {
         console.error(error);
 
@@ -30973,7 +30975,7 @@ function (_React$Component) {
         className: "notification--error"
       }, _react.default.createElement("p", null, error)), createdDigest && _react.default.createElement("div", {
         className: "notification"
-      }, _react.default.createElement("p", null, "Awesome. Give the following id to the bot with the", " ", _react.default.createElement("code", null, "/subscribe"), " command."), _react.default.createElement("p", null, _react.default.createElement("code", null, createdDigest))));
+      }, _react.default.createElement("p", null, "Awesome. Run the following command with the bot:"), _react.default.createElement("p", null, _react.default.createElement("code", null, "/subscribe ", createdDigest)), _react.default.createElement("p", null)));
     }
   }]);
 
@@ -31161,7 +31163,7 @@ var App = function App() {
     component: _editor.default
   }))), _react.default.createElement("footer", null, _react.default.createElement("div", null, _react.default.createElement("span", null, "Built by ", _react.default.createElement("a", {
     href: "https://antonniklasson.se"
-  }, "Anton Niklasson")))));
+  }, "Anton")))));
 };
 
 _reactDom.default.render(_react.default.createElement(App, null), document.querySelector("#app"));
@@ -31192,7 +31194,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51593" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55354" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

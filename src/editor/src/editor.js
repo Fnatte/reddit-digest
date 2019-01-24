@@ -105,6 +105,7 @@ export default class Editor extends React.Component {
           __creating: false,
           createdDigest: response.data.id
         })
+        window.location = '/editor/' + response.data.id
       })
       .catch(error => {
         console.error(error)
@@ -124,7 +125,6 @@ export default class Editor extends React.Component {
       days,
       time
     } = this.state
-
 
     if (__loading) {
       return <div>Loading digest...</div>
@@ -189,7 +189,9 @@ export default class Editor extends React.Component {
               disabled={__creating}
             />
           </div>
-          <button disabled={__creating || !canSubmitForm}>{__creating ? "..." : "Save"}</button>
+          <button disabled={__creating || !canSubmitForm}>
+            {__creating ? "..." : "Save"}
+          </button>
         </form>
 
         {error && (
@@ -199,12 +201,11 @@ export default class Editor extends React.Component {
         )}
         {createdDigest && (
           <div className="notification">
+            <p>Awesome. Run the following command with the bot:</p>
             <p>
-              Awesome. Give the following id to the bot with the{" "}
-              <code>/subscribe</code> command.
+              <code>/subscribe {createdDigest}</code>
             </p>
             <p>
-              <code>{createdDigest}</code>
             </p>
           </div>
         )}

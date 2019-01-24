@@ -1,13 +1,13 @@
 #! /usr/bin/env node
 
-const path = require('path')
-const fs = require('fs')
+const path = require("path")
+const fs = require("fs")
 const express = require("express")
-const https = require('https')
+const https = require("https")
 const cors = require("cors")
 const moment = require("moment")
 const bodyParser = require("body-parser")
-const emoji = require('node-emoji')
+const emoji = require("node-emoji")
 const telegram = require("./telegram")
 const reddit = require("./reddit")
 const { requestLogger, logger } = require("./log")
@@ -18,12 +18,12 @@ app.use(cors())
 app.use(bodyParser.json())
 app.use(requestLogger)
 
-app.post('/api/auth/telegram', async (req, res) => {
+app.post("/api/auth/telegram", async (req, res) => {
   await firebase.storeUser(req.body)
 
   await telegram.sendMessage({
     chat_id: req.body.id,
-    text: `Hey, lets get this party started! ${emoji.get('dancer')}`
+    text: `Hey, lets get this party started! ${emoji.get("dancer")}`
   })
 
   return res.send(200)
@@ -92,20 +92,24 @@ app.get("/api/marshall_digests", async (req, res) => {
   return res.send("done")
 })
 
-app.get("/*", express.static(path.join(__dirname, '../dist/')))
-app.get("/*", (req, res) => res.sendFile(path.join(__dirname, '../dist/')))
+app.get("/*", express.static(path.join(__dirname, "../dist/")))
+app.get("/*", (req, res) => res.sendFile(path.join(__dirname, "../dist/")))
 
-/** --- === --- **/
-
-const httpsOptions = process.env.NODE_ENV !== 'production' ? {
-  key: fs.readFileSync(path.resolve('ssl/server.key')),
-  cert: fs.readFileSync(path.resolve('ssl/server.crt'))
-} : {}
-const server = https.createServer(httpsOptions, app).listen(process.env.PORT, function(){
-  // eslint-disable-next-line
-  console.log(
-    `Reddit Digest fetcher listening https://${process.env.DOMAIN}:${
-      server.address().port
-    }`
-  )
-})
+const server =
+  process.NODE_ENV === "production"
+    ? app.listen(process.env.PORT)
+    : https
+        .createServer(
+          {
+            key: fs.readFileSync(path.resolve("ssl/server.key")),
+            cert: fs.readFileSync(path.resolve("ssl/server.crt"))
+          },
+          app
+        )
+        .listen(process.env.PORT, function() {
+          console.log(
+            `Reddit Digest fetcher listening https://${process.env.DOMAIN}:${
+              server.address().port
+            }`
+          )
+        })

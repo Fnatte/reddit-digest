@@ -18,7 +18,7 @@ const App = () => (
     <footer>
       <div>
         <span>
-          Built by <a href="https://antonniklasson.se">Anton Niklasson</a>
+          Built by <a href="https://antonniklasson.se">Anton</a>
         </span>
       </div>
     </footer>

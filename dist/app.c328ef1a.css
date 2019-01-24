@@ -80,7 +80,7 @@
   margin: 0 0.5em 0 0;
 }
 .landing-page header {
-  height: 20vh;
+  height: 40vh;
   display: flex;
   background: rgba(255,255,255,0.9) url("background.9e15dd99.jpg") center center;
   background-size: cover;
