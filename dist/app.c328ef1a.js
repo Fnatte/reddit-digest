@@ -31099,6 +31099,7 @@ var reloadCSS = require('_css_loader');
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
 },{"./background.jpg":[["background.9e15dd99.jpg","background.jpg"],"background.jpg"],"_css_loader":"../../../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"landing.js":[function(require,module,exports) {
+
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31109,6 +31110,8 @@ exports.default = void 0;
 var _react = _interopRequireDefault(require("react"));
 
 var _axios = _interopRequireDefault(require("axios"));
+
+var _process = _interopRequireDefault(require("process"));
 
 var _telegramLogin = _interopRequireDefault(require("./telegramLogin"));
 
@@ -31124,6 +31127,7 @@ var onLogin = function onLogin(response) {
 };
 
 var Landing = function Landing() {
+  console.log('TELEGRAM_BOT_NAME', "devredditdigest_bot");
   return _react.default.createElement("div", {
     className: "landing-page"
   }, _react.default.createElement("header", null), _react.default.createElement("main", null, _react.default.createElement("div", {
@@ -31136,7 +31140,7 @@ var Landing = function Landing() {
 
 var _default = Landing;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","./telegramLogin":"telegramLogin.js","./landing.styl":"landing.styl"}],"app.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","process":"../../../node_modules/process/browser.js","./telegramLogin":"telegramLogin.js","./landing.styl":"landing.styl"}],"app.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -31194,7 +31198,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56279" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56938" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

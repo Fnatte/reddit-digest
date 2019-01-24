@@ -1,5 +1,6 @@
 import React from "react"
 import axios from 'axios'
+import process from 'process'
 import TelegramLogin from "./telegramLogin"
 import "./landing.styl"
 
@@ -12,6 +13,7 @@ const onLogin = response => {
 }
 
 const Landing = () => {
+  console.log('TELEGRAM_BOT_NAME', process.env.TELEGRAM_BOT_NAME)
   return (
     <div className="landing-page">
       <header>
