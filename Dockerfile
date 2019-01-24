@@ -9,4 +9,4 @@ RUN yarn build
 
 ENV NODE_ENV=production
 
-CMD node -r dotenv/config src/app.js
+CMD node src/app.js
