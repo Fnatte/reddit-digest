@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "dev": "parallelshell \"nodemon -w src -- -r dotenv/config src/app.js\" \"parcel watch src/editor/src/index.html\""
+    "dev": "parallelshell \"nodemon -w src -- -r dotenv/config src/app.js\" \"parcel watch src/editor/src/index.html\"",
+    "deploy": "./scripts/deploy.sh"
   },
   "license": "UNLICENSED",
   "dependencies": {
@@ -8,6 +9,7 @@
     "axios": "^0.18.0",
     "babel-eslint": "^10.0.1",
     "body-parser": "^1.18.3",
+    "compression": "^1.7.3",
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",
     "eslint": "^5.12.0",
