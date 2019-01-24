@@ -29,8 +29,8 @@ app.post("/api/auth/telegram", async (req, res) => {
   return res.send(200)
 })
 
-app.post("/api/telegram", (req, res) => {
-  telegram.onUpdate(req.body).then(() => {
+app.post("/api/telegram", async (req, res) => {
+  await telegram.onUpdate(req.body).then(() => {
     return res.sendStatus(200)
   })
 })
@@ -95,21 +95,20 @@ app.get("/api/marshall_digests", async (req, res) => {
 app.get("/*", express.static(path.join(__dirname, "../dist/")))
 app.get("/*", (req, res) => res.sendFile(path.join(__dirname, "../dist/")))
 
-const server =
-  process.NODE_ENV === "production"
-    ? app.listen(process.env.PORT)
-    : https
-        .createServer(
-          {
-            key: fs.readFileSync(path.resolve("ssl/server.key")),
-            cert: fs.readFileSync(path.resolve("ssl/server.crt"))
-          },
-          app
-        )
-        .listen(process.env.PORT, () => {
-          console.log(
-            `Reddit Digest fetcher listening https://${process.env.DOMAIN}:${
-              server.address().port
-            }`
-          )
-        })
+if (process.env.NODE_ENV === "production") {
+  app.listen(process.env.PORT, () => {
+    console.log("Reddit Digest running with Production Build")
+  })
+} else {
+  const options = {
+    key: fs.readFileSync(path.resolve("ssl/key.pem")),
+    cert: fs.readFileSync(path.resolve("ssl/cert.pem"))
+  }
+  const server = https.createServer(options, app).listen(443, () => {
+    console.log(
+      `Reddit Digest listening https://${process.env.DOMAIN}:${
+        server.address().port
+      }`
+    )
+  })
+}
