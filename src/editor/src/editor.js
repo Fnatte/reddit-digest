@@ -2,8 +2,7 @@ import React from "react"
 import axios from "axios"
 import logo from "./telegram.svg"
 import "./editor.styl"
-
-/* eslint-disable no-console */
+import Layout from "./layout"
 
 const dayLabels = [
   "monday",
@@ -105,7 +104,7 @@ export default class Editor extends React.Component {
           __creating: false,
           createdDigest: response.data.id
         })
-        window.location = '/editor/' + response.data.id
+        window.location = "/editor/" + response.data.id
       })
       .catch(error => {
         console.error(error)
@@ -126,90 +125,93 @@ export default class Editor extends React.Component {
       time
     } = this.state
 
-    if (__loading) {
-      return <div>Loading digest...</div>
-    }
-
     const strings = digestId ? uiStringVariants.update : uiStringVariants.create
     const canSubmitForm = title.length && subreddits.length && days > 0 && time
 
     return (
-      <div className="editor-page">
-        <h3>{strings.title}</h3>
-        <form onSubmit={this.onSubmit}>
-          <div className="form-field">
-            <label>Title:</label>
-            <input
-              type="text"
-              value={title}
-              onChange={this.onTitleChange}
-              disabled={__creating}
-            />
-          </div>
-          <div className="form-field">
-            <label>Comma-separated subreddits:</label>
-            <input
-              type="text"
-              value={subreddits}
-              onChange={this.onSubredditsChange}
-              disabled={__creating}
-              placeholder="technology, programming, javascript"
-            />
-          </div>
-          <div className="form-field">
-            <label>What days?</label>
-            <div className="multiselect">
-              {(127)
-                .toString(2)
-                .split("")
-                .map((_, index) => (
-                  <div key={index} className="multiselect__choice">
-                    <input
-                      type="checkbox"
-                      checked={Boolean((days >>> (6 - index)) % 2)}
-                      onChange={this.onDayChange(64 >>> index)}
-                      disabled={__creating}
-                      id={`choice-${dayLabels[index]}`}
-                    />
-                    <label htmlFor={`choice-${dayLabels[index]}`}>
-                      {dayLabels[index]}
-                    </label>
+      <Layout>
+        <div className="editor-page">
+          {__loading ? (
+            <div>Doing some work...</div>
+          ) : (
+            <React.Fragment>
+              <h3>{strings.title}</h3>
+              <form onSubmit={this.onSubmit}>
+                <div className="form-field">
+                  <label>Title:</label>
+                  <input
+                    type="text"
+                    value={title}
+                    onChange={this.onTitleChange}
+                    disabled={__creating}
+                  />
+                </div>
+                <div className="form-field">
+                  <label>Comma-separated subreddits:</label>
+                  <input
+                    type="text"
+                    value={subreddits}
+                    onChange={this.onSubredditsChange}
+                    disabled={__creating}
+                    placeholder="technology, programming, javascript"
+                  />
+                </div>
+                <div className="form-field">
+                  <label>What days?</label>
+                  <div className="multiselect">
+                    {(127)
+                      .toString(2)
+                      .split("")
+                      .map((_, index) => (
+                        <div key={index} className="multiselect__choice">
+                          <input
+                            type="checkbox"
+                            checked={Boolean((days >>> (6 - index)) % 2)}
+                            onChange={this.onDayChange(64 >>> index)}
+                            disabled={__creating}
+                            id={`choice-${dayLabels[index]}`}
+                          />
+                          <label htmlFor={`choice-${dayLabels[index]}`}>
+                            {dayLabels[index]}
+                          </label>
+                        </div>
+                      ))}
                   </div>
-                ))}
-            </div>
-          </div>
-          <div className="form-field">
-            <label>At what time?</label>
-            <input
-              type="number"
-              min={0}
-              max={23}
-              value={time}
-              onChange={this.onTimeChange}
-              disabled={__creating}
-            />
-          </div>
-          <button disabled={__creating || !canSubmitForm}>
-            {__creating ? "..." : "Save"}
-          </button>
-        </form>
+                </div>
+                <div className="form-field">
+                  <label>At what time?</label>
+                  <input
+                    type="number"
+                    min={0}
+                    max={23}
+                    value={time}
+                    onChange={this.onTimeChange}
+                    disabled={__creating}
+                  />
+                </div>
+                <button disabled={__creating || !canSubmitForm}>
+                  {__creating ? "..." : "Save"}
+                </button>
+              </form>
 
-        {error && (
-          <div className="notification--error">
-            <p>{error}</p>
-          </div>
-        )}
-        {createdDigest && (
-          <div className="notification">
-            <p>Awesome. Run the following command with the bot:</p>
-            <p>
-              <code>/subscribe {createdDigest}</code>
-            </p>
-            <p>
-            </p>
-          </div>
-        )}
-      </div>
+              {error && (
+                <div className="notification--error">
+                  <p>{error}</p>
+                </div>
+              )}
+              {createdDigest && (
+                <div className="notification">
+                  <p>Awesome. Run the following command with the bot:</p>
+                  <p>
+                    <code>/subscribe {createdDigest}</code>
+                  </p>
+                  <p />
+                </div>
+              )}
+            </React.Fragment>
+          )}
+        </div>
+      </Layout>
     )
   }
 }

@@ -37,8 +37,6 @@ class TelegramLogin extends React.Component {
     script.async = true
 
     this.containerRef.current.appendChild(script)
-
-    console.log(script)
   }
 
   render() {

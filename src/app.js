@@ -8,7 +8,8 @@ const cors = require("cors")
 const moment = require("moment")
 const bodyParser = require("body-parser")
 const emoji = require("node-emoji")
-const compression = require('compression')
+const compression = require("compression")
+const _ = require("lodash/fp")
 const telegram = require("./telegram")
 const reddit = require("./reddit")
 const { requestLogger, logger } = require("./log")
@@ -21,14 +22,36 @@ app.use(requestLogger)
 app.use(compression())
 
 app.post("/api/auth/telegram", async (req, res) => {
-  await firebase.storeUser(req.body)
+  console.log("req.body", req.body)
 
-  await telegram.sendMessage({
-    chat_id: req.body.id,
-    text: `Hey, lets get this party started! ${emoji.get("dancer")}`
-  })
+  let userPayload = _.pick([
+    "id",
+    "auth_date",
+    "first_name",
+    "last_name",
+    "username",
+    "photo_url"
+  ])(req.body)
+  const integrityHash = req.body.hash
+  const valid = await telegram.checkPayloadIntegrity(userPayload, integrityHash)
 
-  return res.send(200)
+  if (!valid) {
+    return res.sendStatus(400)
+  }
+
+  userPayload = _.mapKeys(k => k === 'id' ? 'telegram_id' : k)(userPayload)
+
+  let user = await firebase.getUser(userPayload)
+
+  if (!user) {
+    user = await firebase.storeUser(userPayload)
+    await telegram.sendMessage({
+      chat_id: req.body.id,
+      text: `Hey, lets get this party started! ${emoji.get("dancer")}`
+    })
+  }
+
+  return res.send(user)
 })
 
 app.post("/api/telegram", async (req, res) => {
@@ -73,6 +96,13 @@ app.get("/api/marshall_digests", async (req, res) => {
       const shiftedDayNumber = digest.days >>> (7 - moment().isoWeekday())
       const shouldRunToday = Boolean(shiftedDayNumber % 2)
       const shouldRunThisHour = digest.time === moment().hour()
+
+      console.log({
+        digest,
+        shiftedDayNumber,
+        shouldRunToday,
+        shouldRunThisHour
+      })
 
       if (!shouldRunToday || !shouldRunThisHour) {
         logger.log(`Digest ${digest.id} should not run at this moment`)

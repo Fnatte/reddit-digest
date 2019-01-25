@@ -3,26 +3,16 @@ import ReactDOM from "react-dom"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import Editor from "./editor"
 import LandingPage from "./landing"
+import DigestsPage from './digestsPage'
 
 const App = () => (
-  <div className="wrapper">
-    <header>
-      <h1>Reddit Digests</h1>
-    </header>
-    <Router>
-      <Switch>
-        <Route path="/" exact component={LandingPage} />
-        <Route path="/editor/:id?" component={Editor} />
-      </Switch>
-    </Router>
-    <footer>
-      <div>
-        <span>
-          Built by <a href="https://antonniklasson.se">Anton</a>
-        </span>
-      </div>
-    </footer>
-  </div>
+  <Router>
+    <Switch>
+      <Route path="/" exact component={LandingPage} />
+      <Route path="/editor/:id?" component={Editor} />
+      <Route path="/digests" component={DigestsPage} />
+    </Switch>
+  </Router>
 )
 
 ReactDOM.render(<App />, document.querySelector("#app"))

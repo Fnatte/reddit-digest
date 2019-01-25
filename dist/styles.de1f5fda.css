@@ -29,12 +29,24 @@ a {
   text-decoration: none;
 }
 .wrapper > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   background: #69003f;
   padding: 1em;
   color: #fff;
 }
 .wrapper > header h1 {
   font-size: 1.8em;
+}
+.wrapper > header a {
+  padding: 0.5em;
+  color: #ccc;
+}
+.wrapper > header a.active,
+.wrapper > header a:hover {
+  text-decoration: underline;
+  color: #fff;
 }
 .wrapper > footer {
   position: absolute;

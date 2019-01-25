@@ -79,6 +79,11 @@
   height: 1.5em;
   margin: 0 0.5em 0 0;
 }
+.layout__content {
+  width: 90%;
+  max-width: 700px;
+  margin: 2em auto;
+}
 .landing-page header {
   height: 40vh;
   display: flex;
@@ -107,4 +112,44 @@
 .landing-page .content p {
   font-size: 1.5rem;
   margin: 1em 0;
+}
+.switch {
+  background: #f00;
+}
+.switch__input {
+  display: none;
+}
+.switch__visual {
+  position: relative;
+}
+.switch__visual-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3em;
+  height: 2em;
+  background: #f00;
+}
+.switch__visual-knob {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2em;
+  height: 2em;
+  background: #008000;
+}
+.digests-page {
+  font-size: 1em;
+}
+.digests-page .digests__loading {
+  margin: 2em;
+}
+.digests-page .digests__list {
+  margin: 2em 0;
+}
+.digests-page .digests__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em;
 }

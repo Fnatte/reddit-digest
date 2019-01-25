@@ -23,11 +23,20 @@ a
 
 .wrapper
   & > header
+    display flex
+    align-items center
+    justify-content space-between
     background #69003f
     padding 1em
     color white
     h1
       font-size 1.8em
+    a
+      padding .5em
+      color #CCC
+      &.active, &:hover
+        text-decoration underline
+        color white
 
   & > footer
     position absolute

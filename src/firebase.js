@@ -12,8 +12,22 @@ firebase.firestore().settings({
 
 const db = firebase.firestore()
 
+const getUser = async userPayload => {
+  const query = await db
+    .collection("users")
+    .where("telegram_id", "==", userPayload.telegram_id)
+    .get()
+
+  return query.docs.length > 0 ? query.docs[0].data() : null
+}
+
 const storeUser = async payload => {
-  const query = await db.collection('users').add(payload)
+  const ref = await db.collection('users').doc()
+  await ref.set(payload)
+
+  const doc = await ref.get()
+
+  return doc.data()
 }
 
 const getAllDigests = async () => {
@@ -34,12 +48,15 @@ const getDigest = async id => {
 }
 
 const updateDigest = async (digestId, payload) => {
-  return await db.collection('digests').doc(digestId).set({
-    title: payload.title,
-    subreddits: payload.subreddits,
-    days: payload.days,
-    time: payload.time
-  })
+  return await db
+    .collection("digests")
+    .doc(digestId)
+    .set({
+      title: payload.title,
+      subreddits: payload.subreddits,
+      days: payload.days,
+      time: payload.time
+    })
 }
 
 const createDigest = async payload => {
@@ -96,12 +113,12 @@ const subscribeChatToDigest = async (chatId, digestTitle) => {
     .where("title", "==", digestTitle)
     .get()
 
-    return query.docs.map(
-      async doc =>
-        await doc.ref.update({
-          subscribers: firebase.firestore.FieldValue.arrayUnion(chatId)
-        })
-    )
+  return query.docs.map(
+    async doc =>
+      await doc.ref.update({
+        subscribers: firebase.firestore.FieldValue.arrayUnion(chatId)
+      })
+  )
 }
 
 const unsubscribeChatFromDigest = async (chatId, digestTitle) => {
@@ -110,15 +127,16 @@ const unsubscribeChatFromDigest = async (chatId, digestTitle) => {
     .where("title", "==", digestTitle)
     .get()
 
-    return query.docs.map(
-      async doc =>
-        await doc.ref.update({
-          subscribers: firebase.firestore.FieldValue.arrayRemove(chatId)
-        })
-    )
+  return query.docs.map(
+    async doc =>
+      await doc.ref.update({
+        subscribers: firebase.firestore.FieldValue.arrayRemove(chatId)
+      })
+  )
 }
 
 module.exports = {
+  getUser,
   storeUser,
   getDigest,
   updateDigest,

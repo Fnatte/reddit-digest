@@ -30732,7 +30732,56 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"editor.js":[function(require,module,exports) {
+},{"_css_loader":"../../../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"layout.styl":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../../../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"layout.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _reactRouterDom = require("react-router-dom");
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+require("./layout.styl");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Layout = function Layout(_ref) {
+  var children = _ref.children,
+      withoutHeader = _ref.withoutHeader;
+  return _react.default.createElement("div", {
+    className: "wrapper"
+  }, !withoutHeader && _react.default.createElement("header", null, _react.default.createElement("h1", null, "Digests"), _react.default.createElement("nav", null, _react.default.createElement(_reactRouterDom.NavLink, {
+    to: "/digests",
+    activeClassName: "active"
+  }, "My Digests"), _react.default.createElement(_reactRouterDom.NavLink, {
+    to: "/editor",
+    activeClassName: "active"
+  }, "Create digests"))), _react.default.createElement("div", {
+    className: "layout__content"
+  }, children), _react.default.createElement("footer", null, _react.default.createElement("div", null, _react.default.createElement("span", null, "Built by ", _react.default.createElement("a", {
+    href: "https://antonniklasson.se"
+  }, "Anton")))));
+};
+
+Layout.propTypes = {
+  withoutHeader: _propTypes.default.bool
+};
+Layout.defaultProps = {
+  withoutHeader: false
+};
+var _default = Layout;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/es/index.js","prop-types":"../node_modules/prop-types/index.js","./layout.styl":"layout.styl"}],"editor.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -30747,6 +30796,8 @@ var _axios = _interopRequireDefault(require("axios"));
 var _telegram = _interopRequireDefault(require("./telegram.svg"));
 
 require("./editor.styl");
+
+var _layout = _interopRequireDefault(require("./layout"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -30770,7 +30821,6 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-/* eslint-disable no-console */
 var dayLabels = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 var uiStringVariants = {
   create: {
@@ -30844,7 +30894,7 @@ function (_React$Component) {
           createdDigest: response.data.id
         });
 
-        window.location = '/editor/' + response.data.id;
+        window.location = "/editor/" + response.data.id;
       }).catch(function (error) {
         console.error(error);
 
@@ -30917,16 +30967,11 @@ function (_React$Component) {
           subreddits = _this$state2.subreddits,
           days = _this$state2.days,
           time = _this$state2.time;
-
-      if (__loading) {
-        return _react.default.createElement("div", null, "Loading digest...");
-      }
-
       var strings = digestId ? uiStringVariants.update : uiStringVariants.create;
       var canSubmitForm = title.length && subreddits.length && days > 0 && time;
-      return _react.default.createElement("div", {
+      return _react.default.createElement(_layout.default, null, _react.default.createElement("div", {
         className: "editor-page"
-      }, _react.default.createElement("h3", null, strings.title), _react.default.createElement("form", {
+      }, __loading ? _react.default.createElement("div", null, "Doing some work...") : _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("h3", null, strings.title), _react.default.createElement("form", {
         onSubmit: this.onSubmit
       }, _react.default.createElement("div", {
         className: "form-field"
@@ -30975,7 +31020,7 @@ function (_React$Component) {
         className: "notification--error"
       }, _react.default.createElement("p", null, error)), createdDigest && _react.default.createElement("div", {
         className: "notification"
-      }, _react.default.createElement("p", null, "Awesome. Run the following command with the bot:"), _react.default.createElement("p", null, _react.default.createElement("code", null, "/subscribe ", createdDigest)), _react.default.createElement("p", null)));
+      }, _react.default.createElement("p", null, "Awesome. Run the following command with the bot:"), _react.default.createElement("p", null, _react.default.createElement("code", null, "/subscribe ", createdDigest)), _react.default.createElement("p", null)))));
     }
   }]);
 
@@ -30983,7 +31028,7 @@ function (_React$Component) {
 }(_react.default.Component);
 
 exports.default = Editor;
-},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","./telegram.svg":"telegram.svg","./editor.styl":"editor.styl"}],"telegramLogin.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","./telegram.svg":"telegram.svg","./editor.styl":"editor.styl","./layout":"layout.js"}],"telegramLogin.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31059,7 +31104,6 @@ function (_React$Component) {
       script.setAttribute("data-onauth", "TelegramLoginWidget.dataOnauth(user)");
       script.async = true;
       this.containerRef.current.appendChild(script);
-      console.log(script);
     }
   }, {
     key: "render",
@@ -31117,30 +31161,185 @@ var _telegramLogin = _interopRequireDefault(require("./telegramLogin"));
 
 require("./landing.styl");
 
+var _layout = _interopRequireDefault(require("./layout"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var onLogin = function onLogin(response) {
   _axios.default.post('/api/auth/telegram', response).then(function () {
-    mixpanel.track('Login');
+    window.mixpanel.track('Login');
     window.location = '/editor';
   });
 };
 
 var Landing = function Landing() {
-  console.log('TELEGRAM_BOT_NAME', "devredditdigest_bot");
-  return _react.default.createElement("div", {
+  return _react.default.createElement(_layout.default, {
+    withoutHeader: true
+  }, _react.default.createElement("div", {
     className: "landing-page"
   }, _react.default.createElement("header", null), _react.default.createElement("main", null, _react.default.createElement("div", {
     className: "content"
   }, _react.default.createElement("p", null, 'Minimize distractions while staying on top of the things you care about.')), _react.default.createElement(_telegramLogin.default, {
     dataOnauth: onLogin,
     botName: "devredditdigest_bot"
-  })));
+  }))));
 };
 
 var _default = Landing;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","process":"../../../node_modules/process/browser.js","./telegramLogin":"telegramLogin.js","./landing.styl":"landing.styl"}],"app.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","process":"../../../node_modules/process/browser.js","./telegramLogin":"telegramLogin.js","./landing.styl":"landing.styl","./layout":"layout.js"}],"switch.styl":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../../../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"switch.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+require("./switch.styl");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var Switch = function Switch() {
+  return _react.default.createElement("div", {
+    className: "switch"
+  }, _react.default.createElement("input", {
+    type: "checkbox",
+    className: "switch__input"
+  }), _react.default.createElement("div", {
+    className: "switch__visual"
+  }, _react.default.createElement("div", {
+    className: "switch__visual-track"
+  }), _react.default.createElement("div", {
+    className: "switch__visual-knob"
+  })));
+};
+
+var _default = Switch;
+exports.default = _default;
+},{"react":"../node_modules/react/index.js","./switch.styl":"switch.styl"}],"digestsPage.styl":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../../../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"digestsPage.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _axios = _interopRequireDefault(require("axios"));
+
+var _reactRouterDom = require("react-router-dom");
+
+var _layout = _interopRequireDefault(require("./layout"));
+
+var _switch = _interopRequireDefault(require("./switch"));
+
+require("./digestsPage.styl");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var DigestsPage =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(DigestsPage, _React$Component);
+
+  function DigestsPage() {
+    var _getPrototypeOf2;
+
+    var _this;
+
+    _classCallCheck(this, DigestsPage);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(DigestsPage)).call.apply(_getPrototypeOf2, [this].concat(args)));
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {
+      __fetching: false,
+      digests: []
+    });
+
+    return _this;
+  }
+
+  _createClass(DigestsPage, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      this.setState({
+        __fetching: true
+      });
+
+      _axios.default.get("/api/digest").then(function (response) {
+        _this2.setState({
+          digests: response.data,
+          __fetching: false
+        });
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this$state = this.state,
+          __fetching = _this$state.__fetching,
+          digests = _this$state.digests;
+      return _react.default.createElement(_layout.default, null, _react.default.createElement("div", {
+        className: "digests-page"
+      }, _react.default.createElement("h2", null, "Your Digests"), __fetching ? _react.default.createElement("div", {
+        className: "digests__loading"
+      }, _react.default.createElement("em", null, "Fetching your digests...")) : digests.length > 0 ? _react.default.createElement("div", {
+        className: "digests__list"
+      }, digests.map(function (digest) {
+        return _react.default.createElement("div", {
+          key: digest.id,
+          className: "digests__item"
+        }, _react.default.createElement(_reactRouterDom.NavLink, {
+          to: "/editor/".concat(digest.id)
+        }, digest.title));
+      })) : _react.default.createElement("em", null, "You haven't created any digests yet :(")));
+    }
+  }]);
+
+  return DigestsPage;
+}(_react.default.Component);
+
+exports.default = DigestsPage;
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-router-dom":"../node_modules/react-router-dom/es/index.js","./layout":"layout.js","./switch":"switch.js","./digestsPage.styl":"digestsPage.styl"}],"app.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -31153,25 +31352,26 @@ var _editor = _interopRequireDefault(require("./editor"));
 
 var _landing = _interopRequireDefault(require("./landing"));
 
+var _digestsPage = _interopRequireDefault(require("./digestsPage"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var App = function App() {
-  return _react.default.createElement("div", {
-    className: "wrapper"
-  }, _react.default.createElement("header", null, _react.default.createElement("h1", null, "Reddit Digests")), _react.default.createElement(_reactRouterDom.BrowserRouter, null, _react.default.createElement(_reactRouterDom.Switch, null, _react.default.createElement(_reactRouterDom.Route, {
+  return _react.default.createElement(_reactRouterDom.BrowserRouter, null, _react.default.createElement(_reactRouterDom.Switch, null, _react.default.createElement(_reactRouterDom.Route, {
     path: "/",
     exact: true,
     component: _landing.default
   }), _react.default.createElement(_reactRouterDom.Route, {
     path: "/editor/:id?",
     component: _editor.default
-  }))), _react.default.createElement("footer", null, _react.default.createElement("div", null, _react.default.createElement("span", null, "Built by ", _react.default.createElement("a", {
-    href: "https://antonniklasson.se"
-  }, "Anton")))));
+  }), _react.default.createElement(_reactRouterDom.Route, {
+    path: "/digests",
+    component: _digestsPage.default
+  })));
 };
 
 _reactDom.default.render(_react.default.createElement(App, null), document.querySelector("#app"));
-},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","react-router-dom":"../node_modules/react-router-dom/es/index.js","./editor":"editor.js","./landing":"landing.js"}],"../../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","react-router-dom":"../node_modules/react-router-dom/es/index.js","./editor":"editor.js","./landing":"landing.js","./digestsPage":"digestsPage.js"}],"../../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -31198,7 +31398,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56938" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57174" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
