@@ -31710,7 +31710,11 @@ var App = function App() {
     }
   }), _react.default.createElement(_reactRouterDom.Route, {
     path: "/digests",
-    component: _digestsPage.default
+    render: function render(props) {
+      return _react.default.createElement(_routeAuth.default, _extends({}, props, {
+        component: _digestsPage.default
+      }));
+    }
   })));
 };
 

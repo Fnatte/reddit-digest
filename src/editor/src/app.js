@@ -14,7 +14,10 @@ const App = () => (
         path="/editor/:id?"
         render={props => <RouteAuth {...props} component={Editor} />}
       />
-      <Route path="/digests" component={DigestsPage} />
+      <Route
+        path="/digests"
+        render={props => <RouteAuth {...props} component={DigestsPage} />}
+      />
     </Switch>
   </Router>
 )
