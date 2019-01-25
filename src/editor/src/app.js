@@ -1,15 +1,19 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
+import RouteAuth from "./routeAuth"
 import Editor from "./editor"
 import LandingPage from "./landing"
-import DigestsPage from './digestsPage'
+import DigestsPage from "./digestsPage"
 
 const App = () => (
   <Router>
     <Switch>
       <Route path="/" exact component={LandingPage} />
-      <Route path="/editor/:id?" component={Editor} />
+      <Route
+        path="/editor/:id?"
+        render={props => <RouteAuth {...props} component={Editor} />}
+      />
       <Route path="/digests" component={DigestsPage} />
     </Switch>
   </Router>

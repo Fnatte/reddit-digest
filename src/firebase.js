@@ -18,7 +18,11 @@ const getUser = async userPayload => {
     .where("telegram_id", "==", userPayload.telegram_id)
     .get()
 
-  return query.docs.length > 0 ? query.docs[0].data() : null
+  if (query.docs.length === 0) return null
+
+  const doc = query.docs[0]
+
+  return { ...doc.data(), id: doc.id }
 }
 
 const storeUser = async payload => {
@@ -59,10 +63,20 @@ const updateDigest = async (digestId, payload) => {
     })
 }
 
-const createDigest = async payload => {
-  const docRef = await db.collection("digests").add(payload)
+const createDigest = async (author, payload) => {
+  const ref = await db.collection("digests").add({
+    ...payload,
+    creator: author.telegram_id,
+    subscribers: [author.telegram_id]
+  })
+  
+  const doc = await ref.get()
 
-  return { id: docRef.id }
+  return { ...doc.data(), id: doc.id }
+}
+
+const deleteDigest = async digestId => {
+  return await db.collection('digests').doc(digestId).delete() 
 }
 
 const getAllTelegramUpdates = async () => {
@@ -139,6 +153,7 @@ module.exports = {
   getUser,
   storeUser,
   getDigest,
+  deleteDigest,
   updateDigest,
   getAllDigests,
   createDigest,

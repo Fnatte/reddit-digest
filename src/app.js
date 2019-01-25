@@ -10,6 +10,8 @@ const bodyParser = require("body-parser")
 const emoji = require("node-emoji")
 const compression = require("compression")
 const _ = require("lodash/fp")
+const jwt = require('jsonwebtoken')
+const cookieParser = require('cookie-parser')
 const telegram = require("./telegram")
 const reddit = require("./reddit")
 const { requestLogger, logger } = require("./log")
@@ -20,10 +22,30 @@ app.use(cors())
 app.use(bodyParser.json())
 app.use(requestLogger)
 app.use(compression())
+app.use(cookieParser())
+
+const auth = (req, res, next) => {
+  const token = req.cookies['digest-token']
+
+  try {
+    const payload = jwt.verify(token, process.env.JWT_KEY)
+    req.user = payload.user
+  } catch(error) {
+    return res.sendStatus(401)
+  }
+
+  return next()
+}
+
+app.get('/api/me', auth, (req, res) => {
+  if (!req.user) {
+    return res.sendStatus(401)
+  }
+
+  return res.send(req.user)
+})
 
 app.post("/api/auth/telegram", async (req, res) => {
-  console.log("req.body", req.body)
-
   let userPayload = _.pick([
     "id",
     "auth_date",
@@ -51,6 +73,10 @@ app.post("/api/auth/telegram", async (req, res) => {
     })
   }
 
+  const token = jwt.sign({ user }, process.env.JWT_KEY)
+  console.log({ token })
+  res.cookie('digest-token', token, { httpOnly: true })
+
   return res.send(user)
 })
 
@@ -60,19 +86,22 @@ app.post("/api/telegram", async (req, res) => {
   })
 })
 
-app.get("/api/telegram", async (req, res) => {
-  return res.send(await firebase.getAllTelegramUpdates())
-})
-
-app.get("/api/digest", async (req, res) => {
+app.get("/api/digest", auth, async (req, res) => {
   return res.send(await firebase.getAllDigests())
 })
 
-app.post("/api/digest", async (req, res) => {
-  return res.send(await firebase.createDigest(req.body))
+app.post("/api/digest", auth, async (req, res) => {
+  const digest = await firebase.createDigest(req.user, req.body)
+
+  telegram.sendMessage({
+    chat_id: req.user.telegram_id,
+    text: `Nice. I'll start sending you "${digest.title}" according to the schedule.`
+  })
+
+  return res.send(digest)
 })
 
-app.get("/api/digest/:id", async (req, res) => {
+app.get("/api/digest/:id", auth, async (req, res) => {
   const digest = await firebase.getDigest(req.params.id)
 
   if (!digest) {
@@ -82,10 +111,20 @@ app.get("/api/digest/:id", async (req, res) => {
   return res.send(digest)
 })
 
-app.post("/api/digest/:id", async (req, res) => {
+app.post("/api/digest/:id", auth, async (req, res) => {
   await firebase.updateDigest(req.params.id, req.body)
 
   return res.send(req.body)
+})
+
+app.delete('/api/digest/:id', auth, async (req, res) => {
+  const digest = await firebase.getDigest(req.params.id)
+
+  if (digest.creator !== req.user.telegram_id) {
+    return res.sendStatus(401)
+  }
+
+  return await firebase.deleteDigest(req.params.id)
 })
 
 app.get("/api/marshall_digests", async (req, res) => {
@@ -96,13 +135,6 @@ app.get("/api/marshall_digests", async (req, res) => {
       const shiftedDayNumber = digest.days >>> (7 - moment().isoWeekday())
       const shouldRunToday = Boolean(shiftedDayNumber % 2)
       const shouldRunThisHour = digest.time === moment().hour()
-
-      console.log({
-        digest,
-        shiftedDayNumber,
-        shouldRunToday,
-        shouldRunThisHour
-      })
 
       if (!shouldRunToday || !shouldRunThisHour) {
         logger.log(`Digest ${digest.id} should not run at this moment`)

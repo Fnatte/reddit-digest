@@ -104,7 +104,6 @@ export default class Editor extends React.Component {
           __creating: false,
           createdDigest: response.data.id
         })
-        window.location = "/editor/" + response.data.id
       })
       .catch(error => {
         console.error(error)
@@ -201,11 +200,10 @@ export default class Editor extends React.Component {
               )}
               {createdDigest && (
                 <div className="notification">
-                  <p>Awesome. Run the following command with the bot:</p>
                   <p>
-                    <code>/subscribe {createdDigest}</code>
+                    Awesome. The bot will start sending you that digest on the
+                    schedule.
                   </p>
-                  <p />
                 </div>
               )}
             </React.Fragment>

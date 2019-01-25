@@ -171,13 +171,6 @@ const checkPayloadIntegrity = async (payload, hash) => {
     .update(checkString)
     .digest("hex")
 
-  console.log({
-    secret,
-    checkString,
-    hmac,
-    hash
-  })
-
   return hmac === hash
 }
 

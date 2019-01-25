@@ -30658,7 +30658,114 @@ module.exports.default = axios;
 
 },{"./utils":"../node_modules/axios/lib/utils.js","./helpers/bind":"../node_modules/axios/lib/helpers/bind.js","./core/Axios":"../node_modules/axios/lib/core/Axios.js","./defaults":"../node_modules/axios/lib/defaults.js","./cancel/Cancel":"../node_modules/axios/lib/cancel/Cancel.js","./cancel/CancelToken":"../node_modules/axios/lib/cancel/CancelToken.js","./cancel/isCancel":"../node_modules/axios/lib/cancel/isCancel.js","./helpers/spread":"../node_modules/axios/lib/helpers/spread.js"}],"../node_modules/axios/index.js":[function(require,module,exports) {
 module.exports = require('./lib/axios');
-},{"./lib/axios":"../node_modules/axios/lib/axios.js"}],"telegram.svg":[function(require,module,exports) {
+},{"./lib/axios":"../node_modules/axios/lib/axios.js"}],"routeAuth.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _reactRouterDom = require("react-router-dom");
+
+var _axios = _interopRequireDefault(require("axios"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var RouteAuth =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(RouteAuth, _React$Component);
+
+  function RouteAuth() {
+    var _getPrototypeOf2;
+
+    var _this;
+
+    _classCallCheck(this, RouteAuth);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(RouteAuth)).call.apply(_getPrototypeOf2, [this].concat(args)));
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {
+      __validating: true,
+      authorized: false
+    });
+
+    return _this;
+  }
+
+  _createClass(RouteAuth, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      this.setState({
+        __validating: true
+      });
+      (0, _axios.default)("/api/me").then(function (response) {
+        _this2.setState({
+          __validating: false,
+          authorized: true
+        });
+      }).catch(function (error) {
+        _this2.setState({
+          __validating: false,
+          authorized: false
+        });
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this$state = this.state,
+          __validating = _this$state.__validating,
+          authorized = _this$state.authorized;
+
+      var _this$props = this.props,
+          Component = _this$props.component,
+          otherProps = _objectWithoutProperties(_this$props, ["component"]);
+
+      return __validating ? _react.default.createElement("div", null, "Validating credentials...") : authorized ? _react.default.createElement(Component, otherProps) : _react.default.createElement(_reactRouterDom.Redirect, {
+        to: "/"
+      });
+    }
+  }]);
+
+  return RouteAuth;
+}(_react.default.Component);
+
+exports.default = RouteAuth;
+},{"react":"../node_modules/react/index.js","react-router-dom":"../node_modules/react-router-dom/es/index.js","axios":"../node_modules/axios/index.js"}],"telegram.svg":[function(require,module,exports) {
 module.exports = "/telegram.4723bff1.svg";
 },{}],"../../../node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
@@ -30893,8 +31000,6 @@ function (_React$Component) {
           __creating: false,
           createdDigest: response.data.id
         });
-
-        window.location = "/editor/" + response.data.id;
       }).catch(function (error) {
         console.error(error);
 
@@ -31020,7 +31125,7 @@ function (_React$Component) {
         className: "notification--error"
       }, _react.default.createElement("p", null, error)), createdDigest && _react.default.createElement("div", {
         className: "notification"
-      }, _react.default.createElement("p", null, "Awesome. Run the following command with the bot:"), _react.default.createElement("p", null, _react.default.createElement("code", null, "/subscribe ", createdDigest)), _react.default.createElement("p", null)))));
+      }, _react.default.createElement("p", null, "Awesome. The bot will start sending you that digest on the schedule.")))));
     }
   }]);
 
@@ -31028,7 +31133,95 @@ function (_React$Component) {
 }(_react.default.Component);
 
 exports.default = Editor;
-},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","./telegram.svg":"telegram.svg","./editor.styl":"editor.styl","./layout":"layout.js"}],"telegramLogin.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","./telegram.svg":"telegram.svg","./editor.styl":"editor.styl","./layout":"layout.js"}],"../node_modules/react-router/es/index.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+Object.defineProperty(exports, "MemoryRouter", {
+  enumerable: true,
+  get: function () {
+    return _MemoryRouter2.default;
+  }
+});
+Object.defineProperty(exports, "Prompt", {
+  enumerable: true,
+  get: function () {
+    return _Prompt2.default;
+  }
+});
+Object.defineProperty(exports, "Redirect", {
+  enumerable: true,
+  get: function () {
+    return _Redirect2.default;
+  }
+});
+Object.defineProperty(exports, "Route", {
+  enumerable: true,
+  get: function () {
+    return _Route2.default;
+  }
+});
+Object.defineProperty(exports, "Router", {
+  enumerable: true,
+  get: function () {
+    return _Router2.default;
+  }
+});
+Object.defineProperty(exports, "StaticRouter", {
+  enumerable: true,
+  get: function () {
+    return _StaticRouter2.default;
+  }
+});
+Object.defineProperty(exports, "Switch", {
+  enumerable: true,
+  get: function () {
+    return _Switch2.default;
+  }
+});
+Object.defineProperty(exports, "generatePath", {
+  enumerable: true,
+  get: function () {
+    return _generatePath2.default;
+  }
+});
+Object.defineProperty(exports, "matchPath", {
+  enumerable: true,
+  get: function () {
+    return _matchPath2.default;
+  }
+});
+Object.defineProperty(exports, "withRouter", {
+  enumerable: true,
+  get: function () {
+    return _withRouter2.default;
+  }
+});
+
+var _MemoryRouter2 = _interopRequireDefault(require("./MemoryRouter"));
+
+var _Prompt2 = _interopRequireDefault(require("./Prompt"));
+
+var _Redirect2 = _interopRequireDefault(require("./Redirect"));
+
+var _Route2 = _interopRequireDefault(require("./Route"));
+
+var _Router2 = _interopRequireDefault(require("./Router"));
+
+var _StaticRouter2 = _interopRequireDefault(require("./StaticRouter"));
+
+var _Switch2 = _interopRequireDefault(require("./Switch"));
+
+var _generatePath2 = _interopRequireDefault(require("./generatePath"));
+
+var _matchPath2 = _interopRequireDefault(require("./matchPath"));
+
+var _withRouter2 = _interopRequireDefault(require("./withRouter"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+},{"./MemoryRouter":"../node_modules/react-router/es/MemoryRouter.js","./Prompt":"../node_modules/react-router/es/Prompt.js","./Redirect":"../node_modules/react-router/es/Redirect.js","./Route":"../node_modules/react-router/es/Route.js","./Router":"../node_modules/react-router/es/Router.js","./StaticRouter":"../node_modules/react-router/es/StaticRouter.js","./Switch":"../node_modules/react-router/es/Switch.js","./generatePath":"../node_modules/react-router/es/generatePath.js","./matchPath":"../node_modules/react-router/es/matchPath.js","./withRouter":"../node_modules/react-router/es/withRouter.js"}],"telegramLogin.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -31153,6 +31346,8 @@ exports.default = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
+var _reactRouter = require("react-router");
+
 var _axios = _interopRequireDefault(require("axios"));
 
 var _process = _interopRequireDefault(require("process"));
@@ -31165,29 +31360,93 @@ var _layout = _interopRequireDefault(require("./layout"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var onLogin = function onLogin(response) {
-  _axios.default.post('/api/auth/telegram', response).then(function () {
-    window.mixpanel.track('Login');
-    window.location = '/editor';
-  });
-};
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-var Landing = function Landing() {
-  return _react.default.createElement(_layout.default, {
-    withoutHeader: true
-  }, _react.default.createElement("div", {
-    className: "landing-page"
-  }, _react.default.createElement("header", null), _react.default.createElement("main", null, _react.default.createElement("div", {
-    className: "content"
-  }, _react.default.createElement("p", null, 'Minimize distractions while staying on top of the things you care about.')), _react.default.createElement(_telegramLogin.default, {
-    dataOnauth: onLogin,
-    botName: "devredditdigest_bot"
-  }))));
-};
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var Landing =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(Landing, _React$Component);
+
+  function Landing() {
+    var _getPrototypeOf2;
+
+    var _this;
+
+    _classCallCheck(this, Landing);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Landing)).call.apply(_getPrototypeOf2, [this].concat(args)));
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {
+      __authorizing: false
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "onLogin", function (response) {
+      _this.setState({
+        __authorizing: true
+      });
+
+      _axios.default.post("/api/auth/telegram", response).then(function () {
+        _this.setState({
+          __authorizing: false
+        });
+
+        window.mixpanel.track("Login");
+        window.location = "/editor";
+      }).catch(function (error) {
+        _this.setState({
+          __authorizing: false
+        });
+      });
+    });
+
+    return _this;
+  }
+
+  _createClass(Landing, [{
+    key: "render",
+    value: function render() {
+      var __authorizing = this.state.__authorizing;
+      return _react.default.createElement(_layout.default, {
+        withoutHeader: true
+      }, _react.default.createElement("div", {
+        className: "landing-page"
+      }, _react.default.createElement("header", null), _react.default.createElement("main", null, _react.default.createElement("div", {
+        className: "content"
+      }, _react.default.createElement("p", null, "Minimize distractions while staying on top of the things you care about.")), __authorizing ? _react.default.createElement("div", null, "Signing in...") : _react.default.createElement(_telegramLogin.default, {
+        dataOnauth: this.onLogin,
+        botName: "devredditdigest_bot"
+      }))));
+    }
+  }]);
+
+  return Landing;
+}(_react.default.Component);
 
 var _default = Landing;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","process":"../../../node_modules/process/browser.js","./telegramLogin":"telegramLogin.js","./landing.styl":"landing.styl","./layout":"layout.js"}],"switch.styl":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-router":"../node_modules/react-router/es/index.js","axios":"../node_modules/axios/index.js","process":"../../../node_modules/process/browser.js","./telegramLogin":"telegramLogin.js","./landing.styl":"landing.styl","./layout":"layout.js"}],"switch.styl":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -31223,7 +31482,53 @@ var Switch = function Switch() {
 
 var _default = Switch;
 exports.default = _default;
-},{"react":"../node_modules/react/index.js","./switch.styl":"switch.styl"}],"digestsPage.styl":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","./switch.styl":"switch.styl"}],"button.styl":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
+
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../../../node_modules/parcel-bundler/src/builtins/css-loader.js"}],"button.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.DestructiveButton = exports.Button = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+require("./button.styl");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
+var Button = function Button(_ref) {
+  var children = _ref.children,
+      otherProps = _objectWithoutProperties(_ref, ["children"]);
+
+  return _react.default.createElement("button", _extends({}, otherProps, {
+    className: "button"
+  }), children);
+};
+
+exports.Button = Button;
+
+var DestructiveButton = function DestructiveButton(_ref2) {
+  var children = _ref2.children,
+      otherProps = _objectWithoutProperties(_ref2, ["children"]);
+
+  return _react.default.createElement("button", _extends({}, otherProps, {
+    className: "button button--destructive"
+  }), children);
+};
+
+exports.DestructiveButton = DestructiveButton;
+},{"react":"../node_modules/react/index.js","./button.styl":"button.styl"}],"digestsPage.styl":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -31245,6 +31550,8 @@ var _reactRouterDom = require("react-router-dom");
 var _layout = _interopRequireDefault(require("./layout"));
 
 var _switch = _interopRequireDefault(require("./switch"));
+
+var _button = require("./button");
 
 require("./digestsPage.styl");
 
@@ -31293,6 +31600,27 @@ function (_React$Component) {
       digests: []
     });
 
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "deleteDigest", function (digest) {
+      return function () {
+        _this.setState({
+          __deleting: true
+        });
+
+        _axios.default.delete("/api/digest/".concat(digest.id)).then(function (response) {
+          _this.setState({
+            __deleting: false,
+            digests: _this.state.digests.filter(function (d) {
+              return d.id === digest.id;
+            })
+          });
+        }).catch(function (error) {
+          _this.setState({
+            __deleting: false
+          });
+        });
+      };
+    });
+
     return _this;
   }
 
@@ -31315,6 +31643,8 @@ function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
+      var _this3 = this;
+
       var _this$state = this.state,
           __fetching = _this$state.__fetching,
           digests = _this$state.digests;
@@ -31330,8 +31660,14 @@ function (_React$Component) {
           className: "digests__item"
         }, _react.default.createElement(_reactRouterDom.NavLink, {
           to: "/editor/".concat(digest.id)
-        }, digest.title));
-      })) : _react.default.createElement("em", null, "You haven't created any digests yet :(")));
+        }, digest.title), _react.default.createElement(_button.DestructiveButton, {
+          onClick: _this3.deleteDigest(digest)
+        }, "Delete ", digest.title));
+      })) : _react.default.createElement("div", {
+        className: "digests__list"
+      }, _react.default.createElement("p", null, _react.default.createElement("em", null, "You haven't created any digests yet :(")), _react.default.createElement("p", null, _react.default.createElement(_reactRouterDom.Link, {
+        to: "/editor"
+      }, "Do it right now!")))));
     }
   }]);
 
@@ -31339,7 +31675,7 @@ function (_React$Component) {
 }(_react.default.Component);
 
 exports.default = DigestsPage;
-},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-router-dom":"../node_modules/react-router-dom/es/index.js","./layout":"layout.js","./switch":"switch.js","./digestsPage.styl":"digestsPage.styl"}],"app.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","axios":"../node_modules/axios/index.js","react-router-dom":"../node_modules/react-router-dom/es/index.js","./layout":"layout.js","./switch":"switch.js","./button":"button.js","./digestsPage.styl":"digestsPage.styl"}],"app.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -31347,6 +31683,8 @@ var _react = _interopRequireDefault(require("react"));
 var _reactDom = _interopRequireDefault(require("react-dom"));
 
 var _reactRouterDom = require("react-router-dom");
+
+var _routeAuth = _interopRequireDefault(require("./routeAuth"));
 
 var _editor = _interopRequireDefault(require("./editor"));
 
@@ -31356,6 +31694,8 @@ var _digestsPage = _interopRequireDefault(require("./digestsPage"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
 var App = function App() {
   return _react.default.createElement(_reactRouterDom.BrowserRouter, null, _react.default.createElement(_reactRouterDom.Switch, null, _react.default.createElement(_reactRouterDom.Route, {
     path: "/",
@@ -31363,7 +31703,11 @@ var App = function App() {
     component: _landing.default
   }), _react.default.createElement(_reactRouterDom.Route, {
     path: "/editor/:id?",
-    component: _editor.default
+    render: function render(props) {
+      return _react.default.createElement(_routeAuth.default, _extends({}, props, {
+        component: _editor.default
+      }));
+    }
   }), _react.default.createElement(_reactRouterDom.Route, {
     path: "/digests",
     component: _digestsPage.default
@@ -31371,7 +31715,7 @@ var App = function App() {
 };
 
 _reactDom.default.render(_react.default.createElement(App, null), document.querySelector("#app"));
-},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","react-router-dom":"../node_modules/react-router-dom/es/index.js","./editor":"editor.js","./landing":"landing.js","./digestsPage":"digestsPage.js"}],"../../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","react-router-dom":"../node_modules/react-router-dom/es/index.js","./routeAuth":"routeAuth.js","./editor":"editor.js","./landing":"landing.js","./digestsPage":"digestsPage.js"}],"../../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -31398,7 +31742,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57174" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54219" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

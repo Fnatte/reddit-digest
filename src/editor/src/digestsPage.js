@@ -1,8 +1,9 @@
 import React from "react"
 import axios from "axios"
-import { NavLink } from "react-router-dom"
+import { NavLink, Link } from "react-router-dom"
 import Layout from "./layout"
 import Switch from "./switch"
+import { DestructiveButton } from "./button"
 import "./digestsPage.styl"
 
 export default class DigestsPage extends React.Component {
@@ -17,6 +18,22 @@ export default class DigestsPage extends React.Component {
     axios.get("/api/digest").then(response => {
       this.setState({ digests: response.data, __fetching: false })
     })
+  }
+
+  deleteDigest = digest => () => {
+    this.setState({ __deleting: true })
+
+    axios
+      .delete(`/api/digest/${digest.id}`)
+      .then(response => {
+        this.setState({
+          __deleting: false,
+          digests: this.state.digests.filter(d => d.id === digest.id)
+        })
+      })
+      .catch(error => {
+        this.setState({ __deleting: false })
+      })
   }
 
   render() {
@@ -35,11 +52,21 @@ export default class DigestsPage extends React.Component {
               {digests.map(digest => (
                 <div key={digest.id} className="digests__item">
                   <NavLink to={`/editor/${digest.id}`}>{digest.title}</NavLink>
+                  <DestructiveButton onClick={this.deleteDigest(digest)}>
+                    Delete {digest.title}
+                  </DestructiveButton>
                 </div>
               ))}
             </div>
           ) : (
-            <em>You haven't created any digests yet :(</em>
+            <div className="digests__list">
+              <p>
+                <em>You haven't created any digests yet :(</em>
+              </p>
+              <p>
+                <Link to="/editor">Do it right now!</Link>
+              </p>
+            </div>
           )}
         </div>
       </Layout>
