@@ -71,6 +71,12 @@ const onUpdate = async payload => {
   await firebase.storeTelegramUpdate(update_id, message)
 
   switch (true) {
+    case message.text.startsWith('/help'): {
+      return sendMessage({
+        chat_id: message.chat.id,
+        text: `I will help you avoid some distractions, while still staying on top of the things your are interested in.\n\nCheckout https://digest.antonniklasson.se`
+      })
+    }
     case message.text.startsWith("/subscribe"): {
       const digestId = message.text.split("/subscribe")[1].trim()
 

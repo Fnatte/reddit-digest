@@ -4,16 +4,18 @@
 - [x] Update a digest, how without auth?
 - [x] Add "TELEGRAM_BOT_NAME" to .env
 - [x] Add "DOMAIN" to .env
+- [x] Don't create duplicates in users collection
+- [x] There shouldn't be a need for manually adding digests with the login in place
+- [x] Login with telegram in the editor, no need to subscribe to things?
+  - [x] Add auth to creating and updating digests
 
 # Next Action
+
 - _nothing prioritized_
 
 # Backlog
-- Don't create duplicates in users collection
+
 - Perhaps add a note about https://www.reddit.com/reddits/ in the welcome message
-- There shouldn't be a need for manually adding digests with the login in place
-- Login with telegram in the editor, no need to subscribe to things?
-  - Add auth to creating and updating digests
 - Include an edit link in the actual digest
 - Mixpanel (https://mixpanel.com/pricing)
 - Ask a follow-up question for the id if /subscribe is "empty"
