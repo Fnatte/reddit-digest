@@ -31664,7 +31664,7 @@ function (_React$Component) {
         className: "digests-page"
       }, _react.default.createElement("h2", null, "Your Digests"), __fetching ? _react.default.createElement("div", {
         className: "digests__loading"
-      }, _react.default.createElement("em", null, "Fetching your digests...")) : digests.length > 0 ? _react.default.createElement("div", {
+      }, _react.default.createElement("em", null, "Fetching your digests...")) : digests.length > 0 ? _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
         className: "digests__list"
       }, digests.map(function (digest) {
         return _react.default.createElement("div", {
@@ -31675,7 +31675,10 @@ function (_React$Component) {
         }, digest.title), _react.default.createElement(_button.DestructiveButton, {
           onClick: _this3.deleteDigest(digest)
         }, "Delete ", digest.title));
-      })) : _react.default.createElement("div", {
+      })), _react.default.createElement(_reactRouterDom.Link, {
+        to: "/editor",
+        className: "digests__new-link"
+      }, "+ Create Digest")) : _react.default.createElement("div", {
         className: "digests__list"
       }, _react.default.createElement("p", null, _react.default.createElement("em", null, "You haven't created any digests yet :(")), _react.default.createElement("p", null, _react.default.createElement(_reactRouterDom.Link, {
         to: "/editor"

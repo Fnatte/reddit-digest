@@ -169,6 +169,11 @@
   align-items: center;
   padding: 1em;
 }
+.digests-page .digests__new-link {
+  display: block;
+  margin: 3em auto;
+  text-align: center;
+}
 .digests-page p {
   margin: 1em 0;
 }

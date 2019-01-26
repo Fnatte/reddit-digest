@@ -48,16 +48,19 @@ export default class DigestsPage extends React.Component {
               <em>Fetching your digests...</em>
             </div>
           ) : digests.length > 0 ? (
-            <div className="digests__list">
-              {digests.map(digest => (
-                <div key={digest.id} className="digests__item">
-                  <NavLink to={`/editor/${digest.id}`}>{digest.title}</NavLink>
-                  <DestructiveButton onClick={this.deleteDigest(digest)}>
-                    Delete {digest.title}
-                  </DestructiveButton>
-                </div>
-              ))}
-            </div>
+            <React.Fragment>
+              <div className="digests__list">
+                {digests.map(digest => (
+                  <div key={digest.id} className="digests__item">
+                    <NavLink to={`/editor/${digest.id}`}>{digest.title}</NavLink>
+                    <DestructiveButton onClick={this.deleteDigest(digest)}>
+                      Delete {digest.title}
+                    </DestructiveButton>
+                  </div>
+                ))}
+              </div>
+              <Link to='/editor' className="digests__new-link">+ Create Digest</Link>
+            </React.Fragment>
           ) : (
             <div className="digests__list">
               <p>
