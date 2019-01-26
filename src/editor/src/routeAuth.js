@@ -13,6 +13,8 @@ export default class RouteAuth extends React.Component {
 
     axios("/api/me")
       .then(response => {
+        mixpanel.identify(response.data.id)
+        mixpanel.people.set(response.dat)
         this.setState({ __validating: false, authorized: true })
       })
       .catch(error => {
