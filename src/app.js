@@ -91,7 +91,7 @@ app.post("/api/telegram", async (req, res) => {
 })
 
 app.get("/api/digest", auth, async (req, res) => {
-  return res.send(await firebase.getAllDigests())
+  return res.send(await firebase.getAllDigests(req.user))
 })
 
 app.post("/api/digest", auth, async (req, res) => {
@@ -106,7 +106,7 @@ app.post("/api/digest", auth, async (req, res) => {
 })
 
 app.get("/api/digest/:id", auth, async (req, res) => {
-  const digest = await firebase.getDigest(req.params.id)
+  const digest = await firebase.getDigest(req.user, req.params.id)
 
   if (!digest) {
     return res.sendStatus(404)
