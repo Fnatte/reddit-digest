@@ -122,9 +122,10 @@ app.post("/api/digest/:id", auth, async (req, res) => {
 })
 
 app.delete('/api/digest/:id', auth, async (req, res) => {
-  const digest = await firebase.getDigest(req.params.id)
+  const user = req.user
+  const digest = await firebase.getDigest(user, req.params.id)
 
-  if (digest.creator !== req.user.telegram_id) {
+  if (digest.creator !== user.telegram_id) {
     return res.sendStatus(401)
   }
 
