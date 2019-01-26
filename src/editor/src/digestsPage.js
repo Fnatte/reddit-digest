@@ -64,7 +64,7 @@ export default class DigestsPage extends React.Component {
                 <em>You haven't created any digests yet :(</em>
               </p>
               <p>
-                <Link to="/editor">Do it right now!</Link>
+                <Link to="/editor">Go here to create one!</Link>
               </p>
             </div>
           )}

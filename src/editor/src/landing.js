@@ -16,7 +16,7 @@ class Landing extends React.Component {
 
     axios
       .post("/api/auth/telegram", response)
-      .then(() => {
+      .then(response => {
         this.setState({ __authorizing: false })
 
         const user = response.data
@@ -28,6 +28,7 @@ class Landing extends React.Component {
         this.props.history.push("/editor")
       })
       .catch(error => {
+        console.log(error)
         this.setState({ __authorizing: false })
       })
   }

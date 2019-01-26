@@ -16,6 +16,9 @@ const Layout = ({ children, withoutHeader }) => {
             <NavLink to="/editor" activeClassName="active">
               Create digests
             </NavLink>
+            <NavLink to="/logout" activeClassName="active">
+              Logout
+            </NavLink>
           </nav>
         </header>
       )}

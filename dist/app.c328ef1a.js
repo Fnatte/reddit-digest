@@ -30876,7 +30876,10 @@ var Layout = function Layout(_ref) {
   }, "My Digests"), _react.default.createElement(_reactRouterDom.NavLink, {
     to: "/editor",
     activeClassName: "active"
-  }, "Create digests"))), _react.default.createElement("div", {
+  }, "Create digests"), _react.default.createElement(_reactRouterDom.NavLink, {
+    to: "/logout",
+    activeClassName: "active"
+  }, "Logout"))), _react.default.createElement("div", {
     className: "layout__content"
   }, children), _react.default.createElement("footer", null, _react.default.createElement("div", null, _react.default.createElement("span", null, "Built by ", _react.default.createElement("a", {
     href: "https://antonniklasson.se"
@@ -31410,7 +31413,7 @@ function (_React$Component) {
         __authorizing: true
       });
 
-      _axios.default.post("/api/auth/telegram", response).then(function () {
+      _axios.default.post("/api/auth/telegram", response).then(function (response) {
         _this.setState({
           __authorizing: false
         });
@@ -31422,6 +31425,8 @@ function (_React$Component) {
 
         _this.props.history.push("/editor");
       }).catch(function (error) {
+        console.log(error);
+
         _this.setState({
           __authorizing: false
         });
@@ -31674,7 +31679,7 @@ function (_React$Component) {
         className: "digests__list"
       }, _react.default.createElement("p", null, _react.default.createElement("em", null, "You haven't created any digests yet :(")), _react.default.createElement("p", null, _react.default.createElement(_reactRouterDom.Link, {
         to: "/editor"
-      }, "Do it right now!")))));
+      }, "Go here to create one!")))));
     }
   }]);
 
@@ -31690,6 +31695,8 @@ var _react = _interopRequireDefault(require("react"));
 var _reactDom = _interopRequireDefault(require("react-dom"));
 
 var _reactRouterDom = require("react-router-dom");
+
+var _axios = _interopRequireDefault(require("axios"));
 
 var _routeAuth = _interopRequireDefault(require("./routeAuth"));
 
@@ -31722,11 +31729,21 @@ var App = function App() {
         component: _digestsPage.default
       }));
     }
+  }), _react.default.createElement(_reactRouterDom.Route, {
+    path: "/logout",
+    render: function render(_ref) {
+      var history = _ref.history;
+      (0, _axios.default)('/api/auth/logout').then(function (response) {
+        window.mixpanel.push('Logout');
+        history.push('/');
+      });
+      return null;
+    }
   })));
 };
 
 _reactDom.default.render(_react.default.createElement(App, null), document.querySelector("#app"));
-},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","react-router-dom":"../node_modules/react-router-dom/es/index.js","./routeAuth":"routeAuth.js","./editor":"editor.js","./landing":"landing.js","./digestsPage":"digestsPage.js"}],"../../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"react":"../node_modules/react/index.js","react-dom":"../node_modules/react-dom/index.js","react-router-dom":"../node_modules/react-router-dom/es/index.js","axios":"../node_modules/axios/index.js","./routeAuth":"routeAuth.js","./editor":"editor.js","./landing":"landing.js","./digestsPage":"digestsPage.js"}],"../../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -31753,7 +31770,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60978" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62947" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

@@ -1,6 +1,7 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
+import axios from 'axios'
 import RouteAuth from "./routeAuth"
 import Editor from "./editor"
 import LandingPage from "./landing"
@@ -18,6 +19,14 @@ const App = () => (
         path="/digests"
         render={props => <RouteAuth {...props} component={DigestsPage} />}
       />
+      <Route path="/logout" render={({ history }) => {
+        axios('/api/auth/logout')
+          .then(response => {
+            window.mixpanel.push('Logout')
+            history.push('/')
+          })
+        return null
+      }} />
     </Switch>
   </Router>
 )

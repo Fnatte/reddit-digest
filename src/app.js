@@ -80,6 +80,10 @@ app.post("/api/auth/telegram", async (req, res) => {
   return res.send(user)
 })
 
+app.get('/api/auth/logout', (req, res) => {
+  return res.clearCookie('digest-token').sendStatus(200)
+})
+
 app.post("/api/telegram", async (req, res) => {
   await telegram.onUpdate(req.body).then(() => {
     return res.sendStatus(200)
@@ -155,6 +159,8 @@ app.get("/api/marshall_digests", async (req, res) => {
 
   return res.send("done")
 })
+
+app.all('/api/*', (req, res) => res.sendStatus(404))
 
 app.get("/*", express.static(path.join(__dirname, "../dist/")))
 app.get("/*", (req, res) => res.sendFile(path.join(__dirname, "../dist/")))
