@@ -88,12 +88,15 @@ export default class Editor extends React.Component {
   onSubmit = event => {
     event.preventDefault()
 
+    const { digestId, title, subreddits, days, time } = this.state
+    const isUpdating = Boolean(digestId)
+
     this.setState({ __creating: true })
 
-    const { digestId, title, subreddits, days, time } = this.state
+    window.mixpanel.track(isUpdating ? 'Update Digest' : 'Create Digest')
 
     axios
-      .post(`/api/digest${digestId ? `/${digestId}` : ""}`, {
+      .post(`/api/digest${isUpdating ? `/${digestId}` : ""}`, {
         title,
         subreddits,
         days,

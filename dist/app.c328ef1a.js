@@ -30984,19 +30984,21 @@ function (_React$Component) {
 
     _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "onSubmit", function (event) {
       event.preventDefault();
-
-      _this.setState({
-        __creating: true
-      });
-
       var _this$state = _this.state,
           digestId = _this$state.digestId,
           title = _this$state.title,
           subreddits = _this$state.subreddits,
           days = _this$state.days,
           time = _this$state.time;
+      var isUpdating = Boolean(digestId);
 
-      _axios.default.post("/api/digest".concat(digestId ? "/".concat(digestId) : ""), {
+      _this.setState({
+        __creating: true
+      });
+
+      window.mixpanel.track(isUpdating ? 'Update Digest' : 'Create Digest');
+
+      _axios.default.post("/api/digest".concat(isUpdating ? "/".concat(digestId) : ""), {
         title: title,
         subreddits: subreddits,
         days: days,
