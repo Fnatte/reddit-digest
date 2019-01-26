@@ -19,7 +19,7 @@ class Landing extends React.Component {
       .then(() => {
         this.setState({ __authorizing: false })
 
-        window.mixpanel.track("Login")
+        window.mixpanel.track("Login", { ...response.data })
         window.location = "/editor"
       })
       .catch(error => {

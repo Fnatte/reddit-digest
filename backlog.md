@@ -11,13 +11,12 @@
 
 # Next Action
 
-- _nothing prioritized_
+- Mixpanel (https://mixpanel.com/pricing)
 
 # Backlog
 
 - Perhaps add a note about https://www.reddit.com/reddits/ in the welcome message
 - Include an edit link in the actual digest
-- Mixpanel (https://mixpanel.com/pricing)
 - Ask a follow-up question for the id if /subscribe is "empty"
 - Add validation for creating and updating a digest
 - Somehow disable scheduling bailouts in development
