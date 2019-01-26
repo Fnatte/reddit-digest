@@ -35,7 +35,13 @@ const storeUser = async payload => {
 }
 
 const getAllDigests = async (user) => {
-  const snapshot = await db.collection("digests").where('creator', '==', user.telegram_id).get()
+  let snapshot;
+
+  if (!user) {
+    snapshot = await db.collection('digests').get()
+  } else {
+    snapshot = await db.collection("digests").where('creator', '==', user.telegram_id).get()
+  }
 
   return snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
 }
