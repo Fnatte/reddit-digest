@@ -30937,10 +30937,12 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 var dayLabels = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 var uiStringVariants = {
   create: {
-    title: "Create a new digest"
+    title: "Create a new digest",
+    submitLabel: "Create"
   },
   update: {
-    title: "Update digest"
+    title: "Update digest",
+    submitLabel: "Update"
   }
 };
 
@@ -30996,7 +30998,7 @@ function (_React$Component) {
         __creating: true
       });
 
-      window.mixpanel.track(isUpdating ? 'Update Digest' : 'Create Digest');
+      window.mixpanel.track(isUpdating ? "Update Digest" : "Create Digest");
 
       _axios.default.post("/api/digest".concat(isUpdating ? "/".concat(digestId) : ""), {
         title: title,
@@ -31085,7 +31087,7 @@ function (_React$Component) {
       var currentTimezoneValue = (+time - new Date().getTimezoneOffset() / 60) % 24;
       return _react.default.createElement(_layout.default, null, _react.default.createElement("div", {
         className: "editor-page"
-      }, __loading ? _react.default.createElement("div", null, "Doing some work...") : _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("h3", null, strings.title), _react.default.createElement("form", {
+      }, __loading ? null : _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("h3", null, strings.title), _react.default.createElement("form", {
         onSubmit: this.onSubmit
       }, _react.default.createElement("div", {
         className: "form-field"
@@ -31130,9 +31132,9 @@ function (_React$Component) {
         disabled: __creating
       }), _react.default.createElement("span", {
         className: "form-field__note"
-      }, "As UTC\xB100:00. Equals to ~", currentTimezoneValue, " in your timezone")), _react.default.createElement("button", {
+      }, "UTC\xB100:00. (", currentTimezoneValue, ":00 in your current timezone)")), _react.default.createElement("button", {
         disabled: __creating || !canSubmitForm
-      }, __creating ? "..." : "Save")), error && _react.default.createElement("div", {
+      }, __creating ? "..." : strings.submitLabel)), error && _react.default.createElement("div", {
         className: "notification--error"
       }, _react.default.createElement("p", null, error)), createdDigest && _react.default.createElement("div", {
         className: "notification"
@@ -31627,7 +31629,7 @@ function (_React$Component) {
           _this.setState({
             __deleting: false,
             digests: _this.state.digests.filter(function (d) {
-              return d.id === digest.id;
+              return d.id !== digest.id;
             })
           });
         }).catch(function (error) {
@@ -31778,7 +31780,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51512" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54613" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

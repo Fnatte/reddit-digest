@@ -16,10 +16,12 @@ const dayLabels = [
 
 const uiStringVariants = {
   create: {
-    title: "Create a new digest"
+    title: "Create a new digest",
+    submitLabel: "Create"
   },
   update: {
-    title: "Update digest"
+    title: "Update digest",
+    submitLabel: "Update"
   }
 }
 
@@ -93,7 +95,7 @@ export default class Editor extends React.Component {
 
     this.setState({ __creating: true })
 
-    window.mixpanel.track(isUpdating ? 'Update Digest' : 'Create Digest')
+    window.mixpanel.track(isUpdating ? "Update Digest" : "Create Digest")
 
     axios
       .post(`/api/digest${isUpdating ? `/${digestId}` : ""}`, {
@@ -129,14 +131,13 @@ export default class Editor extends React.Component {
 
     const strings = digestId ? uiStringVariants.update : uiStringVariants.create
     const canSubmitForm = title.length && subreddits.length && days > 0 && time
-    const currentTimezoneValue = (+time - (new Date).getTimezoneOffset() / 60) % 24
+    const currentTimezoneValue =
+      (+time - new Date().getTimezoneOffset() / 60) % 24
 
     return (
       <Layout>
         <div className="editor-page">
-          {__loading ? (
-            <div>Doing some work...</div>
-          ) : (
+          {__loading ? null : (
             <React.Fragment>
               <h3>{strings.title}</h3>
               <form onSubmit={this.onSubmit}>
@@ -191,10 +192,13 @@ export default class Editor extends React.Component {
                     onChange={this.onTimeChange}
                     disabled={__creating}
                   />
-                  <span className="form-field__note">As UTC±00:00. Equals to ~{currentTimezoneValue} in your timezone</span>
+                  <span className="form-field__note">
+                    UTC±00:00. ({currentTimezoneValue}:00 in your current
+                    timezone)
+                  </span>
                 </div>
                 <button disabled={__creating || !canSubmitForm}>
-                  {__creating ? "..." : "Save"}
+                  {__creating ? "..." : strings.submitLabel}
                 </button>
               </form>
 

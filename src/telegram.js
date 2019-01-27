@@ -1,8 +1,8 @@
 const axios = require("axios")
 const moment = require("moment")
 const emoji = require("node-emoji")
-const crypto = require('crypto')
-const _ = require('lodash/fp')
+const crypto = require("crypto")
+const _ = require("lodash/fp")
 const db = require("./database")
 const { logger } = require("./log")
 const digests = require("./digests")
@@ -12,33 +12,42 @@ const log = (...args) => {
   logger.log("[Telegram]", ...args)
 }
 
-const prefixUrl = method => `https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/${method}`
+const prefixUrl = method =>
+  `https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/${method}`
 
 const executeCommand = (command, payload = {}) => {
   log("executeCommand", command)
   return axios(prefixUrl(command), { params: payload })
     .then(res => res.data)
     .catch(error => {
-      // eslint-disable-next-line no-console
-      console.error(error)
+      logger.error(error)
     })
 }
 
 const formatTelegramDigest = posts => {
-  return posts.reduce(
-    (result, post) => `${result}${formatPostRow(post)}\n\n`,
-    ""
-  )
+  return _.pipe(
+    _.map(formatPostRow),
+    _.join("\n\n")
+  )(posts)
 }
-const formatPostRow = post =>
-  `<b>${formatUpvotes(post.ups)} in /r/${post.subreddit}</b> <i>${formatDate(
-    post
-  )}</i>\n<a href="https://www.reddit.com${post.permalink}">${post.title}</a>`
+
+const formatPostRow = post => {
+  const meta = `<b>${formatUpvotes(post.ups)} in /r/${
+    post.subreddit
+  }</b> <i>${formatDate(post)}</i>`
+  const title = `<a href="https://www.reddit.com${post.permalink}">${
+    post.title
+  }</a>`
+
+  return `${meta}\n${title}`
+}
+
 const formatUpvotes = votes => {
   return votes >= 1000
     ? `${(votes / 1000).toFixed(1)}k upvotes`
     : `${votes} upvotes`
 }
+
 const formatDate = post => {
   return `${moment().diff(moment(post.created * 1000), "hour")} hours ago`
 }
@@ -69,7 +78,7 @@ const onUpdate = async payload => {
   await firebase.storeTelegramUpdate(update_id, message)
 
   switch (true) {
-    case message.text.startsWith('/help'): {
+    case message.text.startsWith("/help"): {
       return sendMessage({
         chat_id: message.chat.id,
         text: `I will help you avoid some distractions, while still staying on top of the things your are interested in.\n\nCheckout https://digest.antonniklasson.se`
@@ -148,20 +157,28 @@ const onUpdate = async payload => {
         chat_id: message.chat.id,
         text: `What? ${emoji.get("surprised")}`
       })
-
-      break
     }
   }
 }
 
+const buildDigest = (digest, posts) => {
+  const header = `<b>Yo! Here's your digest "${digest.title}" for today:</b>`
+  const content = formatTelegramDigest(posts)
+  const footer = `<a href="https://digest.antonniklasson.se/editor/${
+    digest.id
+  }">[Edit digest]</a>`
+
+  return `${header}\n\n${content}\n\n${footer}`
+}
+
 const sendDigest = async (digest, posts, chatId) => {
-  const text = `<b>Here's your digest "${digest.title}"</b>\n\n${formatTelegramDigest(posts)}`
+  const digestMarkup = buildDigest(digest, posts)
 
   await sendMessage({
     chat_id: chatId,
     parse_mode: "html",
     disable_web_page_preview: true,
-    text
+    text: digestMarkup
   })
 }
 
@@ -188,7 +205,7 @@ const constructCheckString = payload => {
     _.toPairs,
     _.map(([key, value]) => `${key}=${value}`),
     _.sortBy(_.identity),
-    _.join('\n')
+    _.join("\n")
   )(payload)
 }
 

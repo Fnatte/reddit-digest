@@ -10,8 +10,8 @@ const bodyParser = require("body-parser")
 const emoji = require("node-emoji")
 const compression = require("compression")
 const _ = require("lodash/fp")
-const jwt = require('jsonwebtoken')
-const cookieParser = require('cookie-parser')
+const jwt = require("jsonwebtoken")
+const cookieParser = require("cookie-parser")
 const telegram = require("./telegram")
 const reddit = require("./reddit")
 const { requestLogger, logger } = require("./log")
@@ -25,19 +25,19 @@ app.use(compression())
 app.use(cookieParser())
 
 const auth = (req, res, next) => {
-  const token = req.cookies['digest-token']
+  const token = req.cookies["digest-token"]
 
   try {
     const payload = jwt.verify(token, process.env.JWT_KEY)
     req.user = payload.user
-  } catch(error) {
+  } catch (error) {
     return res.sendStatus(401)
   }
 
   return next()
 }
 
-app.get('/api/me', auth, (req, res) => {
+app.get("/api/me", auth, (req, res) => {
   if (!req.user) {
     return res.sendStatus(401)
   }
@@ -61,7 +61,7 @@ app.post("/api/auth/telegram", async (req, res) => {
     return res.sendStatus(400)
   }
 
-  userPayload = _.mapKeys(k => k === 'id' ? 'telegram_id' : k)(userPayload)
+  userPayload = _.mapKeys(k => (k === "id" ? "telegram_id" : k))(userPayload)
 
   let user = await firebase.getUser(userPayload)
 
@@ -75,13 +75,13 @@ app.post("/api/auth/telegram", async (req, res) => {
 
   const token = jwt.sign({ user }, process.env.JWT_KEY)
   console.log({ token })
-  res.cookie('digest-token', token, { httpOnly: true })
+  res.cookie("digest-token", token, { httpOnly: true })
 
   return res.send(user)
 })
 
-app.get('/api/auth/logout', (req, res) => {
-  return res.clearCookie('digest-token').sendStatus(200)
+app.get("/api/auth/logout", (req, res) => {
+  return res.clearCookie("digest-token").sendStatus(200)
 })
 
 app.post("/api/telegram", async (req, res) => {
@@ -99,7 +99,9 @@ app.post("/api/digest", auth, async (req, res) => {
 
   telegram.sendMessage({
     chat_id: req.user.telegram_id,
-    text: `Nice. I'll start sending you "${digest.title}" according to the schedule.`
+    text: `Nice. I'll start sending you "${
+      digest.title
+    }" according to the schedule.`
   })
 
   return res.send(digest)
@@ -121,15 +123,19 @@ app.post("/api/digest/:id", auth, async (req, res) => {
   return res.send(req.body)
 })
 
-app.delete('/api/digest/:id', auth, async (req, res) => {
+app.delete("/api/digest/:id", auth, async (req, res) => {
   const user = req.user
   const digest = await firebase.getDigest(user, req.params.id)
 
-  if (digest.creator !== user.telegram_id) {
-    return res.sendStatus(401)
+  console.log({ user, digest })
+
+  if (!digest || digest.creator !== user.telegram_id) {
+    return res.sendStatus(404)
   }
 
-  return await firebase.deleteDigest(req.params.id)
+  await firebase.deleteDigest(req.params.id)
+
+  return res.status(204).send(digest)
 })
 
 app.get("/api/marshall_digests", async (req, res) => {
@@ -140,14 +146,20 @@ app.get("/api/marshall_digests", async (req, res) => {
       storedDigests.map(async digest => {
         const shiftedDayNumber = digest.days >>> (7 - moment().isoWeekday())
         const shouldRunToday = Boolean(shiftedDayNumber % 2)
-        const shouldRunThisHour = +digest.time === moment().utc().hour()
+        const shouldRunThisHour =
+          +digest.time ===
+          moment()
+            .utc()
+            .hour()
 
         console.log({
           shiftedDayNumber,
           shouldRunToday,
           shouldRunThisHour,
           currentHour: moment().hour(),
-          currentUTCHour: moment().utc().hour()
+          currentUTCHour: moment()
+            .utc()
+            .hour()
         })
 
         if (!shouldRunToday || !shouldRunThisHour) {
@@ -166,14 +178,14 @@ app.get("/api/marshall_digests", async (req, res) => {
         )
       })
     )
-  } catch(error) {
+  } catch (error) {
     console.error(error)
   }
 
   return res.send("done")
 })
 
-app.all('/api/*', (req, res) => res.sendStatus(404))
+app.all("/api/*", (req, res) => res.sendStatus(404))
 
 app.get("/*", express.static(path.join(__dirname, "../dist/")))
 app.get("/*", (req, res) => res.sendFile(path.join(__dirname, "../dist/")))

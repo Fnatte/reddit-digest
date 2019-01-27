@@ -28,7 +28,7 @@ export default class DigestsPage extends React.Component {
       .then(response => {
         this.setState({
           __deleting: false,
-          digests: this.state.digests.filter(d => d.id === digest.id)
+          digests: this.state.digests.filter(d => d.id !== digest.id)
         })
       })
       .catch(error => {
@@ -52,14 +52,18 @@ export default class DigestsPage extends React.Component {
               <div className="digests__list">
                 {digests.map(digest => (
                   <div key={digest.id} className="digests__item">
-                    <NavLink to={`/editor/${digest.id}`}>{digest.title}</NavLink>
+                    <NavLink to={`/editor/${digest.id}`}>
+                      {digest.title}
+                    </NavLink>
                     <DestructiveButton onClick={this.deleteDigest(digest)}>
                       Delete {digest.title}
                     </DestructiveButton>
                   </div>
                 ))}
               </div>
-              <Link to='/editor' className="digests__new-link">+ Create Digest</Link>
+              <Link to="/editor" className="digests__new-link">
+                + Create Digest
+              </Link>
             </React.Fragment>
           ) : (
             <div className="digests__list">

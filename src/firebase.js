@@ -26,7 +26,7 @@ const getUser = async userPayload => {
 }
 
 const storeUser = async payload => {
-  const ref = await db.collection('users').doc()
+  const ref = await db.collection("users").doc()
   await ref.set(payload)
 
   const doc = await ref.get()
@@ -34,13 +34,16 @@ const storeUser = async payload => {
   return doc.data()
 }
 
-const getAllDigests = async (user) => {
-  let snapshot;
+const getAllDigests = async user => {
+  let snapshot
 
   if (!user) {
-    snapshot = await db.collection('digests').get()
+    snapshot = await db.collection("digests").get()
   } else {
-    snapshot = await db.collection("digests").where('creator', '==', user.telegram_id).get()
+    snapshot = await db
+      .collection("digests")
+      .where("creator", "==", user.telegram_id)
+      .get()
   }
 
   return snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }))
@@ -49,18 +52,22 @@ const getAllDigests = async (user) => {
 const getDigest = async (user, id) => {
   if (!id) return null
 
-  const query = await db
+  const doc = await db
     .collection("digests")
     .doc(id)
     .get()
 
-  const data = query.data()
-
-  if (data.creator !== user.telegram_id) {
-    return null;
+  if (!doc.exists) {
+    return null
   }
 
-  return query.exists ? { ...query.data(), id } : null
+  const data = doc.data()
+
+  if (data.creator !== user.telegram_id) {
+    return null
+  }
+
+  return { ...doc.data(), id }
 }
 
 const updateDigest = async (digestId, payload) => {
@@ -81,14 +88,21 @@ const createDigest = async (author, payload) => {
     creator: author.telegram_id,
     subscribers: [author.telegram_id]
   })
-  
+
   const doc = await ref.get()
 
   return { ...doc.data(), id: doc.id }
 }
 
 const deleteDigest = async digestId => {
-  return await db.collection('digests').doc(digestId).delete() 
+  const query = await db
+    .collection("digests")
+    .doc(digestId)
+    .delete()
+
+  console.log(query)
+
+  return digestId
 }
 
 const getAllTelegramUpdates = async () => {
