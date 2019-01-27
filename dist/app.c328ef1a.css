@@ -27,6 +27,11 @@
   font-size: 1rem;
   padding: 0.2em;
 }
+.form-field__note {
+  font-size: 0.9em;
+  line-height: 1.4;
+  color: #666;
+}
 .multiselect__choice {
   margin: 0.5em;
 }

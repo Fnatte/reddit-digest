@@ -129,6 +129,7 @@ export default class Editor extends React.Component {
 
     const strings = digestId ? uiStringVariants.update : uiStringVariants.create
     const canSubmitForm = title.length && subreddits.length && days > 0 && time
+    const currentTimezoneValue = (+time - (new Date).getTimezoneOffset() / 60) % 24
 
     return (
       <Layout>
@@ -190,6 +191,7 @@ export default class Editor extends React.Component {
                     onChange={this.onTimeChange}
                     disabled={__creating}
                   />
+                  <span className="form-field__note">As UTC±00:00. Equals to ~{currentTimezoneValue} in your timezone</span>
                 </div>
                 <button disabled={__creating || !canSubmitForm}>
                   {__creating ? "..." : "Save"}

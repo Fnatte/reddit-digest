@@ -134,29 +134,44 @@ app.delete('/api/digest/:id', auth, async (req, res) => {
 
 app.get("/api/marshall_digests", async (req, res) => {
   const storedDigests = await firebase.getAllDigests()
+  const marshalledDigests = new Set;
 
-  await Promise.all(
-    storedDigests.map(async digest => {
-      const shiftedDayNumber = digest.days >>> (7 - moment().isoWeekday())
-      const shouldRunToday = Boolean(shiftedDayNumber % 2)
-      const shouldRunThisHour = digest.time === moment().hour()
+  try {
+    await Promise.all(
+      storedDigests.map(async digest => {
+        const shiftedDayNumber = digest.days >>> (7 - moment().isoWeekday())
+        const shouldRunToday = Boolean(shiftedDayNumber % 2)
+        const shouldRunThisHour = +digest.time === moment().utc().hour()
 
-      if (!shouldRunToday || !shouldRunThisHour) {
-        logger.log(`Digest ${digest.id} should not run at this moment`)
-        return Promise.resolve()
-      }
-
-      let posts = await reddit.fetchPosts(
-        digest.subreddits.split(",").map(sr => sr.trim())
-      )
-
-      return Promise.all(
-        digest.subscribers.map(subscriber => {
-          return telegram.sendDigest(posts.slice(1, 10), subscriber)
+        console.log({
+          shiftedDayNumber,
+          shouldRunToday,
+          shouldRunThisHour,
+          currentHour: moment().hour(),
+          currentUTCHour: moment().utc().hour()
         })
-      )
-    })
-  )
+
+        if (!shouldRunToday || !shouldRunThisHour) {
+          logger.log(`Digest ${digest.id} should not run at this moment`)
+          return Promise.resolve()
+        }
+
+        marshalledDigests.add(digest)
+
+        let posts = await reddit.fetchPosts(
+          digest.subreddits.split(",").map(sr => sr.trim())
+        )
+
+        return Promise.all(
+          digest.subscribers.map(subscriber => {
+            return telegram.sendDigest(digest, posts.slice(1, 10), subscriber)
+          })
+        )
+      })
+    )
+  } catch(error) {
+    console.error(error)
+  }
 
   return res.send("done")
 })

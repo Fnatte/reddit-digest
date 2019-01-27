@@ -31082,6 +31082,7 @@ function (_React$Component) {
           time = _this$state2.time;
       var strings = digestId ? uiStringVariants.update : uiStringVariants.create;
       var canSubmitForm = title.length && subreddits.length && days > 0 && time;
+      var currentTimezoneValue = (+time - new Date().getTimezoneOffset() / 60) % 24;
       return _react.default.createElement(_layout.default, null, _react.default.createElement("div", {
         className: "editor-page"
       }, __loading ? _react.default.createElement("div", null, "Doing some work...") : _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("h3", null, strings.title), _react.default.createElement("form", {
@@ -31127,7 +31128,9 @@ function (_React$Component) {
         value: time,
         onChange: this.onTimeChange,
         disabled: __creating
-      })), _react.default.createElement("button", {
+      }), _react.default.createElement("span", {
+        className: "form-field__note"
+      }, "As UTC\xB100:00. Equals to ~", currentTimezoneValue, " in your timezone")), _react.default.createElement("button", {
         disabled: __creating || !canSubmitForm
       }, __creating ? "..." : "Save")), error && _react.default.createElement("div", {
         className: "notification--error"
@@ -31775,7 +31778,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62947" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50990" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
