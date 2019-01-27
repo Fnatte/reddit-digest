@@ -25,7 +25,7 @@ class Landing extends React.Component {
         window.mixpanel.people.set(user)
         window.mixpanel.track("Login", user)
 
-        this.props.history.push("/editor")
+        this.props.history.push("/digests")
       })
       .catch(error => {
         console.log(error)

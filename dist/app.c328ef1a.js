@@ -31428,7 +31428,7 @@ function (_React$Component) {
         window.mixpanel.people.set(user);
         window.mixpanel.track("Login", user);
 
-        _this.props.history.push("/editor");
+        _this.props.history.push("/digests");
       }).catch(function (error) {
         console.log(error);
 
