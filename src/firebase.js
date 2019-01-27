@@ -67,7 +67,7 @@ const updateDigest = async (digestId, payload) => {
   return await db
     .collection("digests")
     .doc(digestId)
-    .set({
+    .update({
       title: payload.title,
       subreddits: payload.subreddits,
       days: payload.days,

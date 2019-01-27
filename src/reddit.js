@@ -18,6 +18,9 @@ const fetchPosts = async (subreddits) => {
           `https://www.reddit.com/r/${sr}/top.json`,
           { params: { t: 'day' } }
         )
+        .catch(error => {
+          console.error('reddit.fetchPosts', sr, error)
+        })
       )
     ).then(responses => {
       resolve(
