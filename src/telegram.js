@@ -8,13 +8,11 @@ const { logger } = require("./log")
 const digests = require("./digests")
 const firebase = require("./firebase")
 
-const TOKEN = process.env.TELEGRAM_TOKEN
-
 const log = (...args) => {
   logger.log("[Telegram]", ...args)
 }
 
-const prefixUrl = method => `https://api.telegram.org/bot${TOKEN}/${method}`
+const prefixUrl = method => `https://api.telegram.org/bot${process.env.TELEGRAM_TOKEN}/${method}`
 
 const executeCommand = (command, payload = {}) => {
   log("executeCommand", command)
