@@ -20,12 +20,14 @@ const fetchPosts = async (subreddits) => {
         )
         .catch(error => {
           console.error('reddit.fetchPosts', sr, error)
+          return Promise.resolve(null)
         })
       )
     ).then(responses => {
       resolve(
         _.pipe(
           _.flatten,
+          _.compact,
           _.map(_.get('data.data.children')),
           _.flatten,
           _.map(_.pipe(

@@ -134,7 +134,6 @@ app.delete('/api/digest/:id', auth, async (req, res) => {
 
 app.get("/api/marshall_digests", async (req, res) => {
   const storedDigests = await firebase.getAllDigests()
-  const marshalledDigests = new Set;
 
   try {
     await Promise.all(
@@ -155,8 +154,6 @@ app.get("/api/marshall_digests", async (req, res) => {
           logger.log(`Digest ${digest.id} should not run at this moment`)
           return Promise.resolve()
         }
-
-        marshalledDigests.add(digest)
 
         let posts = await reddit.fetchPosts(
           digest.subreddits.split(",").map(sr => sr.trim())

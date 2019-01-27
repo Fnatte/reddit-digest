@@ -155,9 +155,7 @@ const onUpdate = async payload => {
 }
 
 const sendDigest = async (digest, posts, chatId) => {
-  const text = `<b>Here's your digest "${digest.title}<b>\n${moment().format(
-    "YYYY-MM-DD"
-  )}</b>\n\n${formatTelegramDigest(posts)}`
+  const text = `<b>Here's your digest "${digest.title}"</b>\n\n${formatTelegramDigest(posts)}`
 
   await sendMessage({
     chat_id: chatId,
