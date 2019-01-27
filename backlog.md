@@ -15,6 +15,7 @@
 
 # Backlog
 
+- Consider Reddit API timezone when displaying dates and timestamps
 - Perhaps add a note about https://www.reddit.com/reddits/ in the welcome message
 - Include an edit link in the actual digest
 - Ask a follow-up question for the id if /subscribe is "empty"
