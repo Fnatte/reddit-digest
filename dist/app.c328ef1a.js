@@ -31417,7 +31417,109 @@ var DestructiveButton = function DestructiveButton(_ref2) {
 };
 
 exports.DestructiveButton = DestructiveButton;
-},{"react":"../../node_modules/react/index.js","./button.styl":"components/button.styl"}],"views/digestsView.styl":[function(require,module,exports) {
+},{"react":"../../node_modules/react/index.js","./button.styl":"components/button.styl"}],"components/ConfirmableDestructiveAction.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _button = require("./button");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var ConfirmDestructiveAction =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(ConfirmDestructiveAction, _React$Component);
+
+  function ConfirmDestructiveAction() {
+    var _getPrototypeOf2;
+
+    var _this;
+
+    _classCallCheck(this, ConfirmDestructiveAction);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(ConfirmDestructiveAction)).call.apply(_getPrototypeOf2, [this].concat(args)));
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {
+      confirming: false
+    });
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "propTypes", {
+      actionLabel: PropTypes.string.isRequired,
+      confirmLabel: PropTypes.string.isRequired,
+      cancelLabel: PropTypes.string.isRequired,
+      onConfirm: PropTypes.func.isRequired,
+      onCancel: PropTypes.func.isRequired
+    });
+
+    return _this;
+  }
+
+  _createClass(ConfirmDestructiveAction, [{
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      var confirming = this.state.confirming;
+      var _this$props = this.props,
+          actionLabel = _this$props.actionLabel,
+          confirmLabel = _this$props.confirmLabel,
+          cancelLabel = _this$props.cancelLabel,
+          onConfirm = _this$props.onConfirm,
+          onCancel = _this$props.onCancel;
+
+      if (confirming) {
+        return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement(_button.DestructiveButton, {
+          onClick: onConfirm
+        }, confirmLabel), _react.default.createElement(Button, {
+          onClick: onCancel
+        }, cancelLabel));
+      }
+
+      return _react.default.createElement(_button.DestructiveButton, {
+        onClick: function onClick() {
+          return _this2.setState({
+            confirming: true
+          });
+        }
+      }, actionLabel);
+    }
+  }]);
+
+  return ConfirmDestructiveAction;
+}(_react.default.Component);
+
+exports.default = ConfirmDestructiveAction;
+},{"react":"../../node_modules/react/index.js","./button":"components/button.js"}],"views/digestsView.styl":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -31438,7 +31540,7 @@ var _reactRouterDom = require("react-router-dom");
 
 var _layout = _interopRequireDefault(require("../layout"));
 
-var _button = require("../components/button");
+var _ConfirmableDestructiveAction = _interopRequireDefault(require("../components/ConfirmableDestructiveAction"));
 
 require("./digestsView.styl");
 
@@ -31547,9 +31649,13 @@ function (_React$Component) {
           className: "digests__item"
         }, _react.default.createElement(_reactRouterDom.NavLink, {
           to: "/editor/".concat(digest.id)
-        }, digest.title), _react.default.createElement(_button.DestructiveButton, {
-          onClick: _this3.deleteDigest(digest)
-        }, "Delete ", digest.title));
+        }, digest.title), _react.default.createElement(_ConfirmableDestructiveAction.default, {
+          actionLabel: "Delete ".concat(digest.title),
+          confirmLabel: "Do it!",
+          cancelLabel: "Nah, don't.",
+          onConfirm: _this3.deleteDigest(digest),
+          onCancel: function onCancel() {}
+        }));
       })), _react.default.createElement(_reactRouterDom.Link, {
         to: "/editor",
         className: "digests__new-link"
@@ -31565,7 +31671,7 @@ function (_React$Component) {
 }(_react.default.Component);
 
 exports.default = DigestsPage;
-},{"react":"../../node_modules/react/index.js","axios":"../../node_modules/axios/index.js","react-router-dom":"../../node_modules/react-router-dom/es/index.js","../layout":"layout.js","../components/button":"components/button.js","./digestsView.styl":"views/digestsView.styl"}],"app.js":[function(require,module,exports) {
+},{"react":"../../node_modules/react/index.js","axios":"../../node_modules/axios/index.js","react-router-dom":"../../node_modules/react-router-dom/es/index.js","../layout":"layout.js","../components/ConfirmableDestructiveAction":"components/ConfirmableDestructiveAction.js","./digestsView.styl":"views/digestsView.styl"}],"app.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -31648,7 +31754,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61041" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63530" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

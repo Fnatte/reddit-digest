@@ -3,9 +3,7 @@ const moment = require("moment")
 const emoji = require("node-emoji")
 const crypto = require("crypto")
 const _ = require("lodash/fp")
-const db = require("./database")
 const { logger } = require("./log")
-const digests = require("./digests")
 const firebase = require("./firebase")
 
 const log = (...args) => {

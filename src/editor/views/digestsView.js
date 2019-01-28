@@ -2,7 +2,8 @@ import React from "react"
 import axios from "axios"
 import { NavLink, Link } from "react-router-dom"
 import Layout from "../layout"
-import { DestructiveButton } from "../components/button"
+// import { DestructiveButton } from "../components/button"
+import ConfirmableDestructiveAction from "../components/ConfirmableDestructiveAction"
 import "./digestsView.styl"
 
 export default class DigestsPage extends React.Component {
@@ -54,9 +55,13 @@ export default class DigestsPage extends React.Component {
                     <NavLink to={`/editor/${digest.id}`}>
                       {digest.title}
                     </NavLink>
-                    <DestructiveButton onClick={this.deleteDigest(digest)}>
-                      Delete {digest.title}
-                    </DestructiveButton>
+                    <ConfirmableDestructiveAction
+                      actionLabel={`Delete ${digest.title}`}
+                      confirmLabel="Do it!"
+                      cancelLabel="Nah, don't."
+                      onConfirm={this.deleteDigest(digest)}
+                      onCancel={() => {}}
+                    />
                   </div>
                 ))}
               </div>
