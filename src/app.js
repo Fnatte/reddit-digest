@@ -142,11 +142,6 @@ app.get("/api/marshall_digests", async (req, res) => {
   const storedDigests = await firebase.getAllDigests()
   let marshalledDigests = []
 
-  await telegram.sendMessage({
-    chat_id: process.env.TELEGRAM_ANTON,
-    text: "Starting digest marshalling on " + process.env.DOMAIN
-  })
-
   try {
     await Promise.all(
       storedDigests.map(async digest => {
@@ -157,16 +152,6 @@ app.get("/api/marshall_digests", async (req, res) => {
           moment()
             .utc()
             .hour()
-
-        console.log({
-          shiftedDayNumber,
-          shouldRunToday,
-          shouldRunThisHour,
-          currentHour: moment().hour(),
-          currentUTCHour: moment()
-            .utc()
-            .hour()
-        })
 
         if (!shouldRunToday || !shouldRunThisHour) {
           logger.log(`Digest #${digest.id} should not run at this moment`)
@@ -188,14 +173,21 @@ app.get("/api/marshall_digests", async (req, res) => {
     )
   } catch (error) {
     console.error(error)
+
+    await telegram.sendMessage({
+      chat_id: process.env.TELEGRAM_ANTON,
+      text:
+        "Something went wrong when marshalling digests" +
+        "\n" +
+        JSON.stringify(error, null, 2)
+    })
   }
 
   await telegram.sendMessage({
     chat_id: process.env.TELEGRAM_ANTON,
     text:
-      "Finishing digest marshalling on " +
-      process.env.DOMAIN +
-      "\n\n" +
+      "Marshalled the following digests successfully:" +
+      "\n" +
       JSON.stringify(marshalledDigests, null, 2)
   })
 
