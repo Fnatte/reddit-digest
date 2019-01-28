@@ -1,7 +1,9 @@
 import React from "react"
-import { DestructiveButton } from "./button"
+import PropTypes from "prop-types"
+import { Button, DestructiveButton } from "./button"
+import "./confirmableDestructiveAction.styl"
 
-export default class ConfirmDestructiveAction extends React.Component {
+export default class ConfirmableDestructiveAction extends React.Component {
   state = {
     confirming: false
   }
@@ -14,31 +16,32 @@ export default class ConfirmDestructiveAction extends React.Component {
     onCancel: PropTypes.func.isRequired
   }
 
+  onCancel = () => {
+    this.setState({ confirming: false })
+    this.props.onCancel()
+  }
+
   render() {
     const { confirming } = this.state
-    const {
-      actionLabel,
-      confirmLabel,
-      cancelLabel,
-      onConfirm,
-      onCancel
-    } = this.props
-
-    if (confirming) {
-      return (
-        <React.Fragment>
-          <DestructiveButton onClick={onConfirm}>
-            {confirmLabel}
-          </DestructiveButton>
-          <Button onClick={onCancel}>{cancelLabel}</Button>
-        </React.Fragment>
-      )
-    }
+    const { actionLabel, confirmLabel, cancelLabel, onConfirm } = this.props
 
     return (
-      <DestructiveButton onClick={() => this.setState({ confirming: true })}>
-        {actionLabel}
-      </DestructiveButton>
+      <div className="confirmable-destructive-action">
+        {confirming ? (
+          <React.Fragment>
+            <DestructiveButton onClick={onConfirm}>
+              {confirmLabel}
+            </DestructiveButton>
+            <Button onClick={this.onCancel}>{cancelLabel}</Button>
+          </React.Fragment>
+        ) : (
+          <DestructiveButton
+            onClick={() => this.setState({ confirming: true })}
+          >
+            {actionLabel}
+          </DestructiveButton>
+        )}
+      </div>
     )
   }
 }

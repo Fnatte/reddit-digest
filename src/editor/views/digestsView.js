@@ -3,7 +3,7 @@ import axios from "axios"
 import { NavLink, Link } from "react-router-dom"
 import Layout from "../layout"
 // import { DestructiveButton } from "../components/button"
-import ConfirmableDestructiveAction from "../components/ConfirmableDestructiveAction"
+import ConfirmableDestructiveAction from "../components/confirmableDestructiveAction"
 import "./digestsView.styl"
 
 export default class DigestsPage extends React.Component {
