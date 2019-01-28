@@ -1,8 +1,7 @@
 import React from "react"
 import axios from "axios"
-import logo from "./telegram.svg"
-import "./editor.styl"
-import Layout from "./layout"
+import "./editorView.styl"
+import Layout from "../layout"
 
 const dayLabels = [
   "monday",
@@ -95,8 +94,6 @@ export default class Editor extends React.Component {
 
     this.setState({ __creating: true })
 
-    window.mixpanel.track(isUpdating ? "Update Digest" : "Create Digest")
-
     axios
       .post(`/api/digest${isUpdating ? `/${digestId}` : ""}`, {
         title,
@@ -105,6 +102,8 @@ export default class Editor extends React.Component {
         time
       })
       .then(response => {
+        window.mixpanel.track(isUpdating ? "Update Digest" : "Create Digest")
+
         this.setState({
           __creating: false,
           createdDigest: response.data.id

@@ -1,10 +1,9 @@
 import React from "react"
-import { browserHistory } from "react-router"
 import axios from "axios"
 import process from "process"
-import TelegramLogin from "./telegramLogin"
-import "./landing.styl"
-import Layout from "./layout"
+import TelegramLogin from "../telegramLogin"
+import "./landingView.styl"
+import Layout from "../layout"
 
 class Landing extends React.Component {
   state = {

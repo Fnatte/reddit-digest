@@ -92,7 +92,7 @@
 .landing-page header {
   height: 40vh;
   display: flex;
-  background: rgba(255,255,255,0.9) url("background.9e15dd99.jpg") center center;
+  background: rgba(255,255,255,0.9) url("background.73f2e897.jpg") center center;
   background-size: cover;
   box-shadow: 0 0 50px #000 inset;
 }
@@ -117,31 +117,6 @@
 .landing-page .content p {
   font-size: 1.5rem;
   margin: 1em 0;
-}
-.switch {
-  background: #f00;
-}
-.switch__input {
-  display: none;
-}
-.switch__visual {
-  position: relative;
-}
-.switch__visual-track {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 3em;
-  height: 2em;
-  background: #f00;
-}
-.switch__visual-knob {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 2em;
-  height: 2em;
-  background: #008000;
 }
 .button {
   padding: 0.4em;

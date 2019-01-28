@@ -140,6 +140,12 @@ app.delete("/api/digest/:id", auth, async (req, res) => {
 
 app.get("/api/marshall_digests", async (req, res) => {
   const storedDigests = await firebase.getAllDigests()
+  let marshalledDigests = []
+
+  await telegram.sendMessage({
+    chat_id: process.env.TELEGRAM_ANTON,
+    text: "Starting digest marshalling on " + process.env.DOMAIN
+  })
 
   try {
     await Promise.all(
@@ -163,9 +169,11 @@ app.get("/api/marshall_digests", async (req, res) => {
         })
 
         if (!shouldRunToday || !shouldRunThisHour) {
-          logger.log(`Digest ${digest.id} should not run at this moment`)
+          logger.log(`Digest #${digest.id} should not run at this moment`)
           return Promise.resolve()
         }
+
+        marshalledDigests = [...marshalledDigests, digest]
 
         let posts = await reddit.fetchPosts(
           digest.subreddits.split(",").map(sr => sr.trim())
@@ -182,7 +190,16 @@ app.get("/api/marshall_digests", async (req, res) => {
     console.error(error)
   }
 
-  return res.send("done")
+  await telegram.sendMessage({
+    chat_id: process.env.TELEGRAM_ANTON,
+    text:
+      "Finishing digest marshalling on " +
+      process.env.DOMAIN +
+      "\n\n" +
+      JSON.stringify(marshalledDigests, null, 2)
+  })
+
+  return res.send({ status: "done", marshalledDigests })
 })
 
 app.all("/api/*", (req, res) => res.sendStatus(404))

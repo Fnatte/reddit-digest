@@ -1,10 +1,9 @@
 import React from "react"
 import axios from "axios"
 import { NavLink, Link } from "react-router-dom"
-import Layout from "./layout"
-import Switch from "./switch"
-import { DestructiveButton } from "./button"
-import "./digestsPage.styl"
+import Layout from "../layout"
+import { DestructiveButton } from "../components/button"
+import "./digestsView.styl"
 
 export default class DigestsPage extends React.Component {
   state = {
@@ -68,7 +67,7 @@ export default class DigestsPage extends React.Component {
           ) : (
             <div className="digests__list">
               <p>
-                <em>You haven't created any digests yet :(</em>
+                <em>You do not have any digests yet.</em>
               </p>
               <p>
                 <Link to="/editor">Go here to create one!</Link>
