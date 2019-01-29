@@ -9,17 +9,17 @@
 - [x] There shouldn't be a need for manually adding digests with the login in place
 - [x] Login with telegram in the editor, no need to subscribe to things?
   - [x] Add auth to creating and updating digests
+- [x] Include an edit link in the actual digest
 
 # Next Action
 
-1. Mixpanel (https://mixpanel.com/pricing)
-2. Add "Run now" to digest list
+1. Add "Run now" to digest list
 
 # Backlog
 
+- Mixpanel (https://mixpanel.com/pricing)
 - Consider Reddit API timezone when displaying dates and timestamps
 - Perhaps add a note about https://www.reddit.com/reddits/ in the welcome message
-- Include an edit link in the actual digest
 - Add validation for creating and updating a digest
-- Somehow disable scheduling bailouts in development
-- Provide some more information about the digest schedule when subscribing
+- Email channel
+- Messenger channel
