@@ -37,8 +37,7 @@ export default class Editor extends React.Component {
       title: "",
       subreddits: "",
       days: parseInt("0000000", 2),
-      time: 8,
-      createdDigest: null
+      time: 8
     }
   }
 
@@ -104,9 +103,13 @@ export default class Editor extends React.Component {
       .then(response => {
         window.mixpanel.track(isUpdating ? "Update Digest" : "Create Digest")
 
+        this.props.history.push("/editor/" + response.data.id)
+
+        // Set notification somehow
+
         this.setState({
           __creating: false,
-          createdDigest: response.data.id
+          digestId: response.data.id
         })
       })
       .catch(error => {
@@ -121,7 +124,6 @@ export default class Editor extends React.Component {
       __loading,
       __creating,
       digestId,
-      createdDigest,
       title,
       subreddits,
       days,
@@ -204,14 +206,6 @@ export default class Editor extends React.Component {
               {error && (
                 <div className="notification--error">
                   <p>{error}</p>
-                </div>
-              )}
-              {createdDigest && (
-                <div className="notification">
-                  <p>
-                    Awesome. The bot will start sending you that digest on the
-                    schedule.
-                  </p>
                 </div>
               )}
             </React.Fragment>

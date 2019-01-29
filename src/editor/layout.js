@@ -23,6 +23,11 @@ const Layout = ({ children, withoutHeader }) => {
         </header>
       )}
       <div className="layout__content">{children}</div>
+      {/*
+      <div className="notification__container">
+        <div className="notification">This is a notification! Nice.</div>
+      </div>
+      */}
       <footer>
         <div>
           <span>
