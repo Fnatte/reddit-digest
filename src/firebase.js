@@ -75,10 +75,7 @@ const updateDigest = async (digestId, payload) => {
     .collection("digests")
     .doc(digestId)
     .update({
-      title: payload.title,
-      subreddits: payload.subreddits,
-      days: payload.days,
-      time: payload.time
+      ...payload
     })
 }
 
@@ -99,8 +96,6 @@ const deleteDigest = async digestId => {
     .collection("digests")
     .doc(digestId)
     .delete()
-
-  console.log(query)
 
   return digestId
 }

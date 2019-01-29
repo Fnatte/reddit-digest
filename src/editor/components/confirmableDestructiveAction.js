@@ -8,7 +8,7 @@ export default class ConfirmableDestructiveAction extends React.Component {
     confirming: false
   }
 
-  propTypes = {
+  static propTypes = {
     actionLabel: PropTypes.string.isRequired,
     confirmLabel: PropTypes.string.isRequired,
     cancelLabel: PropTypes.string.isRequired,

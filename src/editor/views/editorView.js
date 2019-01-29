@@ -53,10 +53,9 @@ export default class Editor extends React.Component {
 
           this.setState({
             __loading: false,
-
             digestId: digest.id,
             title: digest.title,
-            subreddits: digest.subreddits,
+            subreddits: digest.subreddits.join(", "),
             days: digest.days,
             time: digest.time
           })
@@ -64,7 +63,7 @@ export default class Editor extends React.Component {
         .catch(error => {
           console.error(error.response.data)
           this.setState({ __loading: false })
-          window.location = "/"
+          this.props.history.push("/")
         })
     }
   }
@@ -96,7 +95,7 @@ export default class Editor extends React.Component {
     axios
       .post(`/api/digest${isUpdating ? `/${digestId}` : ""}`, {
         title,
-        subreddits,
+        subreddits: subreddits.split(/[,\s]+/),
         days,
         time
       })

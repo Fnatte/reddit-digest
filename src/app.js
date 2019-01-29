@@ -73,9 +73,9 @@ app.post("/api/auth/telegram", async (req, res) => {
     })
   }
 
-  const token = jwt.sign({ user }, process.env.JWT_KEY)
-  console.log({ token })
-  res.cookie("digest-token", token, { httpOnly: true })
+  res.cookie("digest-token", jwt.sign({ user }, process.env.JWT_KEY), {
+    httpOnly: true
+  })
 
   return res.send(user)
 })
@@ -127,8 +127,6 @@ app.delete("/api/digest/:id", auth, async (req, res) => {
   const user = req.user
   const digest = await firebase.getDigest(user, req.params.id)
 
-  console.log({ user, digest })
-
   if (!digest || digest.creator !== user.telegram_id) {
     return res.sendStatus(404)
   }
@@ -160,19 +158,21 @@ app.get("/api/marshall_digests", async (req, res) => {
 
         marshalledDigests = [...marshalledDigests, digest]
 
-        let posts = await reddit.fetchPosts(
-          digest.subreddits.split(",").map(sr => sr.trim())
-        )
+        let posts = await reddit.fetchPosts(digest.subreddits)
 
-        return Promise.all(
-          digest.subscribers.map(subscriber => {
-            return telegram.sendDigest(digest, posts.slice(1, 10), subscriber)
-          })
-        )
+        if (posts.length > 0) {
+          return Promise.all(
+            digest.subscribers.map(subscriber => {
+              return telegram.sendDigest(digest, posts.slice(0, 10), subscriber)
+            })
+          )
+        }
+
+        return Promise.resolve()
       })
     )
   } catch (error) {
-    console.error(error)
+    logger.error(error)
 
     await telegram.sendMessage({
       chat_id: process.env.TELEGRAM_ANTON,
@@ -201,7 +201,7 @@ app.get("/*", (req, res) => res.sendFile(path.join(__dirname, "../dist/")))
 
 if (process.env.NODE_ENV === "production") {
   app.listen(process.env.PORT, () => {
-    console.log("Reddit Digest running with Production Build")
+    logger.log("Reddit Digest running with Production Build")
   })
 } else {
   const options = {
@@ -209,7 +209,7 @@ if (process.env.NODE_ENV === "production") {
     cert: fs.readFileSync(path.resolve("ssl/cert.pem"))
   }
   const server = https.createServer(options, app).listen(443, () => {
-    console.log(
+    logger.log(
       `Reddit Digest listening https://${process.env.DOMAIN}:${
         server.address().port
       }`

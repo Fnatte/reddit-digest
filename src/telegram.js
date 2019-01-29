@@ -153,7 +153,7 @@ const onUpdate = async payload => {
 
       return await sendMessage({
         chat_id: message.chat.id,
-        text: `What? ${emoji.get("surprised")}`
+        text: `What?`
       })
     }
   }
