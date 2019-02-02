@@ -11,6 +11,7 @@ const emoji = require("node-emoji")
 const compression = require("compression")
 const _ = require("lodash/fp")
 const jwt = require("jsonwebtoken")
+const axios = require('axios')
 const cookieParser = require("cookie-parser")
 const telegram = require("./telegram")
 const reddit = require("./reddit")
@@ -23,6 +24,12 @@ app.use(bodyParser.json())
 app.use(requestLogger)
 app.use(compression())
 app.use(cookieParser())
+
+const notifyAnton = async data => {
+    await axios.post('https://pi.antn.se/notify/telegram', {
+      message: data
+    })
+}
 
 const auth = (req, res, next) => {
   const token = req.cookies["digest-token"]
@@ -174,22 +181,16 @@ app.get("/api/marshall_digests", async (req, res) => {
   } catch (error) {
     logger.error(error)
 
-    await telegram.sendMessage({
-      chat_id: process.env.TELEGRAM_ANTON,
-      text:
-        "Something went wrong when marshalling digests" +
-        "\n" +
-        JSON.stringify(error, null, 2)
-    })
+    await notifyAnton("Something went wrong when marshalling digests" +
+      "\n" +
+      JSON.stringify(error, null, 2)
+    )
   }
 
-  await telegram.sendMessage({
-    chat_id: process.env.TELEGRAM_ANTON,
-    text:
-      "Marshalled the following digests successfully:" +
+  await notifyAnton("Marshalled the following digests successfully:" +
       "\n" +
       JSON.stringify(marshalledDigests, null, 2)
-  })
+  )
 
   return res.send({ status: "done", marshalledDigests })
 })
