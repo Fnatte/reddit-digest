@@ -160,5 +160,7 @@ typings/
 .dynamodb/
 
 
+!.gitkeep
 firebaseServiceAccountKey.json
 dist
+ssl

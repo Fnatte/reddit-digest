@@ -206,10 +206,10 @@ if (process.env.NODE_ENV === "production") {
   })
 } else {
   const options = {
-    key: fs.readFileSync(path.resolve("ssl/key.pem")),
-    cert: fs.readFileSync(path.resolve("ssl/cert.pem"))
+    key: fs.readFileSync(path.resolve(`ssl/${process.env.DOMAIN}.key`)),
+    cert: fs.readFileSync(path.resolve(`ssl/${process.env.DOMAIN}.crt`))
   }
-  const server = https.createServer(options, app).listen(443, () => {
+  const server = https.createServer(options, app).listen(process.env.PORT, () => {
     logger.log(
       `Reddit Digest listening https://${process.env.DOMAIN}:${
         server.address().port
