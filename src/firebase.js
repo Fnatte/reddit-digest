@@ -3,7 +3,7 @@ var firebase = require("firebase-admin")
 var serviceAccount = require("../firebaseServiceAccountKey.json")
 firebase.initializeApp({
   credential: firebase.credential.cert(serviceAccount),
-  databaseURL: "https://reddit-digests.firebaseio.com"
+  databaseURL: process.env.FIREBASE_DB_URL
 })
 
 firebase.firestore().settings({
