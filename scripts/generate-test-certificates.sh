@@ -39,7 +39,7 @@ EOF
 
 # Generate the root key
 echo Generate the root key
-openssl genrsa -des3 -passout pass:$PASS -out $CA_PATH.key 2048 
+openssl genrsa -des3 -passout pass:$PASS -out $CA_PATH.key 2048
 
 # Generate a root-certificate based on the root-key
 echo Generate a root-certificate based on the root-key
