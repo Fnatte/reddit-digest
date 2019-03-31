@@ -1,6 +1,7 @@
 import React from "react"
 import axios from "axios"
 import { NavLink, Link } from "react-router-dom"
+import firebase from "../firebase"
 import Layout from "../layout"
 // import { DestructiveButton } from "../components/button"
 import ConfirmableDestructiveAction from "../components/confirmableDestructiveAction"

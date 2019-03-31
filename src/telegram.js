@@ -1,8 +1,8 @@
 const axios = require("axios")
-const moment = require("moment")
 const emoji = require("node-emoji")
 const crypto = require("crypto")
 const _ = require("lodash/fp")
+const { formatToHtml } = require('./format/html');
 const { logger } = require("./log")
 const firebase = require("./firebase")
 
@@ -20,34 +20,6 @@ const executeCommand = (command, payload = {}) => {
     .catch(error => {
       logger.error(error)
     })
-}
-
-const formatTelegramDigest = posts => {
-  return _.pipe(
-    _.map(formatPostRow),
-    _.join("\n\n")
-  )(posts)
-}
-
-const formatPostRow = post => {
-  const meta = `<b>${formatUpvotes(post.ups)} in /r/${
-    post.subreddit
-  }</b> <i>${formatDate(post)}</i>`
-  const title = `<a href="https://www.reddit.com${post.permalink}">${
-    post.title
-  }</a>`
-
-  return `${meta}\n${title}`
-}
-
-const formatUpvotes = votes => {
-  return votes >= 1000
-    ? `${(votes / 1000).toFixed(1)}k upvotes`
-    : `${votes} upvotes`
-}
-
-const formatDate = post => {
-  return `${moment().diff(moment(post.created * 1000), "hour")} hours ago`
 }
 
 const onUpdate = async payload => {
@@ -159,18 +131,8 @@ const onUpdate = async payload => {
   }
 }
 
-const buildDigest = (digest, posts) => {
-  const header = `<b>Yo! Here's your digest "${digest.title}" for today:</b>`
-  const content = formatTelegramDigest(posts)
-  const footer = `<a href="https://digest.antonniklasson.se/editor/${
-    digest.id
-  }">[Edit digest]</a>`
-
-  return `${header}\n\n${content}\n\n${footer}`
-}
-
 const sendDigest = async (digest, posts, chatId) => {
-  const digestMarkup = buildDigest(digest, posts)
+  const digestMarkup = formatToHtml(digest, posts)
 
   await sendMessage({
     chat_id: chatId,

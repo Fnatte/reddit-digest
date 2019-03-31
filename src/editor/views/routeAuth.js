@@ -1,5 +1,6 @@
 import React from "react"
 import { Redirect } from "react-router-dom"
+import firebase from "../firebase"
 import axios from "axios"
 
 export default class RouteAuth extends React.Component {

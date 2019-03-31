@@ -38,7 +38,9 @@ class Landing extends React.Component {
   componentDidMount() {
     this.unregisterAuthObserver = firebase
       .auth()
-      .onAuthStateChanged(user => this.setState({ isSignedIn: !!user }))
+      .onAuthStateChanged(user => {
+        this.setState({ isSignedIn: !!user })
+      })
   }
 
   render() {

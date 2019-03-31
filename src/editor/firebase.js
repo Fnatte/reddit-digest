@@ -10,4 +10,8 @@ firebase.initializeApp({
   messagingSenderId: "167395521438"
 })
 
-export default firebase;
+// Session cookies are managed by our server side, so we do not need firebase
+// to manage auth persistence.
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE)
+
+export default firebase

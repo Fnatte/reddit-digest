@@ -29,7 +29,6 @@ const fetchPosts = async subreddits => {
           _.compact,
           _.map(_.get("data.data.children")),
           _.flatten,
-          _.tap(console.log),
           _.map(
             _.pipe(
               _.get("data"),

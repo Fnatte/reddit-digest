@@ -39,7 +39,13 @@ const getAllDigests = async user => {
 
   if (!user) {
     snapshot = await db.collection("digests").get()
-  } else {
+
+  } else if (user.uid ) {
+    snapshot = await db
+      .collection("digests")
+      .where("creator", "==", user.uid)
+      .get()
+  } else if (user.telegram_id ) {
     snapshot = await db
       .collection("digests")
       .where("creator", "==", user.telegram_id)
@@ -63,7 +69,7 @@ const getDigest = async (user, id) => {
 
   const data = doc.data()
 
-  if (data.creator !== user.telegram_id) {
+  if (data.creator !== user.telegram_id && data.creator !== user.uid) {
     return null
   }
 
@@ -82,8 +88,8 @@ const updateDigest = async (digestId, payload) => {
 const createDigest = async (author, payload) => {
   const ref = await db.collection("digests").add({
     ...payload,
-    creator: author.telegram_id,
-    subscribers: [author.telegram_id]
+    creator: author.uid || author.telegram_id,
+    subscribers: [author.uid || author.telegram_id]
   })
 
   const doc = await ref.get()
