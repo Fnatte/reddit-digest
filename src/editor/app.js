@@ -2,10 +2,12 @@ import React from "react"
 import ReactDOM from "react-dom"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import axios from "axios"
+import './firebase';
 import RouteAuth from "./views/routeAuth"
 import EditorView from "./views/editorView"
 import LandingView from "./views/landingView"
 import DigestsView from "./views/digestsView"
+
 
 const App = () => (
   <Router>

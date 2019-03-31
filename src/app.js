@@ -87,6 +87,32 @@ app.post("/api/auth/telegram", async (req, res) => {
   return res.send(user)
 })
 
+app.post("/api/auth/firebase", async (req, res) => {
+  const accessToken = req.body.stsTokenManager && req.body.stsTokenManager.accessToken;
+  const decodedToken = await firebase.auth.verifyIdToken(accessToken);
+
+  if (!decodedToken) {
+    return res.sendStatus(400);
+  }
+
+  const userPayload = _.pick([
+    "uid",
+    "auth_time",
+    "name",
+    "email",
+    "email_verified",
+    "picture"
+  ])(decodedToken)
+  console.log('getUser', userPayload);
+  const user = await firebase.getUser(userPayload)
+  if (!user) {
+    console.log('storeUser', userPayload);
+    await firebase.storeUser(userPayload)
+  }
+
+  return res.sendStatus(200)
+})
+
 app.get("/api/auth/logout", (req, res) => {
   return res.clearCookie("digest-token").sendStatus(200)
 })

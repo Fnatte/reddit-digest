@@ -2,19 +2,22 @@ import React from "react"
 import axios from "axios"
 import process from "process"
 import TelegramLogin from "../telegramLogin"
+import Login from "../login"
 import "./landingView.styl"
 import Layout from "../layout"
+import firebase from "firebase/app"
 
 class Landing extends React.Component {
   state = {
-    __authorizing: false
+    __authorizing: false,
+    isSignedIn: false
   }
 
-  onLogin = response => {
+  onLogin = user => {
     this.setState({ __authorizing: true })
 
     axios
-      .post("/api/auth/telegram", response)
+      .post("/api/auth/firebase", user)
       .then(response => {
         this.setState({ __authorizing: false })
 
@@ -32,8 +35,14 @@ class Landing extends React.Component {
       })
   }
 
+  componentDidMount() {
+    this.unregisterAuthObserver = firebase
+      .auth()
+      .onAuthStateChanged(user => this.setState({ isSignedIn: !!user }))
+  }
+
   render() {
-    const { __authorizing } = this.state
+    const { __authorizing, isSignedIn } = this.state
 
     return (
       <Layout withoutHeader>
@@ -47,13 +56,14 @@ class Landing extends React.Component {
                 }
               </p>
             </div>
-            {__authorizing ? (
-              <div>Signing in...</div>
+            {!isSignedIn ? (
+              __authorizing ? (
+                <div>Signing in...</div>
+              ) : (
+                <Login onAuth={this.onLogin} />
+              )
             ) : (
-              <TelegramLogin
-                dataOnauth={this.onLogin}
-                botName={process.env.TELEGRAM_BOT_NAME}
-              />
+              <div>Signed in</div>
             )}
           </main>
         </div>

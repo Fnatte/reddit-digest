@@ -15,7 +15,7 @@ const db = firebase.firestore()
 const getUser = async userPayload => {
   const query = await db
     .collection("users")
-    .where("telegram_id", "==", userPayload.telegram_id)
+    .where("uid", "==", userPayload.uid)
     .get()
 
   if (query.docs.length === 0) return null
@@ -184,5 +184,6 @@ module.exports = {
   getPreviousUpdateFromTelegramChat,
   getSubscriptionsByChat,
   subscribeChatToDigest,
-  unsubscribeChatFromDigest
+  unsubscribeChatFromDigest,
+  auth: firebase.auth()
 }
